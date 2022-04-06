@@ -395,7 +395,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileGridSnap: 3
-  maxFloors: 5
+  maxFloors: 20
   roomsPerFloorRange: {x: 8, y: 12}
   closedDoorChance: 0.5
   usePrebuiltFloor: 0

@@ -145,11 +145,17 @@ public class ApartmentBuilder : MonoBehaviour
 
 				BuildFloor();
 
+				Debug.LogFormat("Built floor, {0} available exits left",availableExits.Count);
+
 				TagCourtyardRailings();
 
 				BuildSideWings();
 
+				Debug.LogFormat("Built side wings, {0} available exits left", availableExits.Count);
+
 				BuildRooms();
+
+				Debug.LogFormat("Built rooms, {0} available exits left", availableExits.Count);
 
 				BuildWalls();
 
@@ -496,9 +502,16 @@ public class ApartmentBuilder : MonoBehaviour
 	{
 		//Transform[] roomPositions = availableExits.ToArray() + availableWalls.ToArray();
 		//Transform[] possibleRoomPositions = availableExits.ToArray();
-		List<Transform> possibleRoomPositions = availableExits;
+		//List<Transform> possibleRoomPositions = availableExits.CopyTo();
+		//availableExits.
+
+		Transform[] possibleRoomPositions = new Transform[availableExits.Count + availableWalls.Count];
+		availableExits.CopyTo(possibleRoomPositions);
+		availableWalls.CopyTo(possibleRoomPositions, availableExits.Count);
+
 		//possibleRoomPositions.AddRange(availableExits.ToArray());
-		possibleRoomPositions.AddRange(availableWalls.ToArray());
+		//possibleRoomPositions.AddRange(availableWalls.ToArray());
+		//possibleRoomPositions.
 
 		int maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
 
@@ -510,6 +523,9 @@ public class ApartmentBuilder : MonoBehaviour
 		List<Transform> roomPositions = GetRandomRoomNodes(maxRoomsPerFloor, possibleRoomPositions);
 
 		foreach (Transform currentAnchor in possibleRoomPositions) {
+			if (currentAnchor == null)
+				continue;
+
 			float closedDoor = Random.Range(0f, 1.0f);
 
 			if (closedDoor < closedDoorChance)
@@ -575,22 +591,28 @@ public class ApartmentBuilder : MonoBehaviour
 	}
 
 
-	protected List<Transform> GetRandomRoomNodes(int maxRange, List<Transform> sourceTransforms, bool preventNeighbors = true)
+	//protected List<Transform> GetRandomRoomNodes(int maxRange, List<Transform> sourceTransforms, bool preventNeighbors = true)
+	protected List<Transform> GetRandomRoomNodes(int maxRange, Transform[] sourceTransforms, bool preventNeighbors = true)
 	{
 		List<Transform> roomNodes = new List<Transform>();
 		int i = 0;
 		while (i < maxRange) {
 
-			int randomRoomSlot = Random.Range(0, sourceTransforms.Count);
+			int randomRoomSlot = Random.Range(0, sourceTransforms.Length);
 
 			Transform roomNode = sourceTransforms[randomRoomSlot];
+
+			if (roomNode == null)
+				continue;
+
 			Tile parentTile = roomNode.GetComponentInParent<Tile>();
 
 			if (!ShouldBuildDoorHere(roomNode, parentTile, preventNeighbors))
 				continue;
 
 			roomNodes.Add(roomNode);
-			sourceTransforms.Remove(roomNode);
+			//sourceTransforms.Remove(roomNode);
+			sourceTransforms[randomRoomSlot] = null;
 			i++;
 		}
 		return roomNodes;
@@ -720,9 +742,23 @@ public class ApartmentBuilder : MonoBehaviour
 
 	protected void BuildWalls()
 	{
-		List<Transform> wallsToBuild = availableWalls;
+		//List<Transform> 
+		List<Vector3> placedWallCoords = new List<Vector3>();
 
+		List<Transform> wallsToBuild = availableWalls;
+		//List<Transform> wallsToBuild = new List<Transform>();
+
+		//wallsToBuild.AddRange(availableWalls);
 		wallsToBuild.AddRange(availableExits);
+
+		//wallsToBuild.AddRange(availableExits.AsReadOnly());
+
+		//string debug = "";
+		//if (availableWalls)
+			//debug += "";
+
+
+		Debug.LogFormat("{0} available walls, {1} available exits, should build {2} walls", availableWalls.Count, availableExits.Count, wallsToBuild.Count );
 
 		for (int i = 0; i < wallsToBuild.Count; i++) {
 
@@ -739,12 +775,18 @@ public class ApartmentBuilder : MonoBehaviour
 
 					if (tag.WallType == WallType.ClosedDoor)
 						newWallType = closedDoorTypes[0];
-
-
 				}
 			}
 
+			//Vector3 blockCoords = GetBlockCoordinates(joiningPoint.position);
+
+			//if (placedWallCoords.Contains(blockCoords))
+			//	continue;
+
+			//placedWallCoords.Add(blockCoords);
+
 			GameObject newWall = Instantiate(newWallType, joiningPoint.position, joiningPoint.rotation, joiningPoint.parent);
+			//Debug.Log("Built wall");
 		}
 	}
 
@@ -829,7 +871,7 @@ public class ApartmentBuilder : MonoBehaviour
 	protected void CheckTileExits(Transform _tile)
 	{
 		foreach (Transform t in _tile.Find("AnchorPoints/Exits")) {
-			if (t.gameObject.activeSelf)
+			if (t.gameObject.activeSelf && !availableExits.Contains(t))
 				availableExits.Add(t);
 		}
 	}

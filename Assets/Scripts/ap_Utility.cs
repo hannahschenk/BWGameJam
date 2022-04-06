@@ -66,4 +66,32 @@ public static class ap_Utility
 		return Vector3.Dot(perp, up);
 	}
 
+	/// <summary>
+	/// Returns a list of walls who are offset (e.g., facing) along a world direction axis
+	/// </summary>
+	/// <param name="tile"></param>
+	/// <param name="goalDirection"></param>
+	/// <returns></returns>
+	public static List<Transform> GetWallsAlongDirection(Tile tile, Vector3 goalDirection)
+	{
+
+		//Transform[] targets = Selection.transforms;
+		List<Transform> walls = new List<Transform>();
+
+		//foreach (Transform target in targets) {
+		if ((tile.transform.childCount > 0)) {
+
+			foreach (Transform t in tile.transform.Find("AnchorPoints/Walls")) {
+
+				Vector3 direction = t.position - t.parent.position;
+				if (ap_Utility.IsFacing(direction, goalDirection))
+					walls.Add(t);
+
+			}
+		}
+		//}
+
+		return walls;
+	}
+
 }
