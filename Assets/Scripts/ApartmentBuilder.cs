@@ -7,7 +7,7 @@ public class ApartmentBuilder : MonoBehaviour
 {
 	//Build Parameters
 	[Tooltip("Represents how closely tiles can be placed to prevent overlap")]
-	public float tileGridSnap = 3.0f;
+	public const float tileGridSnap = 3.0f;
 	public int maxFloors = 1;
 
 	public Vector2 roomsPerFloorRange = new Vector2(4.0f, 8.0f);
@@ -38,6 +38,11 @@ public class ApartmentBuilder : MonoBehaviour
 	public GameObject[] wallTypes;
 	public GameObject[] railingTypes;
 	public GameObject[] closedDoorTypes;
+
+	// Rooms
+	public Tile[] medRoomTypes;
+	public Tile[] narrowRoomTypes;
+	public Tile[] closetRoomTypes;
 
 	//Build data
 	protected Transform currentFloor; //empty wing gameobject for organization purposes
@@ -135,6 +140,7 @@ public class ApartmentBuilder : MonoBehaviour
 	{
 		if (usePrebuiltFloor) {
 			CheckExistingFloor();
+			BuildWalls();
 		} else {
 
 			elevation = 0 - (maxFloors / 2) * floorHeight; //test elevation, start at middle floor
@@ -145,17 +151,17 @@ public class ApartmentBuilder : MonoBehaviour
 
 				BuildFloor();
 
-				Debug.LogFormat("Built floor, {0} available exits left",availableExits.Count);
+				//Debug.LogFormat("Built floor, {0} available exits left",availableExits.Count);
 
 				TagCourtyardRailings();
 
 				BuildSideWings();
 
-				Debug.LogFormat("Built side wings, {0} available exits left", availableExits.Count);
+				//Debug.LogFormat("Built side wings, {0} available exits left", availableExits.Count);
 
 				BuildRooms();
 
-				Debug.LogFormat("Built rooms, {0} available exits left", availableExits.Count);
+				//Debug.LogFormat("Built rooms, {0} available exits left", availableExits.Count);
 
 				BuildWalls();
 
@@ -380,11 +386,11 @@ public class ApartmentBuilder : MonoBehaviour
 	/// <param name="newTileType">The type of tile to build</param>
 	/// <param name="joiningPoint">The transform reference whose position and facing will be matched</param>
 	/// <param name="newTile">The built tile</param>
-	protected void BuildTile(Tile newTileType, Transform joiningPoint, out Tile newTile)
+	protected void BuildTile(Tile newTileType, Transform joiningPoint, out Tile newTile, float snap = tileGridSnap)
 	{
 
 		Vector3 tilePos = GetNewTilePosition(newTileType, joiningPoint);
-		Vector3 blockCoordinates = GetBlockCoordinates(tilePos);
+		Vector3 blockCoordinates = GetBlockCoordinates(tilePos, snap);
 
 		if (!tileCoords.Contains(blockCoordinates)) {
 			newTile = Instantiate(newTileType, tilePos, joiningPoint.rotation, currentFloor);
@@ -394,7 +400,9 @@ public class ApartmentBuilder : MonoBehaviour
 			Debug.LogFormat("Couldn't place {0} tile at coords, already occupied", newTileType);
 		}
 
-		availableExits.Remove(joiningPoint);
+		//availableExits.Remove(joiningPoint);
+		if (!availableExits.Remove(joiningPoint))
+			availableWalls.Remove(joiningPoint);
 	}
 
 	protected void ConsiderAndBuildTiles()
@@ -545,11 +553,100 @@ public class ApartmentBuilder : MonoBehaviour
 		//}
 
 		//Actually build the rooms
-		foreach (Transform t in roomPositions) {
+		foreach (Transform roomStartNode in roomPositions) {
 
-			BuildTile(roomTypes[Random.Range(0, roomTypes.Length)], t, out Tile newTile);
+			int _medRooms = Random.Range(1, 3); //1-2 rooms
+											   //int medRooms = Random.Range(1, 4); //1-3 rooms
+			int _closets = Random.Range(1, 3);
+			int _narrows = Random.Range(1, 3);
 
-			availableWalls.Remove(t);
+			int _totalBuild = _medRooms + _closets + _narrows;
+			int _built = 0;
+			int _closetsBuilt = 0, _medRoomsBuilt = 0, _narrowsBuilt = 0;
+
+			Transform joiningPoint = roomStartNode;
+
+			while (_built < _totalBuild) {
+
+				//let's just see what weird rooms we get first
+				//int remainingBuckets = (closetsBuilt < closets ? 1 : 0) + (medRoomsBuilt < medRooms ? 1 : 0) + (narrowsBuilt < narrows ? 1 : 0);
+				//int roll = Random.Range(0, remainingBuckets);
+
+				// There's gotta be a better way to do this but I have no time
+				List<Tile> availableTiles = new List<Tile>();
+
+				if (_medRoomsBuilt < _medRooms) {
+					availableTiles.Add(medRoomTypes[Random.Range(0, medRoomTypes.Length)]);
+				}
+
+				if (_narrowsBuilt < _narrows) {
+					availableTiles.Add(narrowRoomTypes[Random.Range(0, narrowRoomTypes.Length)]);
+				}
+
+				if (_closetsBuilt < _closets && _built > 0) { // don't start with a closet
+					availableTiles.Add(closetRoomTypes[Random.Range(0, closetRoomTypes.Length)]);
+				}
+
+				if (availableTiles.Count == 0)
+					break;
+
+				Tile newTileType = availableTiles[Random.Range(0, availableTiles.Count)];
+				Tile newTile = null;
+
+				Vector3 extents = Vector3.one * 3.0f;
+				BoxCollider box = newTileType.GetComponentInChildren<BoxCollider>();
+				if (box) {
+					Debug.LogFormat("Found extents for {0}", newTileType);
+					extents = box.bounds.extents;
+				} else {
+					//Debug.LogFormat("No extents for {0}", newTileType);
+				}
+				//box.bounds.extents
+				//box.size;
+
+				Collider[] cols = Physics.OverlapBox(joiningPoint.position, extents, joiningPoint.rotation);
+				if (cols.Length == 0 || _built < 1) {
+					BuildTile(newTileType, joiningPoint, out newTile, 1f);
+				} else {
+					Debug.Log("Collision, rerouting");
+				}
+				
+				
+
+				//BuildTile(newTileType, joiningPoint, out Tile newTile, 1f);
+				//BuildTile(roomTypes[Random.Range(0, roomTypes.Length)], t, out Tile newTile);
+
+				if (newTile != null) {
+					switch (newTile.TileType) {
+						case TileType.RoomMed:
+							_medRoomsBuilt++;
+							break;
+						case TileType.RoomNarrow:
+							_narrowsBuilt++;
+							break;
+						case TileType.RoomCloset:
+							_closetsBuilt++;
+							break;
+					}
+					joiningPoint = GetRandomExit(newTile);
+				}
+				
+				int rewind = placedTiles.Count;
+				while (joiningPoint == null && rewind > 0) {
+					Debug.Log("Rewinding...");
+					rewind--;
+					joiningPoint = GetRandomExit(placedTiles[rewind]);
+				}
+				
+				
+				//placedTiles[placedTiles.Count-1]
+
+
+				_built++;
+			}
+
+			availableWalls.Remove(roomStartNode);
+
 
 		}
 	}
@@ -734,10 +831,10 @@ public class ApartmentBuilder : MonoBehaviour
 	/// <summary>
 	/// Return coordinates rounded to gridsnap (typically used for tile coordinates, to prevent being placed too closely together)
 	/// </summary>
-	protected Vector3 GetBlockCoordinates(Vector3 coords)
+	protected Vector3 GetBlockCoordinates(Vector3 coords, float snap = tileGridSnap)
 	{
 		//return ap_Utility.RoundTo(coords, tileGridSnap);
-		return new Vector3(ap_Utility.RoundTo(coords.x, tileGridSnap), coords.y, ap_Utility.RoundTo(coords.z, tileGridSnap));
+		return new Vector3(ap_Utility.RoundTo(coords.x, snap), coords.y, ap_Utility.RoundTo(coords.z, snap));
 	}
 
 	protected void BuildWalls()
@@ -758,7 +855,7 @@ public class ApartmentBuilder : MonoBehaviour
 			//debug += "";
 
 
-		Debug.LogFormat("{0} available walls, {1} available exits, should build {2} walls", availableWalls.Count, availableExits.Count, wallsToBuild.Count );
+		//Debug.LogFormat("{0} available walls, {1} available exits, should build {2} walls", availableWalls.Count, availableExits.Count, wallsToBuild.Count );
 
 		for (int i = 0; i < wallsToBuild.Count; i++) {
 
@@ -778,12 +875,11 @@ public class ApartmentBuilder : MonoBehaviour
 				}
 			}
 
-			//Vector3 blockCoords = GetBlockCoordinates(joiningPoint.position);
-
-			//if (placedWallCoords.Contains(blockCoords))
-			//	continue;
-
-			//placedWallCoords.Add(blockCoords);
+			//TODO: REMOVE THIS COORDINATE BLOCKING IF WE'RE USING WALLS WITH CULLED BACKFACES (e.g., interior/exterior walls would be placed very close together)
+			Vector3 blockCoords = GetBlockCoordinates(joiningPoint.position, 1.0f);
+			if (placedWallCoords.Contains(blockCoords))
+				continue;
+			placedWallCoords.Add(blockCoords);
 
 			GameObject newWall = Instantiate(newWallType, joiningPoint.position, joiningPoint.rotation, joiningPoint.parent);
 			//Debug.Log("Built wall");
@@ -830,10 +926,10 @@ public class ApartmentBuilder : MonoBehaviour
 			}
 		}
 
-		if (validExits.Count > 1)
+		if (validExits.Count > 0)
 			return validExits[Random.Range(0, validExits.Count)];
 		else
-			return validExits[0];
+			return null;
 	}
 
 	/// <summary>

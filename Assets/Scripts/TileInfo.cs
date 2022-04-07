@@ -12,6 +12,9 @@ namespace TileInfo
 		Fork,
 		Room,
 		CorridorSmall,
+		RoomMed,
+		RoomNarrow,
+		RoomCloset
 	}
 
 	public enum WallType
