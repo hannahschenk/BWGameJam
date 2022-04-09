@@ -8,6 +8,10 @@ public class ap_ContextMenuHelpers : Editor
 
 	//private static List<GameObject> selection = new List<GameObject>();
 
+	//private const float snap = 3.0f;
+	private const float snap = 1.0f;
+	private const float rotSnap = 90f;
+
 	[MenuItem("GameObject/Snap Positions and Rotations", false, 0)]
 	private static void SnapPositionsAndRotations()
 	{
@@ -18,8 +22,8 @@ public class ap_ContextMenuHelpers : Editor
 			//targets[i].localPosition
 
 			Undo.RecordObject(targets[i], "Snap Positions and Rotations " + targets[i].name);
-			targets[i].localPosition = ap_Utility.RoundTo(targets[i].localPosition, 3.0f);
-			targets[i].eulerAngles = ap_Utility.RoundTo(targets[i].eulerAngles, 90.0f);
+			targets[i].localPosition = ap_Utility.RoundTo(targets[i].localPosition, snap);
+			targets[i].eulerAngles = ap_Utility.RoundTo(targets[i].eulerAngles, rotSnap);
 
 			//Undo.RecordObject(targets[i], "Paste Transform Values " + targets[i].name);
 			//targets[i].localPosition = values[j].localPosition;
