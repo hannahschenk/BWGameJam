@@ -105,7 +105,7 @@ Shader "Hidden/Outline Post Process"
 			float depthFiniteDifference0 = depth1 - depth0;
 			float depthFiniteDifference1 = depth3 - depth2;
 			// edgeDepth is calculated using the Roberts cross operator, the same operation is applied to the normal below.
-			float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 100;
+			float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * 200;
 			edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
 
 			float3 normalFiniteDifference0 = normal1 - normal0;
@@ -123,10 +123,7 @@ Shader "Hidden/Outline Post Process"
 			float4 bottomNeighbor = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, (i.texcoord - float2(0, _MainTex_TexelSize.y)));
 
 			//check if neighboring pixels are light, if so the edge color is dark. Else the edge color is light.
-			if (any((_Dark.rgb + rightNeighbor.rgb) &&
-				(_Dark.rgb + leftNeighbor.rgb) &&
-				(_Dark.rgb + topNeighbor.rgb) &&
-				(_Dark.rgb + bottomNeighbor.rgb))) 
+			if (all(((_Dark.rgb + rightNeighbor.rgb), (_Dark.rgb + leftNeighbor.rgb), (_Dark.rgb + topNeighbor.rgb), (_Dark.rgb + bottomNeighbor.rgb))))
 			{
 				edgeColor = float4(_Dark.rgb, _Dark.a * edge);
 			}
