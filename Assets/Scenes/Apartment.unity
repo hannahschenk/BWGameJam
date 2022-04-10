@@ -752,7 +752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6f975d5e2996a4baca3a83a0e3ac08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxFloors: 10
+  maxFloors: 1
   roomsPerFloorRange: {x: 12, y: 14}
   closedDoorChance: 0.5
   usePrebuiltFloor: 0

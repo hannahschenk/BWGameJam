@@ -90,6 +90,10 @@ public class ApartmentBuilder : MonoBehaviour
 			Tile tile = roomComponentTypes[i];
 
 			Renderer renderer = tile.GetComponentInChildren<Renderer>();
+			//Collider renderer = tile.GetComponentInChildren<Collider>();
+			//MeshCollider renderer = tile.GetComponentInChildren<MeshCollider>();
+			
+
 			Bounds bounds = renderer.bounds;
 
 			roomComponentsArea.Add(tile, Mathf.RoundToInt(bounds.size.x * bounds.size.z));
@@ -1079,10 +1083,10 @@ public class ApartmentBuilder : MonoBehaviour
 			}
 
 			//TODO: REMOVE THIS COORDINATE BLOCKING IF WE'RE USING WALLS WITH CULLED BACKFACES (e.g., interior/exterior walls would be placed very close together)
-			Vector3 blockCoords = GetBlockCoordinates(joiningPoint.position, 1.0f);
-			if (placedWallCoords.Contains(blockCoords))
-				continue;
-			placedWallCoords.Add(blockCoords);
+			//Vector3 blockCoords = GetBlockCoordinates(joiningPoint.position, 1.0f);
+			//if (placedWallCoords.Contains(blockCoords))
+			//	continue;
+			//placedWallCoords.Add(blockCoords);
 
 			GameObject newWall = Instantiate(newWallType, joiningPoint.position, joiningPoint.rotation, joiningPoint.parent);
 			//Debug.Log("Built wall");
