@@ -39,30 +39,10 @@ public class ApartmentBuilder : MonoBehaviour
 	public GameObject[] wallTypes;
 	public GameObject[] railingTypes;
 	public GameObject[] closedDoorTypes;
+	public GameObject[] exteriorPanels;
 
 	// Rooms
-	public Tile[] medRoomTypes;
-	public Tile[] narrowRoomTypes;
-	public Tile[] closetRoomTypes;
-	//public GameObject roomScaffold;
-	public Tile roomScaffoldType;
-
 	public Tile[] roomComponentTypes;
-	//public GameObject[] roomComponentTypes;
-
-
-	//public GameObject[] prebuiltRooms;
-	//public List<Tile, float> roomBlocksAndArea = new List<Tile, float>();
-	//public Dictionary<Tile, float> roomBlocksAndArea = new Dictionary<Tile, float>();
-
-	//public Room[] rooms;
-
-	//[Ser]
-	//public struct Room
-	//{
-	//	public Tile tile;
-	//	public float area;
-	//}
 
 	//Build data
 	protected Transform currentFloor; //empty wing gameobject for organization purposes
@@ -199,6 +179,11 @@ public class ApartmentBuilder : MonoBehaviour
 				//Debug.LogFormat("Built rooms, {0} available exits left", availableExits.Count);
 
 				BuildWalls();
+
+				// Build Exterior Panel
+				Vector3 panelPos = new Vector3(3f, elevation, -3f);
+				//Quaternion.FromToRotation(Vector3.forward, Vector3.right);
+				Instantiate(exteriorPanels[Random.Range(0, exteriorPanels.Length)], panelPos, Quaternion.FromToRotation(Vector3.forward, Vector3.right), currentFloor);
 
 				elevation += floorHeight;
 				ClearVars();
@@ -573,133 +558,6 @@ public class ApartmentBuilder : MonoBehaviour
 
 	}
 
-	public void PlacePrebuiltRooms(List<Transform> roomPositions)
-	{
-
-	}
-
-	public enum RoomBoundariesType
-	{
-		Med,	// 6x6
-		Small,	// 4x4
-		Narrow,	// 2x6
-		Short,	// 2x4
-		Closet	// 2x2
-	}
-
-	protected void CreateRoomBoundaries(List<Transform> roomPositions)
-	{
-		// 4 med tiles: 6*6*4 = 144 1m blocks
-		// 
-		// walls are 0.2m thick
-
-		//Multiple entrances? Probably via targeted cleanup work afterwards.
-		foreach (Transform roomStartNode in roomPositions) {
-
-			//Tile newTileType = roomScaffold
-			//Instantiate(roomScaffold, roomStartNode.position, roomStartNode.rotation, roomStartNode);
-			BuildTile(roomScaffoldType, roomStartNode, out Tile newTile);
-
-			CreateRoom(RoomBoundariesType.Med, roomStartNode, newTile.transform);
-			break;
-		}
-
-	}
-
-	protected void CreateRoom(RoomBoundariesType roomType, Transform joiningPoint, Transform scaffold)
-	{
-		Bounds room;
-		switch (roomType) {
-			case RoomBoundariesType.Med:
-				room = new Bounds(new Vector3(3f, 0f, 3f), new Vector3(6f, 0f, 6f));
-				break;
-			case RoomBoundariesType.Small:
-				room = new Bounds(new Vector3(2f, 0f, 2f), new Vector3(4f, 0f, 4f));
-				break;
-			case RoomBoundariesType.Narrow:
-				room = new Bounds(new Vector3(1f, 0f, 3f), new Vector3(2f, 0f, 6f));
-				break;
-			case RoomBoundariesType.Short:
-				room = new Bounds(new Vector3(1f, 0f, 2f), new Vector3(2f, 0f, 4f));
-				break;
-			case RoomBoundariesType.Closet:
-				room = new Bounds(new Vector3(1f, 0f, 1f), new Vector3(2f, 0f, 2f));
-				break;
-			default:
-				room = new Bounds(new Vector3(3f, 0f, 3f), new Vector3(6f, 0f, 6f));
-				break;
-		}
-
-		Vector3 worldPos = joiningPoint.position;
-		// tile is 'facing' joiningPoint.forward...
-		// offset is scaffold.centre - joiningPoint.position
-
-		//Rotated Vector3 = rotation * vector3;
-
-		// we need to rotate, BUT HOW? WHICH DIRECTION?
-
-		// THIS IS ALL SUPER WRONG. //
-		// Start from scratch probably, or work through it slower. //
-
-		int wallsToBuild = Mathf.RoundToInt((room.size.x + room.size.z)); // Perimeter: [2(l+w)] / 2 (each wall is 2 units)
-		int wallsBuilt = 0;
-
-		Debug.LogFormat("Building {0} walls", wallsToBuild);
-
-		while (wallsBuilt < wallsToBuild) {
-
-			Vector3 wallPos = Vector3.zero;
-			//Quaternion wallRot = Quaternion.identity;
-			Quaternion wallRot = joiningPoint.rotation;
-
-			float wallSlot = 0.0f;
-
-			if (wallsBuilt < room.size.x) {
-				wallSlot = wallsBuilt % (room.size.x / 2f); //e.g., build at slot 1,2,3 at y=0 -> 1,2,3 at y=y
-															//wallPos = joiningPoint.position + (joiningPoint.right * (wallSlot + 1) * 2f);
-				wallPos = Vector3.right * (wallSlot + 1) * 2f;
-
-				Vector3 direction = -joiningPoint.forward; //first walls face out, backwards
-
-				if (wallsBuilt > (room.size.x / 2f)) {
-					//Debug.LogFormat("WallPos Before: {0}", wallPos);
-					//wallPos += room.size.z * joiningPoint.forward;
-					wallPos.z += room.size.z;
-					//Debug.LogFormat("WallPos After: {0}", wallPos);
-
-					//wallPos.z = room.size.z;
-					direction = -direction;
-				}
-
-				//Debug.LogFormat("Building wall {0}, room size is {1}, slot: {2}", wallsBuilt, room.size, wallSlot);
-
-				//wallRot = Quaternion.FromToRotation(joiningPoint.forward, direction);
-			}
-			//} else if ((wallsBuilt - room.size.x) < room.size.z) {
-			//	wallSlot = wallsBuilt % (room.size.z / 2f); //e.g., build at slot 1,2,3 at x=0 -> 1,2,3 at x=x
-			//	wallPos = joiningPoint.position + (joiningPoint.forward * (wallSlot + 1) * 2f);
-
-			//	Vector3 direction = -joiningPoint.right; //first walls face out, leftwards
-
-			//	if (wallsBuilt > (room.size.z / 2f)) {
-			//		//wallPos.x = room.size.x;
-			//		wallPos += room.size.x * joiningPoint.right;
-			//		direction = -direction;
-			//	}
-
-			//	//wallRot = Quaternion.FromToRotation(joiningPoint.forward, direction);
-			//	//Build (0, 0->y) then (x, 0->y)
-			//}
-			wallPos = scaffold.TransformPoint(wallPos);
-
-			Instantiate(wallTypes[Random.Range(0, wallTypes.Length)], wallPos, wallRot, scaffold);
-
-			wallsBuilt++;
-		}
-
-
-	}
-
 	protected void AddClosedDoors(Transform[] possibleRoomPositions)
 	{
 		foreach (Transform currentAnchor in possibleRoomPositions) {
@@ -719,17 +577,20 @@ public class ApartmentBuilder : MonoBehaviour
 	}
 
 	protected int maxRoomArea = 144; //96? //Could be a range...
+	protected float returnToRootRoomProbability = 0.5f; //Chance the room builder will return to fork from a root room (medium) rather than continue building
 
 	public bool debugRoomAssembly = false;
 
 	protected void AssembleRoomsFromBlocks2(List<Transform> roomPositions)
 	{
 		int failedRooms = 0;
+		int totalRoomsBuilt = 0;
+		int totalAreaLeft = 0;
 
 		//foreach (Transform roomStartNode in roomPositions) {
 		for (int i = 0; i < roomPositions.Count; i++) {
 
-
+			Tile currentTile = null;
 			List<Tile> roomsToBuild = new List<Tile>(); //component blocks in the rooms to build
 			List<Tile> candidateTiles = new List<Tile>(roomComponentTypes); //Candidate tiles that we can build
 			Dictionary<Tile, Vector3> candidateTilesAtPositions = new Dictionary<Tile, Vector3>();
@@ -742,12 +603,13 @@ public class ApartmentBuilder : MonoBehaviour
 			joiningPoints.Add(roomPositions[i]);
 
 			int roomsBuilt = 0;
+			int rewinds = 0;
 
 			if (debugRoomAssembly)
 				Debug.LogFormat("-------------------Room {0} started!-------------------------", i);
 
+			// Try to place room tiles, ensuring they fit our area budget, and can be placed without any collisions.
 			while (_remainingArea > 0) {
-				//int _remainingArea = 10;
 
 				candidateTiles = CheckTilesArea(candidateTiles, _remainingArea);
 
@@ -770,9 +632,9 @@ public class ApartmentBuilder : MonoBehaviour
 					attempts++;
 				}
 
-				if (attempts > 0) {
-					Debug.LogFormat("Floor {0} Room {1}: Fit a room at an alternate exit", floorsBuilt, i);
-				}
+				//if (attempts > 0) {
+					//Debug.LogFormat("Floor {0} Room {1}: Fit a room at an alternate exit", floorsBuilt, i);
+				//}
 
 				// NEED TO SOMEHOW BE ABLE TO GO /BACK/ TO TRY ANOTHER ROOM STARTING NODE (e.g., more attached to the selection process for nodes)
 				// Might make more sense to 'build' rooms as we select them, instead of being so separated.
@@ -784,15 +646,34 @@ public class ApartmentBuilder : MonoBehaviour
 				}
 
 
-				if (!fitTile && roomsBuilt > 0) { //e.g., not the first tile
+				if (!fitTile && roomsBuilt > 0) {
 					if (debugRoomAssembly)
-						Debug.LogFormat("Room {0}: Couldn't fit any more tiles to {1}, remaining area: {2}", i, joiningPoints[0], _remainingArea);
-
-					// Try a different exit
-
-
+						Debug.LogFormat("Room {0}: Couldn't fit any more tiles to {1}, can't backtrack any further, remaining area: {2}", i, currentTile, _remainingArea);
 				}
-				
+
+
+
+				//if (!fitTile && roomsBuilt > 0) { //e.g., not the first tile
+
+				//	// No exits at our current tile, go back a tile
+				//	int lastTileIndex = placedTiles.IndexOf(currentTile) - 1;
+
+				//	if (roomsBuilt <= rewinds) {
+				//		//if (debugRoomAssembly)
+				//			Debug.LogFormat("Room {0}: Couldn't fit any more tiles to {1}, can't backtrack any further, remaining area: {2}", i, currentTile, _remainingArea);
+				//		break;
+				//	}
+
+				//	Debug.LogFormat("Room {0}: Couldn't fit any more tiles to {1}, rewinding...", i, currentTile);
+
+				//	rewinds++;
+				//	joiningPoints.Clear();
+				//	joiningPoints = GetAvailableExits(placedTiles[lastTileIndex]);
+				//	//joiningPoints.AddRange(GetAvailableExits(placedTiles[lastTileIndex]));
+				//	continue;
+
+				//}
+
 
 				/*while (!fitTile) {
 
@@ -829,11 +710,13 @@ public class ApartmentBuilder : MonoBehaviour
 					Debug.LogFormat("Room {0}: Success! Building tile {1}, remaining area: {2}", i, newTileType, _remainingArea);
 
 
-				BuildTile(newTileType, joiningPoint, pos, out Tile newTile, 1f);
+				BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
 				roomsBuilt++;
 
-				joiningPoints.Clear();
-				joiningPoints = GetAvailableExits(newTile);
+				joiningPoints.Remove(joiningPoint);
+				joiningPoints.AddRange(GetAvailableExits(currentTile));
+				//joiningPoints.Clear();
+				//joiningPoints = GetAvailableExits(currentTile);
 
 				//joiningPoint = GetRandomExit(newTile);
 
@@ -869,10 +752,13 @@ public class ApartmentBuilder : MonoBehaviour
 				//}
 
 			}
+			totalRoomsBuilt += roomsBuilt;
+			totalAreaLeft += _remainingArea;
 			if (debugRoomAssembly)
 				Debug.LogFormat("-------------------Room {0} finished!-------------------------", i);
 			//break;
 		}
+		Debug.LogFormat("Floor {0}: Built {1} rooms, with a total unrealized area of {2}", floorsBuilt, totalRoomsBuilt, totalAreaLeft);
 	}
 
 	protected List<Tile> CheckTilesArea(List<Tile> candidateTiles, int remainingArea)
@@ -948,24 +834,8 @@ public class ApartmentBuilder : MonoBehaviour
 
 	protected bool CanBuildRoomComponent(Tile tile, Transform joiningPoint)
 	{
-		
-
-		//if (remainingArea < currentRoomArea)
-			//return false;
-
 		Vector3 pos = GetNewTilePosition(tile, joiningPoint);
 
-		//protected Vector3 GetNewTilePosition(Tile newTileType, Transform joiningPoint)
-		//{
-		//	//Vector3 localEntryPos = GetEntry(newTileType).localPosition;
-		//	Vector3 localEntryPos = GetRandomEntry(newTileType).localPosition;
-		//	Vector3 offset = joiningPoint.rotation * (Vector3.zero - localEntryPos); //Get offset between Tile's Centre (v3.zero) and its Entry, rotate based on joining point's facing
-		//	Vector3 worldPos = joiningPoint.position + offset;
-		//	return new Vector3(Mathf.Round(worldPos.x), worldPos.y, Mathf.Round(worldPos.z));
-		//	//return ap_Utility.Round(joiningPoint.position + offset); //Round to nearest integer for proper placement
-		//}
-
-		//Vec
 		Bounds bounds = tile.GetComponent<Renderer>().bounds;
 
 		Collider[] cols = Physics.OverlapBox(pos, bounds.extents, joiningPoint.rotation);
@@ -973,113 +843,8 @@ public class ApartmentBuilder : MonoBehaviour
 			Debug.Log("Collision!");
 			return false;
 		}
-
-
-		//remainingArea -= currentRoomArea;
 		return true;
 	}
-
-	//protected Tile
-
-	protected void AssembleRoomsFromBlocks(List<Transform> roomPositions)
-	{
-		foreach (Transform roomStartNode in roomPositions) {
-
-			int _medRooms = Random.Range(1, 3); //1-2 rooms
-												//int medRooms = Random.Range(1, 4); //1-3 rooms
-			int _closets = Random.Range(1, 3);
-			int _narrows = Random.Range(1, 3);
-
-			int _totalBuild = _medRooms + _closets + _narrows;
-			int _built = 0;
-			int _closetsBuilt = 0, _medRoomsBuilt = 0, _narrowsBuilt = 0;
-
-			Transform joiningPoint = roomStartNode;
-
-			while (_built < _totalBuild) {
-
-				//let's just see what weird rooms we get first
-				//int remainingBuckets = (closetsBuilt < closets ? 1 : 0) + (medRoomsBuilt < medRooms ? 1 : 0) + (narrowsBuilt < narrows ? 1 : 0);
-				//int roll = Random.Range(0, remainingBuckets);
-
-				// There's gotta be a better way to do this but I have no time
-				List<Tile> availableTiles = new List<Tile>();
-
-				if (_medRoomsBuilt < _medRooms) {
-					availableTiles.Add(medRoomTypes[Random.Range(0, medRoomTypes.Length)]);
-				}
-
-				if (_narrowsBuilt < _narrows) {
-					availableTiles.Add(narrowRoomTypes[Random.Range(0, narrowRoomTypes.Length)]);
-				}
-
-				if (_closetsBuilt < _closets && _built > 0) { // don't start with a closet
-					availableTiles.Add(closetRoomTypes[Random.Range(0, closetRoomTypes.Length)]);
-				}
-
-				if (availableTiles.Count == 0)
-					break;
-
-				Tile newTileType = availableTiles[Random.Range(0, availableTiles.Count)];
-				Tile newTile = null;
-
-				Vector3 extents = Vector3.one * 3.0f;
-				//BoxCollider box = newTileType.GetComponentInChildren<BoxCollider>();
-				Collider col = newTileType.GetComponentInChildren<Collider>();
-				if (col) {
-					//Debug.LogFormat("Found extents for {0}", newTileType);
-					extents = col.bounds.extents;
-				} else {
-					Debug.LogFormat("No extents for {0}", newTileType);
-				}
-				//box.bounds.extents
-				//box.size;
-
-				Collider[] cols = Physics.OverlapBox(joiningPoint.position, extents, joiningPoint.rotation);
-				if (cols.Length == 0 || _built < 1) {
-					BuildTile(newTileType, joiningPoint, out newTile, 1f);
-				} else {
-					Debug.Log("Collision, rerouting");
-				}
-
-
-
-				//BuildTile(newTileType, joiningPoint, out Tile newTile, 1f);
-				//BuildTile(roomTypes[Random.Range(0, roomTypes.Length)], t, out Tile newTile);
-
-				if (newTile != null) {
-					switch (newTile.TileType) {
-						case TileType.RoomMed:
-							_medRoomsBuilt++;
-							break;
-						case TileType.RoomNarrow:
-							_narrowsBuilt++;
-							break;
-						case TileType.RoomCloset:
-							_closetsBuilt++;
-							break;
-					}
-					joiningPoint = GetRandomExit(newTile);
-				}
-
-				int rewind = placedTiles.Count;
-				while (joiningPoint == null && rewind > 0) {
-					Debug.Log("Rewinding...");
-					rewind--;
-					joiningPoint = GetRandomExit(placedTiles[rewind]);
-				}
-
-
-				//placedTiles[placedTiles.Count-1]
-
-
-				_built++;
-			}
-
-			availableWalls.Remove(roomStartNode);
-		}
-	}
-
 
 	protected bool ShouldBuildDoorHere(Transform currentAnchor, Tile parentTile, bool preventNeighbors)
 	{

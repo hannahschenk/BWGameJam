@@ -752,13 +752,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a6f975d5e2996a4baca3a83a0e3ac08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxFloors: 20
-  roomsPerFloorRange: {x: 8, y: 12}
+  maxFloors: 10
+  roomsPerFloorRange: {x: 12, y: 14}
   closedDoorChance: 0.5
   usePrebuiltFloor: 0
   Floor: {fileID: 0}
-  startRoomType: {fileID: 6394240378717334887, guid: 19046e8b2262def4784b159684b401a5, type: 3}
-  endRoomType: {fileID: 3770899514830141400, guid: 0aa51075fff16714eb42609ab4bb783d, type: 3}
+  startRoomType: {fileID: 3976085811170480564, guid: db56e8cb667d70642ae18a9c87f04323, type: 3}
+  endRoomType: {fileID: 2283118750560467285, guid: f0d9f8cb1ba0cc348af1441dfc3ddcfc, type: 3}
   corridorTypes:
   - {fileID: 9119996944310820296, guid: 5791c9098a3d6ae4a926e31c17d426ee, type: 3}
   rightTurnTypes:
@@ -779,20 +779,15 @@ MonoBehaviour:
   - {fileID: 3472093940062592310, guid: abd1b2e6c1b5c2a4f88a9bcb72e1fa53, type: 3}
   closedDoorTypes:
   - {fileID: 4188331955466184948, guid: 1f4b701ac660b2f47a488966fcacbb77, type: 3}
-  medRoomTypes:
-  - {fileID: 8233196583097636468, guid: c74691b6734f4854090a085d7d7a611b, type: 3}
-  narrowRoomTypes:
-  - {fileID: 3436576818608340893, guid: ff03b5e090a486942a3f4c72456ae6e3, type: 3}
-  closetRoomTypes:
-  - {fileID: 5198742520308623142, guid: c4836ca387104d44ba9993390ecb24ba, type: 3}
-  roomScaffoldType: {fileID: 2603569871112687733, guid: 84be11bde741cca4784798b729083f01, type: 3}
+  exteriorPanels:
+  - {fileID: 3479516500947347332, guid: 4f4927996620b954eaaeaef6a24f4657, type: 3}
   roomComponentTypes:
-  - {fileID: 5198742520308623142, guid: c4836ca387104d44ba9993390ecb24ba, type: 3}
-  - {fileID: 6403912347932177956, guid: 584a26185cf830d419988f8b0f20c404, type: 3}
-  - {fileID: 6859382989755393323, guid: f4fd20b8f4243624e84ca5ad0adbec69, type: 3}
   - {fileID: 8233196583097636468, guid: c74691b6734f4854090a085d7d7a611b, type: 3}
+  - {fileID: 6859382989755393323, guid: f4fd20b8f4243624e84ca5ad0adbec69, type: 3}
+  - {fileID: 6403912347932177956, guid: 584a26185cf830d419988f8b0f20c404, type: 3}
+  - {fileID: 2492685225022382950, guid: ca08927c4f5afa44d9bbd1ef5f488baf, type: 3}
   buildRailings: 1
-  currentSeed: -1872007762
+  currentSeed: 0
   debugForksPerSegment: 1
   debugRoomAssembly: 0
   debugRoomTesting: 0
