@@ -29,6 +29,11 @@ namespace StarterAssets
 		[Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
 		public float Gravity = -15.0f;
 
+		public float CrouchPlayerScale = 0.75f;
+		public float CrouchSpeedScale = 0.70f;
+		public float CrouchRotationScale = 0.9f;
+		public float CrouchTimeout = 0.1f;
+
 		[Space(10)]
 		[Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
 		public float JumpTimeout = 0.1f;
@@ -65,6 +70,7 @@ namespace StarterAssets
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
+		private float _crouchTimeoutDelta;
 
 		private PlayerInput _playerInput;
 		private CharacterController _controller;
@@ -72,6 +78,31 @@ namespace StarterAssets
 		private GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
+		protected bool isCrouching = false;
+
+		public bool IsCrouching
+		{
+			get
+			{
+				return isCrouching;
+			}
+		}
+
+		public bool IsSprinting
+		{
+			get
+			{
+				return _input.sprint;
+			}
+		}
+
+		private float GetMoveSpeed
+		{
+			get
+			{
+				return isCrouching ? MoveSpeed * CrouchSpeedScale : MoveSpeed;
+			}
+		}
 
 		private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
@@ -98,6 +129,7 @@ namespace StarterAssets
 		{
 			JumpAndGravity();
 			GroundedCheck();
+			CrouchInput();
 			Move();
 
 			//Debug.LogFormat("Player Speed: {0}", _controller.velocity.magnitude);
@@ -115,15 +147,74 @@ namespace StarterAssets
 			Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
 		}
 
+
+		private void StopCrouch()
+		{
+			if (!isCrouching)
+				return;
+
+			if (_crouchTimeoutDelta > 0.0f)
+				return;
+
+			_input.crouch = false;
+			isCrouching = false;
+			_crouchTimeoutDelta = CrouchTimeout;
+
+			transform.localScale = Vector3.one;
+
+		}
+
+		private void StartCrouch()
+		{
+			if (isCrouching)
+				return;
+
+			if (_crouchTimeoutDelta > 0.0f)
+				return;
+
+			_input.crouch = false;
+			isCrouching = true;
+			_crouchTimeoutDelta = CrouchTimeout;
+			
+			Vector3 scale = transform.localScale;
+
+			scale.y = CrouchPlayerScale;
+
+			transform.localScale = scale;
+
+		}
+
+		private void CrouchInput()
+		{
+
+			if (!Grounded)
+				StopCrouch();
+
+
+			if (_input.crouch) {
+
+				if (!isCrouching)
+					StartCrouch();
+				else
+					StopCrouch();
+
+			}
+
+
+			if (_crouchTimeoutDelta >= 0.0f)
+				_crouchTimeoutDelta -= Time.deltaTime;
+
+		}
+
 		private void CameraRotation()
 		{
 			// if there is an input
 			if (_input.look.sqrMagnitude >= _threshold) {
 				//Don't multiply mouse input by Time.deltaTime
-				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+				float deltaTimeMultiplier = (IsCurrentDeviceMouse ? 1.0f : Time.deltaTime) * Time.timeScale;
 
-				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
-				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+				_cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier * CrouchRotationScale;
+				_rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier * CrouchRotationScale;
 
 				// clamp our pitch rotation
 				_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
@@ -141,7 +232,7 @@ namespace StarterAssets
 			// set target speed based on move speed, sprint speed and if sprint is pressed
 
 			//float targetSpeed = (_input.sprint) ? SprintSpeed : MoveSpeed;
-			float targetSpeed = (_input.sprint && Grounded) ? SprintSpeed : MoveSpeed; //Prevents sprinting in the air
+			float targetSpeed = (_input.sprint && Grounded && !isCrouching) ? SprintSpeed : GetMoveSpeed; //Prevents sprinting in the air
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -162,8 +253,9 @@ namespace StarterAssets
 				// creates curved result rather than a linear one giving a more organic speed change
 				// note T in Lerp is clamped, so we don't need to clamp our speed
 
-				//_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate);
-				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * (Grounded ? inputMagnitude : 1.0f), Time.deltaTime * SpeedChangeRate);
+
+				//_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * SpeedChangeRate); 
+				_speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * (Grounded ? inputMagnitude : 1.0f), Time.deltaTime * SpeedChangeRate); // Reduces input 
 
 				// round speed to 3 decimal places
 				_speed = Mathf.Round(_speed * 1000f) / 1000f;
