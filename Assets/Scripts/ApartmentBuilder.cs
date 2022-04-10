@@ -603,7 +603,7 @@ public class ApartmentBuilder : MonoBehaviour
 			joiningPoints.Add(roomPositions[i]);
 
 			int roomsBuilt = 0;
-			int rewinds = 0;
+			//int rewinds = 0;
 
 			if (debugRoomAssembly)
 				Debug.LogFormat("-------------------Room {0} started!-------------------------", i);
