@@ -32,6 +32,35 @@ public class ap_ContextMenuHelpers : Editor
 		}
 	}
 
+	[MenuItem("Assets/Set Material to Cel", false, 0)]
+	private static void SetMaterialToCel()
+	{
+		//Transform[] targets = Selection.transforms;
+		GameObject[] targets = Selection.gameObjects;
+
+		for (int i = 0; i < targets.Length; i++) {
+
+			Renderer renderer = targets[i].GetComponentInChildren<Renderer>();
+
+			if (!renderer)
+				return;
+
+			
+			Material mat = (Material)AssetDatabase.LoadAssetAtPath("Assets/Art/Materials/CelMaterial.mat", typeof(Material));
+
+			Undo.RecordObject(targets[i], "Set Material to Cel " + targets[i].name);
+			renderer.material = mat;
+
+			//targets[i].localPosition = ap_Utility.RoundTo(targets[i].localPosition, snap);
+			//targets[i].eulerAngles = ap_Utility.RoundTo(targets[i].eulerAngles, rotSnap);
+
+			//Undo.RecordObject(targets[i], "Paste Transform Values " + targets[i].name);
+			//targets[i].localPosition = values[j].localPosition;
+			//targets[i].localRotation = values[j].localRotation;
+			//targets[i].localScale = values[j].localScale;
+		}
+	}
+
 	[MenuItem("GameObject/Select Walls/+X", false, 1)]
 	private static void SelectWallsRight()
 	{
