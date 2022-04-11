@@ -9,8 +9,8 @@ public class PlayerFPAnimator : MonoBehaviour
 
 	protected int animTriggerFoundItem;
 	protected int animBoolHasItem;
-	protected int animFloatBells;
-	protected int animFloatWeapons;
+	protected int animIntBells;
+	protected int animIntWeapons;
 
 
 	// Start is called before the first frame update
@@ -26,8 +26,8 @@ public class PlayerFPAnimator : MonoBehaviour
 
 		animTriggerFoundItem = Animator.StringToHash("foundItem");
 		animBoolHasItem = Animator.StringToHash("hasItem");
-		animFloatBells = Animator.StringToHash("bells");
-		animFloatWeapons = Animator.StringToHash("weapons");
+		animIntBells = Animator.StringToHash("bells");
+		animIntWeapons = Animator.StringToHash("weapons");
 	}
 
 	// Update is called once per frame
@@ -44,5 +44,22 @@ public class PlayerFPAnimator : MonoBehaviour
 	public void PickupItem()
 	{
 		stats.PickupItem();
+	}
+
+	public void UpdateItemsState()
+	{
+		anim.SetBool(animBoolHasItem, (stats.HasBell || stats.HasSickle) );
+	}
+
+	public void UpdateSickle(bool state)
+	{
+		anim.SetInteger(animIntWeapons, state ? 1 : 0);
+		UpdateItemsState();
+	}
+
+	public void UpdateBell(bool state)
+	{
+		anim.SetInteger(animIntBells, state ? 1 : 0);
+		UpdateItemsState();
 	}
 }

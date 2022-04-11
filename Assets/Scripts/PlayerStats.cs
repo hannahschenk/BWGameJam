@@ -88,6 +88,12 @@ public class PlayerStats : MonoBehaviour
 		_input = GetComponent<PlayerInputs>();
 	}
 
+	private void Reset()
+	{
+		LoseBell();
+		LoseSickle();
+	}
+
 	private void Update()
 	{
 		InteractInput();	
@@ -132,6 +138,8 @@ public class PlayerStats : MonoBehaviour
 			return;
 		}
 
+		item = null;
+
 		if (!items.TryGetValue(rb, out item)) {
 			item = rb.GetComponent<PickableItem>();
 			items.Add(rb, item);
@@ -171,21 +179,25 @@ public class PlayerStats : MonoBehaviour
 	public void GainSickle()
 	{
 		HasSickle = true;
+		anim.UpdateSickle(HasSickle);
 	}
 
 	public void LoseSickle()
 	{
 		HasSickle = false;
+		anim.UpdateSickle(HasSickle);
 	}
 
 	public void GainBell()
 	{
 		HasBell = true;
+		anim.UpdateBell(HasBell);
 	}
 
 	public void LoseBell()
 	{
 		HasBell = false;
+		anim.UpdateBell(HasBell);
 	}
 
 	public void Die()
