@@ -9,6 +9,25 @@
 							<ObjectRef Name="System" ID="{D9BC3956-E85E-441F-867A-7F02C77968FD}" WorkUnitID="{D13A2233-0760-4B12-8FA6-94194D5D2E1B}"/>
 						</Reference>
 					</ReferenceList>
+					<ChildrenList>
+						<Bus Name="Ambient" ID="{9AFE09F7-D979-417A-9DFF-6ED1E7F4DC47}">
+							<ObjectLists/>
+						</Bus>
+						<Bus Name="Effects" ID="{BD56F723-F739-4A82-A7B0-72EA8D818B58}">
+							<ObjectLists/>
+							<DuckingList>
+								<DuckItem>
+									<BusRef Name="Ambient" ID="{9AFE09F7-D979-417A-9DFF-6ED1E7F4DC47}"/>
+									<DuckingParam>
+										<Volume>-6</Volume>
+										<FadeInTime>1</FadeInTime>
+										<FadeOutTime>1</FadeOutTime>
+										<FadeCurve>FadeLinear</FadeCurve>
+									</DuckingParam>
+								</DuckItem>
+							</DuckingList>
+						</Bus>
+					</ChildrenList>
 					<ObjectLists/>
 				</Bus>
 			</ChildrenList>

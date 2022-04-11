@@ -13,19 +13,21 @@ namespace AK
 {
     namespace EVENTS
     {
-        static const AkUniqueID HIGH_INTENSITY = 2083763927U;
-        static const AkUniqueID LOW_INTENSITY = 562163035U;
+        static const AkUniqueID PLAY_AMBIENCE = 278617630U;
+        static const AkUniqueID PLAY_BELL = 1945722105U;
+        static const AkUniqueID PLAY_DOORS = 3655372345U;
     } // namespace EVENTS
 
     namespace BANKS
     {
         static const AkUniqueID INIT = 1355168291U;
-        static const AkUniqueID ACTIVEBGM = 4185012183U;
-        static const AkUniqueID AMBIENTBGM = 4007402847U;
+        static const AkUniqueID EFFECTS = 1942696649U;
     } // namespace BANKS
 
     namespace BUSSES
     {
+        static const AkUniqueID AMBIENT = 77978275U;
+        static const AkUniqueID EFFECTS = 1942696649U;
         static const AkUniqueID MASTER_AUDIO_BUS = 3803692087U;
     } // namespace BUSSES
 
