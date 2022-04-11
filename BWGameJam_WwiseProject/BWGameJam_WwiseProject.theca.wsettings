@@ -3,7 +3,7 @@
 	<UserProjectSettingsInfo>
 		<UserProjectSettings Name="" ID="{91D0AFDA-FB4F-4942-B658-E1391AE05DD1}">
 			<PropertyList>
-				<Property Name="AudioFilesImporter\Path" Type="string" Value="C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\Originals\SFX\Effects\"/>
+				<Property Name="AudioFilesImporter\Path" Type="string" Value="C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\Originals\SFX\Music\"/>
 				<Property Name="Event Action List\{3465872A-270A-4422-B988-A1190DBF6A48}\x64_Expand States" Type="string" Value=""/>
 				<Property Name="Event Action List\{4CB81D40-1820-428A-B34E-5840CF6A2BB7}\x64_Expand States" Type="string" Value=""/>
 				<Property Name="Event Action List\{EF72ED6C-723F-4BD5-BB50-5D0ACCE1E65A}\x64_Expand States" Type="string" Value=""/>

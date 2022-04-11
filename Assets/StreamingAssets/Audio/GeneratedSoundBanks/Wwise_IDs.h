@@ -13,7 +13,9 @@ namespace AK
 {
     namespace EVENTS
     {
-        static const AkUniqueID PLAY_SFX_AMBIENT_1 = 1565414482U;
+        static const AkUniqueID PLAY_AMBIENCE = 278617630U;
+        static const AkUniqueID PLAY_BELL = 1945722105U;
+        static const AkUniqueID PLAY_DOORS = 3655372345U;
     } // namespace EVENTS
 
     namespace BANKS
@@ -24,6 +26,8 @@ namespace AK
 
     namespace BUSSES
     {
+        static const AkUniqueID AMBIENT = 77978275U;
+        static const AkUniqueID EFFECTS = 1942696649U;
         static const AkUniqueID MASTER_AUDIO_BUS = 3803692087U;
     } // namespace BUSSES
 
