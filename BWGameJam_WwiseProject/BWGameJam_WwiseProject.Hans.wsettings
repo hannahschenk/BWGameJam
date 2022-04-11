@@ -3,6 +3,13 @@
 	<UserProjectSettingsInfo>
 		<UserProjectSettings Name="" ID="{151F375F-6C43-454A-8EF3-7304B4E24386}">
 			<PropertyList>
+				<Property Name="Event Action List\{540A9541-EB45-4C9F-B00F-0258C871F8AC}\x64_Expand States" Type="string" Value=""/>
+				<Property Name="Event Action List\{845BE127-B8D4-4C14-811D-9E9540F32490}\x64_Expand States" Type="string" Value=""/>
+				<Property Name="Event Action List\{9A6E4FA6-EDC8-4385-859C-B4F1766D3C25}\x64_Expand States" Type="string" Value=""/>
+				<Property Name="Event Action List\{C1EBB6DF-91AA-4A3D-8D94-4AA5ABF71083}\x64_Expand States" Type="string" Value=""/>
+				<Property Name="Event Action List\{C250E9DA-1DBA-4ED3-8D8D-2BEEC2374941}\x64_Expand States" Type="string" Value=""/>
+				<Property Name="Event Action List\{D85B0687-5718-4425-A533-5A34623C88E7}\x64_Expand States" Type="string" Value=""/>
+				<Property Name="Event Action List\{DEF090F5-999D-4A80-9D3E-78A2FA0E16FD}\x64_Expand States" Type="string" Value=""/>
 				<Property Name="EventView\FilterMode1" Type="int32" Value="2"/>
 				<Property Name="ExternalSourcesInputPath" Type="string">
 					<ValueList>
@@ -17,8 +24,8 @@
 					</ValueList>
 				</Property>
 				<Property Name="Game Profiler\Voice Monitor\LastBus" Type="string" Value="{00000000-0000-0000-0000-000000000000}"/>
-				<Property Name="General\LatestLanguage" Type="int32" Value="684519430"/>
-				<Property Name="General\LatestPlatform" Type="string" Value="Mac"/>
+				<Property Name="General\LatestLanguage" Type="int32" Value="0"/>
+				<Property Name="General\LatestPlatform" Type="string" Value=""/>
 				<Property Name="GenerateSoundBanks\x64_SelectedLanguages" Type="string" Value="BvDMKA=="/>
 				<Property Name="GenerateSoundBanks\x64_SelectedPlatforms" Type="string" Value="klN4u61w3E6yYwucltv5sQ=="/>
 				<Property Name="GenerateSoundBanks\x64_SelectedSoundBanks" Type="string" Value=""/>
