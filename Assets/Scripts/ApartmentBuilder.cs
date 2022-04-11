@@ -80,6 +80,8 @@ public class ApartmentBuilder : MonoBehaviour
 	{
 		CheckRoomComponents();
 
+		GenerateApartmentParams();
+
 		NewLevel();
 	}
 
@@ -99,6 +101,22 @@ public class ApartmentBuilder : MonoBehaviour
 			roomComponentsArea.Add(tile, Mathf.RoundToInt(bounds.size.x * bounds.size.z));
 			//Debug.LogFormat("Tile {0} has an area of {1}", roomComponentTypes[i], Mathf.RoundToInt(bounds.size.x * bounds.size.z));
 		}
+	}
+
+	protected struct FloorParams
+	{
+		public int maxRoomsPerFloor;
+	}
+
+	FloorParams[] floorParams;
+
+	protected void GenerateApartmentParams()
+	{
+		floorParams = new FloorParams[maxFloors + 1];
+		for (int i = 1; i < maxFloors + 1; i++) {
+			floorParams[i].maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
+		}
+
 	}
 
 	protected void EmptyLevel()
@@ -434,13 +452,6 @@ public class ApartmentBuilder : MonoBehaviour
 			availableWalls.Remove(joiningPoint);
 	}
 
-	protected void ConsiderAndBuildTiles()
-	{
-
-
-
-	}
-
 	protected void BuildSideWings()
 	{
 		
@@ -542,7 +553,9 @@ public class ApartmentBuilder : MonoBehaviour
 		availableExits.CopyTo(possibleRoomPositions);
 		availableWalls.CopyTo(possibleRoomPositions, availableExits.Count);
 
-		int maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
+
+		int maxRoomsPerFloor = floorParams[floorsBuilt].maxRoomsPerFloor;
+		//int maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
 
 		// List of actual rooms to build, after rolling for amount to build
 		List<Transform> roomPositions = GetRandomRoomNodesAndRemoveFromArray(maxRoomsPerFloor, possibleRoomPositions);

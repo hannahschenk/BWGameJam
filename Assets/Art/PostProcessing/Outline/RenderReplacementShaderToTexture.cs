@@ -28,12 +28,11 @@ public class RenderReplacementShaderToTexture : MonoBehaviour
 
     private void Start()
     {
-        foreach (Transform t in transform)
-        {
-            DestroyImmediate(t.gameObject);
-        }
+		//foreach (Transform t in transform) {
+		//	DestroyImmediate(t.gameObject);
+		//}
 
-        Camera thisCamera = GetComponent<Camera>();
+		Camera thisCamera = GetComponent<Camera>();
 
         // Create a render texture matching the main camera's current dimensions.
         renderTexture = new RenderTexture(thisCamera.pixelWidth, thisCamera.pixelHeight, renderTextureDepth, renderTextureFormat);

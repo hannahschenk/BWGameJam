@@ -45,8 +45,9 @@ public class ap_ContextMenuHelpers : Editor
 			if (!renderer)
 				return;
 
-			
+
 			Material mat = (Material)AssetDatabase.LoadAssetAtPath("Assets/Art/Materials/CelMaterial.mat", typeof(Material));
+			//Material mat = (Material)AssetDatabase.LoadAssetAtPath("Assets/Art/Materials/Dark.mat", typeof(Material));
 
 			Undo.RecordObject(targets[i], "Set Material to Cel " + targets[i].name);
 			renderer.material = mat;

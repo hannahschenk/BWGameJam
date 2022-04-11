@@ -106,6 +106,8 @@ namespace StarterAssets
 
 		private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
+		private Vector3 capsuleSize = Vector3.zero;
+
 		private void Awake()
 		{
 			// get a reference to our main camera

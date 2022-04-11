@@ -72,6 +72,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5064779457263317250}
     m_Modifications:
+    - target: {fileID: 2028596066152800406, guid: c74691b6734f4854090a085d7d7a611b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 907193f5865bee64ba06f619cc35d22b, type: 2}
     - target: {fileID: 7371345312734436560, guid: c74691b6734f4854090a085d7d7a611b, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -257,6 +261,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomCloset
       objectReference: {fileID: 0}
+    - target: {fileID: 5544768923266094468, guid: ca08927c4f5afa44d9bbd1ef5f488baf, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 907193f5865bee64ba06f619cc35d22b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca08927c4f5afa44d9bbd1ef5f488baf, type: 3}
 --- !u!4 &8129011895575161090 stripped
