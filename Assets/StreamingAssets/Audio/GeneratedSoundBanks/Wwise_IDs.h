@@ -14,6 +14,7 @@ namespace AK
     namespace EVENTS
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         static const AkUniqueID PLAY_AMBIENCE = 278617630U;
         static const AkUniqueID PLAY_BELL = 1945722105U;
         static const AkUniqueID PLAY_DOORS = 3655372345U;
@@ -21,6 +22,9 @@ namespace AK
         static const AkUniqueID HIGH_INTENSITY = 2083763927U;
         static const AkUniqueID LOW_INTENSITY = 562163035U;
 >>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
+=======
+        static const AkUniqueID PLAY_SFX_AMBIENT_1 = 1565414482U;
+>>>>>>> parent of 7f59195 (Soundbank Generated)
     } // namespace EVENTS
 
     namespace BANKS
@@ -37,10 +41,13 @@ namespace AK
     namespace BUSSES
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         static const AkUniqueID AMBIENT = 77978275U;
         static const AkUniqueID EFFECTS = 1942696649U;
 =======
 >>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
+=======
+>>>>>>> parent of 7f59195 (Soundbank Generated)
         static const AkUniqueID MASTER_AUDIO_BUS = 3803692087U;
     } // namespace BUSSES
 
