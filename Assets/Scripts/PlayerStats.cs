@@ -8,20 +8,28 @@ public class PlayerStats : MonoBehaviour
 
 	public string PlayerTag = "Player";
 	protected Transform playerCam;
+	protected PlayerFPAnimator anim;
 
 	protected PlayerInputs _input;
-	protected Animator anim;
-
-	protected int animTriggerFoundItem;
-	protected int animBoolHasItem;
-	protected int animFloatBells;
-	protected int animFloatWeapons;
+	
+	protected PickableItem item;
 
 	protected float interactReach = 2.5f;
 	protected float interactTimeout = 0.1f;
 	protected float interactTimeoutDelta = 0f;
 
-	protected float MaxHealth = 100f;
+	protected float _MaxHealth = 100f;
+	public float MaxHealth
+	{
+		get
+		{
+			return _MaxHealth;
+		}
+		protected set
+		{
+			_MaxHealth = value;
+		}
+	}
 	
 	public float Health
 	{
@@ -69,34 +77,20 @@ public class PlayerStats : MonoBehaviour
 
 	void Awake()
 	{
-		Health = 100f;
-		//Health = MaxHealth;
+		Health = MaxHealth;
 	}
 
     // Start is called before the first frame update
     void Start()
     {
+		anim = GetComponentInChildren<PlayerFPAnimator>();
 		playerCam = GameManager.PlayerCam.transform;
-		anim = GetComponentInChildren<Animator>();
 		_input = GetComponent<PlayerInputs>();
-
-		CacheAnimReferences();
-	}
-
-	protected void CacheAnimReferences()
-	{
-
-		animTriggerFoundItem = Animator.StringToHash("foundItem");
-		animBoolHasItem = Animator.StringToHash("hasItem");
-		animFloatBells = Animator.StringToHash("bells");
-		animFloatWeapons = Animator.StringToHash("weapons");
 	}
 
 	private void Update()
 	{
-
-		InteractInput();
-		
+		InteractInput();	
 	}
 
 	protected void InteractInput()
@@ -137,9 +131,6 @@ public class PlayerStats : MonoBehaviour
 			//Debug.LogFormat("No rigidbody on {0}", hitInfo.collider);
 			return;
 		}
-			
-
-		PickableItem item;
 
 		if (!items.TryGetValue(rb, out item)) {
 			item = rb.GetComponent<PickableItem>();
@@ -149,13 +140,18 @@ public class PlayerStats : MonoBehaviour
 		if (!item) {
 			return;
 		}
-		
-		item.TryInteract();
+
+		if (!item.TryInteract())
+			return;
+
+		anim.FoundItem();
 	}
 
-	public void FoundItem()
+	public void PickupItem()
 	{
-		anim.SetTrigger(animTriggerFoundItem); ;
+		if (!item)
+			return;
+		item.OnPickup();
 	}
 
 	public void Heal(float healAmount)
@@ -174,7 +170,6 @@ public class PlayerStats : MonoBehaviour
 
 	public void GainSickle()
 	{
-		FoundItem();
 		HasSickle = true;
 	}
 
@@ -185,33 +180,12 @@ public class PlayerStats : MonoBehaviour
 
 	public void GainBell()
 	{
-		FoundItem();
 		HasBell = true;
 	}
 
 	public void LoseBell()
 	{
 		HasBell = false;
-	}
-
-	public bool TryGetSickle()
-	{
-		return !HasSickle;
-	}
-
-	public bool TryGetKit()
-	{
-		return (Health < MaxHealth);
-	}
-
-	public void GetKit()
-	{
-		FoundItem();
-	}
-
-	public bool TryGetBell()
-	{
-		return !HasBell;
 	}
 
 	public void Die()

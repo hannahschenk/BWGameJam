@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ItemBell : PickableItem
 {
-	public override void TryInteract()
+	public override bool TryInteract()
 	{
-		if (!stats.TryGetBell())
-			return;
+		return !stats.HasBell;
+	}
 
+	public override void OnPickup()
+	{
 		stats.GainBell();
 
 		Die();

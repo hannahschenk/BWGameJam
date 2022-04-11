@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class ItemSickle : PickableItem
 {
-	public override void TryInteract()
+	public override bool TryInteract()
 	{
-		if (!stats.TryGetSickle())
-			return;
+
+		return !stats.HasSickle;
+
+	}
+
+	public override void OnPickup()
+	{
 
 		stats.GainSickle();
 
 		Die();
+
 	}
 }
