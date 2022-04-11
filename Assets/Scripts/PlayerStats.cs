@@ -69,7 +69,7 @@ public class PlayerStats : MonoBehaviour
 
 	void Awake()
 	{
-		Health = 10f;
+		Health = 100f;
 		//Health = MaxHealth;
 	}
 
@@ -127,14 +127,14 @@ public class PlayerStats : MonoBehaviour
 			return;
 
 		if (!hitInfo.collider) {
-			Debug.LogFormat("No collider on {0}", hitInfo);
+			//Debug.LogFormat("No collider on {0}", hitInfo);
 			return;
 		}
 
 		Rigidbody rb = hitInfo.collider.attachedRigidbody;
 
 		if (!rb) {
-			Debug.LogFormat("No rigidbody on {0}", hitInfo.collider);
+			//Debug.LogFormat("No rigidbody on {0}", hitInfo.collider);
 			return;
 		}
 			
@@ -199,8 +199,7 @@ public class PlayerStats : MonoBehaviour
 
 	public void GetKit()
 	{
-		anim.SetTrigger(animTriggerFoundItem);
-		GameManager.Manager.BGMHighIntensity();
+		anim.SetTrigger(animTriggerFoundItem);;
 	}
 
 	public bool TryGetBell()
