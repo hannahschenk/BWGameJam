@@ -19,7 +19,12 @@ public class PickableItem : MonoBehaviour
         
     //}
 
-	public virtual void TryInteract()
+	public virtual bool TryInteract()
+	{
+		return false;
+	}
+
+	public virtual void OnPickup()
 	{
 
 	}

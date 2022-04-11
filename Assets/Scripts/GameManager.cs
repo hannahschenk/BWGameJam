@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
 	public bool isBellActive = false;
 	protected float bellEndTime = 0f;
 
+	public string EventLowIntensity = "Low_Intensity";
+	public string EventHighIntensity = "High_Intensity";
+	public string EventStopAll = "Stop_All";
+
 	private void Awake()
 	{
 		Manager = this;
@@ -23,11 +27,18 @@ public class GameManager : MonoBehaviour
 		PlayerCam = PlayerStats.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
 	}
 
+	private void Start()
+	{
+		BGMLowIntensity();
+	}
+
 	private void Update()
 	{
 		if (isBellActive) {
-			if (Time.time >= bellEndTime)
-				isBellActive = false;
+			if (Time.time >= bellEndTime) {
+				EndBell();
+			}
+				
 		}
 	}
 
@@ -44,6 +55,28 @@ public class GameManager : MonoBehaviour
 		isBellActive = true;
 		bellEndTime = Time.time + duration;
 	}
+
+	public void EndBell()
+	{
+		isBellActive = false;
+	}
+
+	public void BGMLowIntensity()
+	{
+		AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
+	}
+
+	public void BGMHighIntensity()
+	{
+		AkSoundEngine.PostEvent(EventHighIntensity, gameObject);
+	}
+
+	public void BGMStopAll()
+	{
+		AkSoundEngine.PostEvent(EventStopAll, gameObject);
+	}
+
+
 
 	// Start is called before the first frame update
 	//void Start()

@@ -8,20 +8,28 @@ public class PlayerStats : MonoBehaviour
 
 	public string PlayerTag = "Player";
 	protected Transform playerCam;
+	protected PlayerFPAnimator anim;
 
-	protected PlayerInputs _input;
-	protected Animator anim;
-
-	protected int animTriggerFoundItem;
-	protected int animBoolHasItem;
-	protected int animFloatBells;
-	protected int animFloatWeapons;
+	protected PlayerInputHandler _input;
+	
+	protected PickableItem item;
 
 	protected float interactReach = 2.5f;
 	protected float interactTimeout = 0.1f;
 	protected float interactTimeoutDelta = 0f;
 
-	protected float MaxHealth = 100f;
+	protected float _MaxHealth = 100f;
+	public float MaxHealth
+	{
+		get
+		{
+			return _MaxHealth;
+		}
+		protected set
+		{
+			_MaxHealth = value;
+		}
+	}
 	
 	public float Health
 	{
@@ -69,34 +77,26 @@ public class PlayerStats : MonoBehaviour
 
 	void Awake()
 	{
-		Health = 10f;
-		//Health = MaxHealth;
+		Health = MaxHealth;
 	}
 
     // Start is called before the first frame update
     void Start()
     {
+		anim = GetComponentInChildren<PlayerFPAnimator>();
 		playerCam = GameManager.PlayerCam.transform;
-		anim = GetComponentInChildren<Animator>();
-		_input = GetComponent<PlayerInputs>();
-
-		CacheAnimReferences();
+		_input = GetComponent<PlayerInputHandler>();
 	}
 
-	protected void CacheAnimReferences()
+	private void Reset()
 	{
-
-		animTriggerFoundItem = Animator.StringToHash("foundItem");
-		animBoolHasItem = Animator.StringToHash("hasItem");
-		animFloatBells = Animator.StringToHash("bells");
-		animFloatWeapons = Animator.StringToHash("weapons");
+		LoseBell();
+		LoseSickle();
 	}
 
 	private void Update()
 	{
-
-		InteractInput();
-		
+		InteractInput();	
 	}
 
 	protected void InteractInput()
@@ -127,19 +127,18 @@ public class PlayerStats : MonoBehaviour
 			return;
 
 		if (!hitInfo.collider) {
-			Debug.LogFormat("No collider on {0}", hitInfo);
+			//Debug.LogFormat("No collider on {0}", hitInfo);
 			return;
 		}
 
 		Rigidbody rb = hitInfo.collider.attachedRigidbody;
 
 		if (!rb) {
-			Debug.LogFormat("No rigidbody on {0}", hitInfo.collider);
+			//Debug.LogFormat("No rigidbody on {0}", hitInfo.collider);
 			return;
 		}
-			
 
-		PickableItem item;
+		item = null;
 
 		if (!items.TryGetValue(rb, out item)) {
 			item = rb.GetComponent<PickableItem>();
@@ -149,8 +148,21 @@ public class PlayerStats : MonoBehaviour
 		if (!item) {
 			return;
 		}
-		
-		item.TryInteract();
+
+		if (!item.TryInteract())
+			return;
+
+		anim.FoundItem();
+	}
+
+	// Method called from PlayerFPAnimator when hand is fully extended
+	// Actually triggers the 'OnPickup' code, and tells the animator to check weapon contents
+	public void PickupItem()
+	{
+		if (!item)
+			return;
+		item.OnPickup();
+		anim.UpdateItemsState();
 	}
 
 	public void Heal(float healAmount)
@@ -170,42 +182,25 @@ public class PlayerStats : MonoBehaviour
 	public void GainSickle()
 	{
 		HasSickle = true;
+		//anim.UpdateSickle(HasSickle);
 	}
 
 	public void LoseSickle()
 	{
 		HasSickle = false;
+		//anim.UpdateSickle(HasSickle);
 	}
 
 	public void GainBell()
 	{
 		HasBell = true;
+		//anim.UpdateBell(HasBell);
 	}
 
 	public void LoseBell()
 	{
 		HasBell = false;
-	}
-
-	public bool TryGetSickle()
-	{
-		return !HasSickle;
-	}
-
-	public bool TryGetKit()
-	{
-		return (Health < MaxHealth);
-	}
-
-	public void GetKit()
-	{
-		anim.SetTrigger(animTriggerFoundItem);
-		//anim.SetTrigger()
-	}
-
-	public bool TryGetBell()
-	{
-		return !HasBell;
+		//anim.UpdateBell(HasBell);
 	}
 
 	public void Die()
