@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthKit : PickableItem
+public class ItemHealthKit : PickableItem
 {
 
 	public float healAmount = 50f;
@@ -14,9 +14,7 @@ public class HealthKit : PickableItem
 
 		stats.GetKit();
 
-		//stats.Heal(healAmount);
-		//Die();
+		stats.Heal(healAmount);
+		Die();
 	}
-
-
 }

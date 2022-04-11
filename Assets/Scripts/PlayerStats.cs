@@ -153,6 +153,11 @@ public class PlayerStats : MonoBehaviour
 		item.TryInteract();
 	}
 
+	public void FoundItem()
+	{
+		anim.SetTrigger(animTriggerFoundItem); ;
+	}
+
 	public void Heal(float healAmount)
 	{
 		Health += healAmount;
@@ -169,6 +174,7 @@ public class PlayerStats : MonoBehaviour
 
 	public void GainSickle()
 	{
+		FoundItem();
 		HasSickle = true;
 	}
 
@@ -179,6 +185,7 @@ public class PlayerStats : MonoBehaviour
 
 	public void GainBell()
 	{
+		FoundItem();
 		HasBell = true;
 	}
 
@@ -199,7 +206,7 @@ public class PlayerStats : MonoBehaviour
 
 	public void GetKit()
 	{
-		anim.SetTrigger(animTriggerFoundItem);;
+		FoundItem();
 	}
 
 	public bool TryGetBell()
