@@ -206,12 +206,7 @@ public class PlayerStats : MonoBehaviour
 
 	public void GetKit()
 	{
-<<<<<<< HEAD
 		FoundItem();
-=======
-		anim.SetTrigger(animTriggerFoundItem);
-		//anim.SetTrigger()
->>>>>>> parent of d169034 (Added placeholder Wwise connected BGM)
 	}
 
 	public bool TryGetBell()

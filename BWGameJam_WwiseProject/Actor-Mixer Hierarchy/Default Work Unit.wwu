@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" SchemaVersion="103">
 	<AudioObjects>
-		<WorkUnit Name="Default Work Unit" ID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="01-Awakening" ID="{565393D9-0C76-4151-BD50-314E5505EC6D}" ShortID="772885059">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{F09B477E-4375-474C-95FF-F33ABD459A6B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{A5FC1E67-EB77-40F7-8E48-14DB949B01EB}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="01-Awakening" ID="{D7506FDF-AB07-4983-AE80-CB157FAC9AFB}">
+							<Language>SFX</Language>
+							<AudioFile>01-Awakening.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="686871596"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="01-Awakening" ID="{D7506FDF-AB07-4983-AE80-CB157FAC9AFB}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="18-Fellow_Citizens" ID="{33BB478B-75B4-478C-AC57-2F90254BE956}" ShortID="316171915">
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{F09B477E-4375-474C-95FF-F33ABD459A6B}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{A5FC1E67-EB77-40F7-8E48-14DB949B01EB}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="18-Fellow_Citizens" ID="{6A8B5912-1E35-4B1E-92B9-B1300502C10A}">
+							<Language>SFX</Language>
+							<AudioFile>18-Fellow_Citizens.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="992467216"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="18-Fellow_Citizens" ID="{6A8B5912-1E35-4B1E-92B9-B1300502C10A}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
 	</AudioObjects>
 </WwiseDocument>
