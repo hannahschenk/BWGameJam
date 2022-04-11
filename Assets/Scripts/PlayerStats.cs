@@ -200,7 +200,7 @@ public class PlayerStats : MonoBehaviour
 	public void GetKit()
 	{
 		anim.SetTrigger(animTriggerFoundItem);
-		//anim.SetTrigger()
+		GameManager.Manager.BGMHighIntensity();
 	}
 
 	public bool TryGetBell()
