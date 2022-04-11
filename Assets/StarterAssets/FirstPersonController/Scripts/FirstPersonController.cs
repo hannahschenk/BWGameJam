@@ -75,6 +75,8 @@ namespace StarterAssets
 		private PlayerInput _playerInput;
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
+		private PlayerInputs _pinput;
+
 		private GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
@@ -120,6 +122,7 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
+			_pinput = _input as PlayerInputs;
 			_playerInput = GetComponent<PlayerInput>();
 
 			// reset our timeouts on start
@@ -158,7 +161,7 @@ namespace StarterAssets
 			if (_crouchTimeoutDelta > 0.0f)
 				return;
 
-			_input.crouch = false;
+			_pinput.crouch = false;
 			isCrouching = false;
 			_crouchTimeoutDelta = CrouchTimeout;
 
@@ -174,7 +177,7 @@ namespace StarterAssets
 			if (_crouchTimeoutDelta > 0.0f)
 				return;
 
-			_input.crouch = false;
+			_pinput.crouch = false;
 			isCrouching = true;
 			_crouchTimeoutDelta = CrouchTimeout;
 			
@@ -193,7 +196,7 @@ namespace StarterAssets
 				StopCrouch();
 
 
-			if (_input.crouch) {
+			if (_pinput.crouch) {
 
 				if (!isCrouching)
 					StartCrouch();

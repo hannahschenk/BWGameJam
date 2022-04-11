@@ -7,13 +7,15 @@ public class HealthKit : PickableItem
 
 	public float healAmount = 50f;
 
-	protected override void OnPickup()
+	public override void TryInteract()
 	{
 		if (!stats.TryGetKit())
 			return;
 
-		stats.Heal(healAmount);
-		Die();
+		stats.GetKit();
+
+		//stats.Heal(healAmount);
+		//Die();
 	}
 
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using StarterAssets;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -8,7 +9,17 @@ public class PlayerStats : MonoBehaviour
 	public string PlayerTag = "Player";
 	protected Transform playerCam;
 
+	protected PlayerInputs _input;
+	protected Animator anim;
+
+	protected int animTriggerFoundItem;
+	protected int animBoolHasItem;
+	protected int animFloatBells;
+	protected int animFloatWeapons;
+
 	protected float interactReach = 2.5f;
+	protected float interactTimeout = 0.1f;
+	protected float interactTimeoutDelta = 0f;
 
 	protected float MaxHealth = 100f;
 	
@@ -23,6 +34,7 @@ public class PlayerStats : MonoBehaviour
 			_health = Mathf.Clamp(value, 0f, MaxHealth);
 		}
 	}
+	[SerializeField]
 	protected float _health = 100f;
 
 	protected bool _Sickle = false;
@@ -51,42 +63,61 @@ public class PlayerStats : MonoBehaviour
 		}
 	}
 
-	//protected Dictionary<>
-
-	//protected bool _Kit = false;
-	//public bool HasKit
-	//{
-	//	get
-	//	{
-	//		return
-	//	}
-	//}
-	
-	//public bool HasSickle = false;
-	//public bool HasBell = false;
+	protected Dictionary<Rigidbody, PickableItem> items = new Dictionary<Rigidbody, PickableItem>();
 
 
 
 	void Awake()
 	{
-		Health = MaxHealth;
+		Health = 10f;
+		//Health = MaxHealth;
 	}
 
     // Start is called before the first frame update
     void Start()
     {
 		playerCam = GameManager.PlayerCam.transform;
-    }
+		anim = GetComponentInChildren<Animator>();
+		_input = GetComponent<PlayerInputs>();
 
-	// Update is called once per frame
-	//void Update()
-	//{
+		CacheAnimReferences();
+	}
 
-	//}
+	protected void CacheAnimReferences()
+	{
+
+		animTriggerFoundItem = Animator.StringToHash("foundItem");
+		animBoolHasItem = Animator.StringToHash("hasItem");
+		animFloatBells = Animator.StringToHash("bells");
+		animFloatWeapons = Animator.StringToHash("weapons");
+	}
+
+	private void Update()
+	{
+
+		InteractInput();
+		
+	}
+
+	protected void InteractInput()
+	{
+		if (_input.secondary) {
+
+			if (interactTimeoutDelta <= 0f) {
+				CheckForInteractables();
+				interactTimeoutDelta = interactTimeout;
+			}
+
+			_input.secondary = false;
+		}
+
+		if (interactTimeoutDelta >= 0.0f)
+			interactTimeoutDelta -= Time.deltaTime;
+	}
 
 	private void FixedUpdate()
 	{
-		CheckForInteractables();
+		//CheckForInteractables();
 	}
 
 	protected void CheckForInteractables()
@@ -95,8 +126,31 @@ public class PlayerStats : MonoBehaviour
 		if (!Physics.Raycast(ray, out RaycastHit hitInfo, interactReach))
 			return;
 
+		if (!hitInfo.collider) {
+			Debug.LogFormat("No collider on {0}", hitInfo);
+			return;
+		}
 
+		Rigidbody rb = hitInfo.collider.attachedRigidbody;
 
+		if (!rb) {
+			Debug.LogFormat("No rigidbody on {0}", hitInfo.collider);
+			return;
+		}
+			
+
+		PickableItem item;
+
+		if (!items.TryGetValue(rb, out item)) {
+			item = rb.GetComponent<PickableItem>();
+			items.Add(rb, item);
+		}
+
+		if (!item) {
+			return;
+		}
+		
+		item.TryInteract();
 	}
 
 	public void Heal(float healAmount)
@@ -140,8 +194,13 @@ public class PlayerStats : MonoBehaviour
 
 	public bool TryGetKit()
 	{
-		Debug.Log("Trying to pick up health kit");
 		return (Health < MaxHealth);
+	}
+
+	public void GetKit()
+	{
+		anim.SetTrigger(animTriggerFoundItem);
+		//anim.SetTrigger()
 	}
 
 	public bool TryGetBell()

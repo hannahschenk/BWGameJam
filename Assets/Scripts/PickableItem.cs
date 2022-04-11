@@ -19,26 +19,24 @@ public class PickableItem : MonoBehaviour
         
     //}
 
-	protected virtual void TryInteract()
-	{
-		OnPickup();
-	}
-
-	protected virtual void OnCollisionEnter(Collision col)
-	{
-		if (!col.collider.CompareTag(stats.PlayerTag))
-			return;
-
-		OnPickup();
-	}
-
-	protected virtual void OnPickup()
+	public virtual void TryInteract()
 	{
 
 	}
+
+	//protected virtual void OnCollisionEnter(Collision col)
+	//{
+
+	//	Debug.LogFormat("Col.collider: {0}, Tag: {1}", col.collider, col.collider.tag);
+
+	//	if (!col.collider.CompareTag(stats.PlayerTag))
+	//		return;
+
+	//	TryInteract();
+	//}
 
 	protected virtual void Die()
 	{
-		GameObject.Destroy(this);
+		GameObject.Destroy(gameObject);
 	}
 }
