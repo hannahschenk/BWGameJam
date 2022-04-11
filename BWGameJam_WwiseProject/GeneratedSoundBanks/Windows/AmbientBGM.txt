@@ -1,0 +1,7 @@
+Event	ID	Name			Wwise Object Path	Notes
+	562163035	Low_Intensity			\Default Work Unit\Low_Intensity	
+	2083763927	High_Intensity			\Default Work Unit\High_Intensity	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	686871596	01-Awakening	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\01-Awakening_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\01-Awakening		18719632
+

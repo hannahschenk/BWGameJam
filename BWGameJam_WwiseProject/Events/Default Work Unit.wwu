@@ -3,28 +3,87 @@
 	<Events>
 		<WorkUnit Name="Default Work Unit" ID="{C7D153F2-C23B-4994-A262-207A58E7CD53}" PersistMode="Standalone">
 			<ChildrenList>
+<<<<<<< HEAD
 				<Event Name="Play_Ambience" ID="{3465872A-270A-4422-B988-A1190DBF6A48}">
 					<ChildrenList>
 						<Action Name="" ID="{FE759F84-AAAC-44EF-8290-A7A75F8A1F81}" ShortID="529125978">
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="Ambience" ID="{7365A9B0-5495-49B2-8E5A-FB3B33EE1226}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+=======
+				<Event Name="Low_Intensity" ID="{540A9541-EB45-4C9F-B00F-0258C871F8AC}">
+					<ChildrenList>
+						<Action Name="" ID="{4D551D53-FE10-441C-982A-0654BAA8D554}" ShortID="934730475">
+							<PropertyList>
+								<Property Name="FadeTime" Type="Real64" Value="10"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="01-Awakening" ID="{565393D9-0C76-4151-BD50-314E5505EC6D}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+						<Action Name="" ID="{8DDADA57-9974-4C49-B739-C396AD50703A}" ShortID="638766287">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="FadeTime" Type="Real64" Value="10"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="18-Fellow_Citizens" ID="{33BB478B-75B4-478C-AC57-2F90254BE956}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 								</Reference>
 							</ReferenceList>
 						</Action>
 					</ChildrenList>
 				</Event>
+<<<<<<< HEAD
 				<Event Name="Play_Doors" ID="{4CB81D40-1820-428A-B34E-5840CF6A2BB7}">
 					<ChildrenList>
 						<Action Name="" ID="{6A648009-F227-41D6-BCDD-F22D25D83B41}" ShortID="409703275">
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="Doors" ID="{23C6DC0B-CD24-470D-BAED-018C313EB475}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+=======
+				<Event Name="High_Intensity" ID="{9A6E4FA6-EDC8-4385-859C-B4F1766D3C25}">
+					<ChildrenList>
+						<Action Name="" ID="{A0B88110-F556-47AB-9966-D43CB61CEBBA}" ShortID="826424984">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+								<Property Name="FadeTime" Type="Real64" Value="10"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="01-Awakening" ID="{565393D9-0C76-4151-BD50-314E5505EC6D}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+						<Action Name="" ID="{8EC40513-A049-43E5-AE44-5002205FCCFB}" ShortID="991929176">
+							<PropertyList>
+								<Property Name="FadeTime" Type="Real64" Value="10"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="18-Fellow_Citizens" ID="{33BB478B-75B4-478C-AC57-2F90254BE956}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 								</Reference>
 							</ReferenceList>
 						</Action>
 					</ChildrenList>
 				</Event>
+<<<<<<< HEAD
+=======
+				<Event Name="Stop_All" ID="{DEF090F5-999D-4A80-9D3E-78A2FA0E16FD}">
+					<ChildrenList>
+						<Action Name="" ID="{3DB54C94-641F-403D-A6AF-2AAD5080B100}" ShortID="636401278">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="3"/>
+							</PropertyList>
+							<ReferenceList/>
+						</Action>
+					</ChildrenList>
+				</Event>
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

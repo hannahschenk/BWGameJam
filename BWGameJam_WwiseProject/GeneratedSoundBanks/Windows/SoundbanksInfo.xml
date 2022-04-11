@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SoundBanksInfo Platform="Windows" BasePlatform="Windows" SchemaVersion="12" SoundbankVersion="140">
 	<RootPaths>
+<<<<<<< HEAD
 		<ProjectRoot>C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\</ProjectRoot>
 		<SourceFilesRoot>C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\</SourceFilesRoot>
 		<SoundBanksRoot>C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\GeneratedSoundBanks\Windows\</SoundBanksRoot>
 		<ExternalSourcesInputFile></ExternalSourcesInputFile>
 		<ExternalSourcesOutputRoot>C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+=======
+		<ProjectRoot>U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\</ProjectRoot>
+		<SourceFilesRoot>U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\</SourceFilesRoot>
+		<SoundBanksRoot>U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\GeneratedSoundBanks\Windows\</SoundBanksRoot>
+		<ExternalSourcesInputFile></ExternalSourcesInputFile>
+		<ExternalSourcesOutputRoot>U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\GeneratedSoundBanks\Windows</ExternalSourcesOutputRoot>
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 	</RootPaths>
 	<DialogueEvents/>
 	<StreamedFiles/>
 	<MediaFilesNotInAnyBank/>
 	<SoundBanks>
+<<<<<<< HEAD
 		<SoundBank Id="1355168291" Language="SFX" Hash="1369115897">
+=======
+		<SoundBank Id="1355168291" Language="SFX" Hash="3690994985">
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 			<ObjectPath>Init</ObjectPath>
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 		</SoundBank>
+<<<<<<< HEAD
 		<SoundBank Id="1942696649" Language="SFX" Hash="605703544">
 			<ObjectPath>\SoundBanks\Default Work Unit\Effects</ObjectPath>
 			<ShortName>Effects</ShortName>
@@ -90,6 +103,37 @@
 					</IncludedMemoryFiles>
 				</Event>
 			</IncludedEvents>
+=======
+		<SoundBank Id="4007402847" Language="SFX" Hash="914862460">
+			<ObjectPath>\SoundBanks\Default Work Unit\AmbientBGM</ObjectPath>
+			<ShortName>AmbientBGM</ShortName>
+			<Path>AmbientBGM.bnk</Path>
+			<IncludedEvents>
+				<Event Id="2083763927" Name="High_Intensity" ObjectPath="\Events\Default Work Unit\High_Intensity" DurationType="OneShot" DurationMin="168.559998" DurationMax="168.559998"/>
+				<Event Id="562163035" Name="Low_Intensity" ObjectPath="\Events\Default Work Unit\Low_Intensity" DurationType="OneShot" DurationMin="106.120003" DurationMax="106.120003"/>
+			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="686871596" Language="SFX">
+					<ShortName>01-Awakening.wav</ShortName>
+					<Path>SFX\01-Awakening_10C4C929.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+		</SoundBank>
+		<SoundBank Id="4185012183" Language="SFX" Hash="2075445779">
+			<ObjectPath>\SoundBanks\Default Work Unit\ActiveBGM</ObjectPath>
+			<ShortName>ActiveBGM</ShortName>
+			<Path>ActiveBGM.bnk</Path>
+			<IncludedEvents>
+				<Event Id="2083763927" Name="High_Intensity" ObjectPath="\Events\Default Work Unit\High_Intensity" DurationType="OneShot" DurationMin="168.559998" DurationMax="168.559998"/>
+				<Event Id="562163035" Name="Low_Intensity" ObjectPath="\Events\Default Work Unit\Low_Intensity" DurationType="OneShot" DurationMin="106.120003" DurationMax="106.120003"/>
+			</IncludedEvents>
+			<IncludedMemoryFiles>
+				<File Id="992467216" Language="SFX">
+					<ShortName>18-Fellow_Citizens.wav</ShortName>
+					<Path>SFX\18-Fellow_Citizens_10C4C929.wem</Path>
+				</File>
+			</IncludedMemoryFiles>
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 		</SoundBank>
 	</SoundBanks>
 </SoundBanksInfo>

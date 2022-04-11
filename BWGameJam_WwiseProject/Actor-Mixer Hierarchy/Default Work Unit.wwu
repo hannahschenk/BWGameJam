@@ -3,7 +3,11 @@
 	<AudioObjects>
 		<WorkUnit Name="Default Work Unit" ID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" PersistMode="Standalone">
 			<ChildrenList>
+<<<<<<< HEAD
 				<RandomSequenceContainer Name="Ambience" ID="{7365A9B0-5495-49B2-8E5A-FB3B33EE1226}" ShortID="403958935">
+=======
+				<Sound Name="01-Awakening" ID="{565393D9-0C76-4151-BD50-314E5505EC6D}" ShortID="772885059">
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{F09B477E-4375-474C-95FF-F33ABD459A6B}"/>
@@ -13,6 +17,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
+<<<<<<< HEAD
 						<Sound Name="SFX Ambient 1" ID="{81B42F93-C562-4D0B-AD38-26FAC579F365}" ShortID="967129742">
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -63,6 +68,22 @@
 					<ObjectLists/>
 				</RandomSequenceContainer>
 				<RandomSequenceContainer Name="Doors" ID="{23C6DC0B-CD24-470D-BAED-018C313EB475}" ShortID="700504081">
+=======
+						<AudioFileSource Name="01-Awakening" ID="{D7506FDF-AB07-4983-AE80-CB157FAC9AFB}">
+							<Language>SFX</Language>
+							<AudioFile>01-Awakening.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="686871596"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="01-Awakening" ID="{D7506FDF-AB07-4983-AE80-CB157FAC9AFB}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+				<Sound Name="18-Fellow_Citizens" ID="{33BB478B-75B4-478C-AC57-2F90254BE956}" ShortID="316171915">
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 					<ReferenceList>
 						<Reference Name="Conversion">
 							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{F09B477E-4375-474C-95FF-F33ABD459A6B}"/>
@@ -72,6 +93,7 @@
 						</Reference>
 					</ReferenceList>
 					<ChildrenList>
+<<<<<<< HEAD
 						<Sound Name="Door1" ID="{FD65A1DF-1291-4228-8FC6-652E3AB00508}" ShortID="403183623">
 							<ReferenceList>
 								<Reference Name="Conversion">
@@ -364,6 +386,21 @@
 					</ChildrenList>
 					<ObjectLists/>
 				</RandomSequenceContainer>
+=======
+						<AudioFileSource Name="18-Fellow_Citizens" ID="{6A8B5912-1E35-4B1E-92B9-B1300502C10A}">
+							<Language>SFX</Language>
+							<AudioFile>18-Fellow_Citizens.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="992467216"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ObjectLists/>
+					<ActiveSourceList>
+						<ActiveSource Name="18-Fellow_Citizens" ID="{6A8B5912-1E35-4B1E-92B9-B1300502C10A}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+>>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 			</ChildrenList>
 		</WorkUnit>
 	</AudioObjects>

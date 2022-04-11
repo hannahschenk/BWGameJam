@@ -16,7 +16,6 @@ MonoBehaviour:
   GlobalPropertyNameList:
   - UserSettings.m_BasePath
   - UserSettings.m_StartupLanguage
-  - UserSettings.m_EngineLogging
   - UserSettings.m_MaximumNumberOfPositioningPaths
   - UserSettings.m_MemoryCutoffThreshold
   - UserSettings.m_CommandQueueSize
@@ -64,6 +63,7 @@ MonoBehaviour:
   - AdvancedSettings.m_DebugOutOfRangeLimit
   - AdvancedSettings.m_MemoryAllocationSizeLimit
   - AdvancedSettings.m_MemoryDebugLevel
+  - UserSettings.m_EngineLogging
   UserSettings:
     m_BasePath: Audio\GeneratedSoundBanks
     m_StartupLanguage: English(US)
