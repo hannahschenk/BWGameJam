@@ -1,0 +1,6 @@
+Event	ID	Name			Wwise Object Path	Notes
+	1565414482	Play_SFX_Ambient_1			\Default Work Unit\Play_SFX_Ambient_1	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	505298217	SFX Ambient 1	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\SFX Ambient 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\SFX Ambient 1		11413144
+
