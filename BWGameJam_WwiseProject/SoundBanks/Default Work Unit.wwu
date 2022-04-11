@@ -3,23 +3,10 @@
 	<SoundBanks>
 		<WorkUnit Name="Default Work Unit" ID="{91B1690E-625E-4421-A7A6-D64E98915418}" PersistMode="Standalone">
 			<ChildrenList>
-<<<<<<< HEAD
 				<SoundBank Name="Effects" ID="{C03D1A61-A6A9-4BFA-A1A9-CDE16B679223}">
 					<ObjectInclusionList>
 						<ObjectRef Name="Play_Doors" ID="{4CB81D40-1820-428A-B34E-5840CF6A2BB7}" WorkUnitID="{C7D153F2-C23B-4994-A262-207A58E7CD53}" Origin="Manual" Filter="7"/>
 						<ObjectRef Name="Play_Ambience" ID="{3465872A-270A-4422-B988-A1190DBF6A48}" WorkUnitID="{C7D153F2-C23B-4994-A262-207A58E7CD53}" Origin="Manual" Filter="7"/>
-=======
-				<SoundBank Name="AmbientBGM" ID="{C8ADF67D-81DB-49E6-89DC-568F506898DD}">
-					<ObjectInclusionList>
-						<ObjectRef Name="01-Awakening" ID="{565393D9-0C76-4151-BD50-314E5505EC6D}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="ActiveBGM" ID="{29AD67EF-3648-456D-9707-577BB8676E29}">
-					<ObjectInclusionList>
-						<ObjectRef Name="18-Fellow_Citizens" ID="{33BB478B-75B4-478C-AC57-2F90254BE956}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" Origin="Manual" Filter="7"/>
->>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
 					</ObjectInclusionList>
 					<ObjectExclusionList/>
 					<GameSyncExclusionList/>

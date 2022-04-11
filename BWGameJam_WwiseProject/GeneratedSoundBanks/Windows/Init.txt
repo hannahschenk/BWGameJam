@@ -1,12 +1,6 @@
 Audio Bus	ID	Name			Wwise Object Path	Notes
-<<<<<<< HEAD
-<<<<<<< HEAD
 	77978275	Ambient			\Default Work Unit\Master Audio Bus\Ambient	
 	1942696649	Effects			\Default Work Unit\Master Audio Bus\Effects	
-=======
->>>>>>> 702c0b8470e5271917b1e56bbe6e3b65eef4888a
-=======
->>>>>>> parent of 7f59195 (Soundbank Generated)
 	3803692087	Master Audio Bus			\Default Work Unit\Master Audio Bus	
 
 Audio Devices	ID	Name	Type				Notes
