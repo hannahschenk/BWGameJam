@@ -12,6 +12,10 @@ public class PlayerFPAnimator : MonoBehaviour
 	protected int animIntBells;
 	protected int animIntWeapons;
 
+	public Transform hand;
+	//protected Dictionary<Transform, Weapon> weapons = new Dictionary<Transform, Weapon>();
+	protected Weapon[] weapons;
+
 
 	// Start is called before the first frame update
 	void Start()
@@ -28,38 +32,50 @@ public class PlayerFPAnimator : MonoBehaviour
 		animBoolHasItem = Animator.StringToHash("hasItem");
 		animIntBells = Animator.StringToHash("bells");
 		animIntWeapons = Animator.StringToHash("weapons");
+
+		//weapons.AddRange(hand.GetComponentInChildren<Weapon>());
+
+		weapons = hand.GetComponentsInChildren<Weapon>();
+
+		//Weapon[] ws = hand.GetComponentsInChildren<Weapon>();
+		//foreach (Weapon w in ws) {
+		//	weapons.Add(w.transform, w);
+		//}
+
 	}
 
-	// Update is called once per frame
-	//void Update()
- //   {
-        
- //   }
-
+	// Plays animation to extend hand
 	public void FoundItem()
 	{
 		anim.SetTrigger(animTriggerFoundItem); ;
 	}
 
+	// Event played when hand is fully extended, forwarded to PlayerStats.cs
 	public void PickupItem()
 	{
 		stats.PickupItem();
 	}
 
+	// Called by PlayerStats after an item is successfully added to the inventory
 	public void UpdateItemsState()
 	{
-		anim.SetBool(animBoolHasItem, (stats.HasBell || stats.HasSickle) );
+		// Updates the animator variables (so the player's animations can change accordingly)
+		anim.SetBool(animBoolHasItem, (stats.HasBell || stats.HasSickle));
+
+		// Updates the weapon states
+		for (int i = 0; i < weapons.Length; i++) {
+			weapons[i].UpdateHeldState();
+		}
+
 	}
 
-	public void UpdateSickle(bool state)
-	{
-		anim.SetInteger(animIntWeapons, state ? 1 : 0);
-		UpdateItemsState();
-	}
+	//public void UpdateSickle(bool state)
+	//{
+	//	UpdateItemsState();
+	//}
 
-	public void UpdateBell(bool state)
-	{
-		anim.SetInteger(animIntBells, state ? 1 : 0);
-		UpdateItemsState();
-	}
+	//public void UpdateBell(bool state)
+	//{
+	//	UpdateItemsState();
+	//}
 }

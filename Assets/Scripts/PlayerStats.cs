@@ -155,11 +155,14 @@ public class PlayerStats : MonoBehaviour
 		anim.FoundItem();
 	}
 
+	// Method called from PlayerFPAnimator when hand is fully extended
+	// Actually triggers the 'OnPickup' code, and tells the animator to check weapon contents
 	public void PickupItem()
 	{
 		if (!item)
 			return;
 		item.OnPickup();
+		anim.UpdateItemsState();
 	}
 
 	public void Heal(float healAmount)
@@ -179,25 +182,25 @@ public class PlayerStats : MonoBehaviour
 	public void GainSickle()
 	{
 		HasSickle = true;
-		anim.UpdateSickle(HasSickle);
+		//anim.UpdateSickle(HasSickle);
 	}
 
 	public void LoseSickle()
 	{
 		HasSickle = false;
-		anim.UpdateSickle(HasSickle);
+		//anim.UpdateSickle(HasSickle);
 	}
 
 	public void GainBell()
 	{
 		HasBell = true;
-		anim.UpdateBell(HasBell);
+		//anim.UpdateBell(HasBell);
 	}
 
 	public void LoseBell()
 	{
 		HasBell = false;
-		anim.UpdateBell(HasBell);
+		//anim.UpdateBell(HasBell);
 	}
 
 	public void Die()

@@ -1630,38 +1630,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 475225675929304908, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 475225676259850795, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 475225676618907380, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 475225676748287039, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 475225676990587250, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 475225677054826001, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 475225677806157258, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1260687863183888808, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
-      propertyPath: GroundLayers.m_Bits
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3651319841396587355, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
       propertyPath: m_RootOrder
       value: 6
