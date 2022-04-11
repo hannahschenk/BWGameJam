@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1140497792811908536}
   m_Layer: 2
-  m_Name: Sickle
+  m_Name: WeaponSickle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
