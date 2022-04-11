@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{91B1690E-625E-4421-A7A6-D64E98915418}" SchemaVersion="103">
 	<SoundBanks>
-		<WorkUnit Name="Default Work Unit" ID="{91B1690E-625E-4421-A7A6-D64E98915418}" PersistMode="Standalone">
-			<ChildrenList>
-				<SoundBank Name="AmbientBGM" ID="{C8ADF67D-81DB-49E6-89DC-568F506898DD}">
-					<ObjectInclusionList>
-						<ObjectRef Name="01-Awakening" ID="{565393D9-0C76-4151-BD50-314E5505EC6D}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-				<SoundBank Name="ActiveBGM" ID="{29AD67EF-3648-456D-9707-577BB8676E29}">
-					<ObjectInclusionList>
-						<ObjectRef Name="18-Fellow_Citizens" ID="{33BB478B-75B4-478C-AC57-2F90254BE956}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}" Origin="Manual" Filter="7"/>
-					</ObjectInclusionList>
-					<ObjectExclusionList/>
-					<GameSyncExclusionList/>
-				</SoundBank>
-			</ChildrenList>
-		</WorkUnit>
+		<WorkUnit Name="Default Work Unit" ID="{91B1690E-625E-4421-A7A6-D64E98915418}" PersistMode="Standalone"/>
 	</SoundBanks>
 </WwiseDocument>

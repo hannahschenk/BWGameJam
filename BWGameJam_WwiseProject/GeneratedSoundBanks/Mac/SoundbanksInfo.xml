@@ -16,35 +16,5 @@
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="4007402847" Language="SFX" Hash="914862460">
-			<ObjectPath>\SoundBanks\Default Work Unit\AmbientBGM</ObjectPath>
-			<ShortName>AmbientBGM</ShortName>
-			<Path>AmbientBGM.bnk</Path>
-			<IncludedEvents>
-				<Event Id="2083763927" Name="High_Intensity" ObjectPath="\Events\Default Work Unit\High_Intensity" DurationType="OneShot" DurationMin="168.559998" DurationMax="168.559998"/>
-				<Event Id="562163035" Name="Low_Intensity" ObjectPath="\Events\Default Work Unit\Low_Intensity" DurationType="OneShot" DurationMin="106.120003" DurationMax="106.120003"/>
-			</IncludedEvents>
-			<IncludedMemoryFiles>
-				<File Id="686871596" Language="SFX">
-					<ShortName>01-Awakening.wav</ShortName>
-					<Path>SFX\01-Awakening_10C4C929.wem</Path>
-				</File>
-			</IncludedMemoryFiles>
-		</SoundBank>
-		<SoundBank Id="4185012183" Language="SFX" Hash="2075445779">
-			<ObjectPath>\SoundBanks\Default Work Unit\ActiveBGM</ObjectPath>
-			<ShortName>ActiveBGM</ShortName>
-			<Path>ActiveBGM.bnk</Path>
-			<IncludedEvents>
-				<Event Id="2083763927" Name="High_Intensity" ObjectPath="\Events\Default Work Unit\High_Intensity" DurationType="OneShot" DurationMin="168.559998" DurationMax="168.559998"/>
-				<Event Id="562163035" Name="Low_Intensity" ObjectPath="\Events\Default Work Unit\Low_Intensity" DurationType="OneShot" DurationMin="106.120003" DurationMax="106.120003"/>
-			</IncludedEvents>
-			<IncludedMemoryFiles>
-				<File Id="992467216" Language="SFX">
-					<ShortName>18-Fellow_Citizens.wav</ShortName>
-					<Path>SFX\18-Fellow_Citizens_10C4C929.wem</Path>
-				</File>
-			</IncludedMemoryFiles>
-		</SoundBank>
 	</SoundBanks>
 </SoundBanksInfo>

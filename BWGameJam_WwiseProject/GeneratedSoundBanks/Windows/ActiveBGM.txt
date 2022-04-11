@@ -1,7 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	562163035	Low_Intensity			\Default Work Unit\Low_Intensity	
-	2083763927	High_Intensity			\Default Work Unit\High_Intensity	
-
-In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
-	992467216	18-Fellow_Citizens	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\18-Fellow_Citizens_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\18-Fellow_Citizens		29734048
-

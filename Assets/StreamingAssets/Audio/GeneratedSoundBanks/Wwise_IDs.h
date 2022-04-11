@@ -11,19 +11,6 @@
 
 namespace AK
 {
-    namespace EVENTS
-    {
-        static const AkUniqueID HIGH_INTENSITY = 2083763927U;
-        static const AkUniqueID LOW_INTENSITY = 562163035U;
-    } // namespace EVENTS
-
-    namespace BANKS
-    {
-        static const AkUniqueID INIT = 1355168291U;
-        static const AkUniqueID ACTIVEBGM = 4185012183U;
-        static const AkUniqueID AMBIENTBGM = 4007402847U;
-    } // namespace BANKS
-
     namespace BUSSES
     {
         static const AkUniqueID MASTER_AUDIO_BUS = 3803692087U;
