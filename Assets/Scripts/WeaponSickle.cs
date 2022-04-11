@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponSickle : Weapon
 {
 
-	public override bool GetInventoryState()
+	public override bool CanWield()
 	{
 		return stats.HasSickle;
 	}

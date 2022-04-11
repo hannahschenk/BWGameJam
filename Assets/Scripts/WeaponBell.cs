@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponBell : Weapon
 {
-	public override bool GetInventoryState()
+	public override bool CanWield()
 	{
 		return stats.HasBell;
 	}

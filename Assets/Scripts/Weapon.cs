@@ -17,11 +17,11 @@ public class Weapon : MonoBehaviour
 
 	public virtual void UpdateHeldState()
 	{
-		child.SetActive(GetInventoryState());
+		child.SetActive(CanWield());
 	}
 
 	// e.g., what parameters constrain that we have this item?
-	public virtual bool GetInventoryState()
+	public virtual bool CanWield()
 	{
 		return false;
 	}
