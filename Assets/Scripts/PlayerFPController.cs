@@ -75,7 +75,7 @@ public class PlayerFPController : MonoBehaviour
 	private PlayerInput _playerInput;
 	private CharacterController _controller;
 	//private StarterAssetsInputs _pinput;
-	private PlayerInputs _pinput;
+	private PlayerInputHandler _pinput;
 
 	private GameObject _mainCamera;
 
@@ -121,7 +121,7 @@ public class PlayerFPController : MonoBehaviour
 	private void Start()
 	{
 		_controller = GetComponent<CharacterController>();
-		_pinput = GetComponent<PlayerInputs>();
+		_pinput = GetComponent<PlayerInputHandler>();
 		//_pinput = _pinput as PlayerInputs;
 		_playerInput = GetComponent<PlayerInput>();
 

@@ -3,11 +3,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-public class PlayerInputs : StarterAssets.StarterAssetsInputs
+public class PlayerInputHandler : StarterAssets.StarterAssetsInputs
 {
 
 	public bool crouch;
-
 	public bool primary;
 	public bool secondary;
 

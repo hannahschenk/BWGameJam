@@ -10,7 +10,7 @@ public class PlayerStats : MonoBehaviour
 	protected Transform playerCam;
 	protected PlayerFPAnimator anim;
 
-	protected PlayerInputs _input;
+	protected PlayerInputHandler _input;
 	
 	protected PickableItem item;
 
@@ -85,7 +85,7 @@ public class PlayerStats : MonoBehaviour
     {
 		anim = GetComponentInChildren<PlayerFPAnimator>();
 		playerCam = GameManager.PlayerCam.transform;
-		_input = GetComponent<PlayerInputs>();
+		_input = GetComponent<PlayerInputHandler>();
 	}
 
 	private void Reset()

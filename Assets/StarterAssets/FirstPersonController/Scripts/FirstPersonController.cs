@@ -75,7 +75,7 @@ namespace StarterAssets
 		private PlayerInput _playerInput;
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
-		private PlayerInputs _pinput;
+		private PlayerInputHandler _pinput;
 
 		private GameObject _mainCamera;
 
@@ -122,7 +122,7 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-			_pinput = _input as PlayerInputs;
+			_pinput = _input as PlayerInputHandler;
 			_playerInput = GetComponent<PlayerInput>();
 
 			// reset our timeouts on start
