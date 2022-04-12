@@ -17,9 +17,14 @@ public class GameManager : MonoBehaviour
 	public bool isBellActive = false;
 	protected float bellEndTime = 0f;
 
-	public string EventLowIntensity = "Low_Intensity";
-	public string EventHighIntensity = "High_Intensity";
-	public string EventStopAll = "Stop_All";
+	//public string EventLowIntensity = "Low_Intensity";
+	//public string EventHighIntensity = "High_Intensity";
+	public string PlayAmbiance = "Play_Ambience";
+	public string EventLowIntensity = "Play_Song_EmptyHalls";
+	public string EventHighIntensity = "Play_Song_Ghost_Attack";
+	//public string EventStopAll = "Stop_All";
+
+
 
 	private void Awake()
 	{
@@ -67,7 +72,8 @@ public class GameManager : MonoBehaviour
 
 	public void BGMLowIntensity()
 	{
-		AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
+		//AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
+		AkSoundEngine.PostEvent(PlayAmbiance, gameObject);
 	}
 
 	public void BGMHighIntensity()
@@ -77,7 +83,7 @@ public class GameManager : MonoBehaviour
 
 	public void BGMStopAll()
 	{
-		AkSoundEngine.PostEvent(EventStopAll, gameObject);
+		//AkSoundEngine.PostEvent(EventStopAll, gameObject);
 	}
 
 

@@ -62,6 +62,7 @@ public class Weapon : MonoBehaviour
 	public virtual void UpdateHeldState()
 	{
 		child.SetActive(CanWield());
+		//Wield();
 	}
 
 	// e.g., what parameters constrain that we have this item?
