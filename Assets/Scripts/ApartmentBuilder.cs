@@ -58,7 +58,7 @@ public class ApartmentBuilder : MonoBehaviour
 	List<Transform> availableWalls = new List<Transform>();
 	//if we stored these in a linked array or a dictionary, we could be able to check for availableWalls by looking up specific positions...
 
-	List<Transform> closedDoors = new List<Transform>();
+	//List<Transform> closedDoors = new List<Transform>();
 
 	Dictionary<Tile, Transform> rootRoomTiles = new Dictionary<Tile, Transform>(); //to prevent putting rooms to the same tile.
 	Dictionary<Tile, int> roomComponentsArea = new Dictionary<Tile, int>();
@@ -103,19 +103,38 @@ public class ApartmentBuilder : MonoBehaviour
 		}
 	}
 
-	protected struct FloorParams
-	{
-		public int maxRoomsPerFloor;
-	}
+	//protected struct FloorParams
+	//{
+	//	public int maxRoomsPerFloor;
+	//}
 
-	FloorParams[] floorParams;
+	//FloorParams[] floorParams;
+	protected List<int> floorSeeds = new List<int>();
+
+	//protected void GenerateApartmentParams()
+	//{
+	//	floorParams = new FloorParams[maxFloors + 1];
+	//	for (int i = 1; i < maxFloors + 1; i++) {
+	//		floorParams[i].maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
+	//	}
+
+	//}
 
 	protected void GenerateApartmentParams()
 	{
-		floorParams = new FloorParams[maxFloors + 1];
-		for (int i = 1; i < maxFloors + 1; i++) {
-			floorParams[i].maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
+		if (currentSeed == 0)
+			currentSeed = (int)System.DateTime.Now.Ticks;
+
+		Random.InitState(currentSeed);
+
+		for (int i = 0; i < maxFloors; i++) {
+			floorSeeds.Add(Random.Range(0, 10000));
 		}
+
+		//Random rand = new Random(Guid.NewGuid().GetHashCode());
+		//Guid
+		//Random random = new Random.State.
+		
 
 	}
 
@@ -133,6 +152,7 @@ public class ApartmentBuilder : MonoBehaviour
 		//tileCoords = new List<Vector3>();
 		//availableExits.RemoveAll(i => i == null);
 		//placedTiles.RemoveAll(i => i == null);
+		//floorsBuilt = 0;
 
 		tileCoords.Clear();
 		availableExits.Clear();
@@ -143,12 +163,8 @@ public class ApartmentBuilder : MonoBehaviour
 
 	}
 
-	protected void NewLevel()
+	public void NewLevel()
 	{
-		if (currentSeed == 0)
-			currentSeed = (int)System.DateTime.Now.Ticks;
-
-		Random.InitState(currentSeed);
 
 		EmptyLevel();
 
@@ -173,6 +189,11 @@ public class ApartmentBuilder : MonoBehaviour
 	//}
 	//  }
 
+	public float GetFloorHeight(int floor)
+	{
+		return (floor - 1) * floorHeight;
+	}
+
 	protected void MakeLevel()
 	{
 		if (usePrebuiltFloor) {
@@ -180,10 +201,18 @@ public class ApartmentBuilder : MonoBehaviour
 			BuildWalls();
 		} else {
 
-			elevation = 0 - (maxFloors / 2) * floorHeight; //test elevation, start at middle floor
+			//if (GameManager.CurrentFloor > 1)
+			//	Debug.Break();
+
+			floorsBuilt = 0;
+			elevation = 0;
+			//elevation = 0 - (maxFloors / 2) * floorHeight; //test elevation, start at middle floor
 														   //elevation = 0 - (floorHeight * 2.0f); //test elevation, start at floor 2
 
 			while (floorsBuilt < maxFloors) {
+
+				Random.InitState(floorSeeds[floorsBuilt]);
+
 				floorsBuilt++;
 
 				BuildFloor();
@@ -192,9 +221,13 @@ public class ApartmentBuilder : MonoBehaviour
 
 				TagCourtyardRailings();
 
-				BuildSideWings();
+				if (floorsBuilt == GameManager.CurrentFloor && floorsBuilt <= maxFloors) {
 
-				//Debug.LogFormat("Built side wings, {0} available exits left", availableExits.Count);
+					BuildSideWings();
+
+					//Debug.LogFormat("Built side wings, {0} available exits left", availableExits.Count);
+
+				}
 
 				FindSuitableRoomPositions();
 
@@ -212,10 +245,16 @@ public class ApartmentBuilder : MonoBehaviour
 			}
 		}
 
+		FloorBuilt();
 
 		//		BuildWalls(); //Probably the last step, would also pave over unused exits, etc.
 
 		//makeLevel = false;
+	}
+
+	protected void FloorBuilt()
+	{
+		GameManager.Manager.ChangedFloors();
 	}
 
 	protected void CheckExistingFloor()
@@ -410,6 +449,9 @@ public class ApartmentBuilder : MonoBehaviour
 			}
 
 			BuildTile(newTileType, joiningPoint, out _lastTile);
+			if (newTileType == endRoomType) {
+				_lastTile.GetComponentInChildren<FloorExit>().currentFloor = floorsBuilt;
+			}
 
 			_remainingRooms--;
 			if (_remainingRooms == 0) {
@@ -503,6 +545,9 @@ public class ApartmentBuilder : MonoBehaviour
 				if (newTileType) {
 
 					BuildTile(newTileType, joiningPoint, out Tile newTile);
+					//Instantiate(newTileType, newTile.transform.position + (Vector3.up * 2.5f), newTile.transform.rotation, newTile.transform);
+					if (newTile != null)
+						Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, currentFloor);
 
 					if (!newTile) {
 						Debug.Log("Couldn't build sidepath segment at {0}", exitParentTile.gameObject);
@@ -554,8 +599,8 @@ public class ApartmentBuilder : MonoBehaviour
 		availableWalls.CopyTo(possibleRoomPositions, availableExits.Count);
 
 
-		int maxRoomsPerFloor = floorParams[floorsBuilt].maxRoomsPerFloor;
-		//int maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
+		//int maxRoomsPerFloor = floorParams[floorsBuilt].maxRoomsPerFloor;
+		int maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
 
 		// List of actual rooms to build, after rolling for amount to build
 		List<Transform> roomPositions = GetRandomRoomNodesAndRemoveFromArray(maxRoomsPerFloor, possibleRoomPositions);
@@ -565,7 +610,10 @@ public class ApartmentBuilder : MonoBehaviour
 
 		// Assemble method -- messy, builds on itself or the hallway, hard to control
 		//AssembleRoomsFromBlocks(roomPositions);
-		AssembleRoomsFromBlocks2(roomPositions);
+		if (floorsBuilt == GameManager.CurrentFloor && floorsBuilt <= maxFloors) {
+			AssembleRoomsFromBlocks2(roomPositions);
+		}
+		
 
 		// Block out method
 		// CreateRoomBoundaries(roomPositions);
@@ -719,8 +767,11 @@ public class ApartmentBuilder : MonoBehaviour
 
 				// We can even be picky here, if it's not building enough medium rooms!
 
+				int area = 0;
+				roomComponentsArea.TryGetValue(newTileType, out area);
+				if (area <= 0)
+					break;
 
-				roomComponentsArea.TryGetValue(newTileType, out int area);
 				_remainingArea -= area;
 
 				if (debugRoomAssembly)
@@ -728,6 +779,9 @@ public class ApartmentBuilder : MonoBehaviour
 
 
 				BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
+				if (currentTile != null)
+					Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
+
 				roomsBuilt++;
 
 				joiningPoints.Remove(joiningPoint);
@@ -818,6 +872,7 @@ public class ApartmentBuilder : MonoBehaviour
 				Bounds bounds = tile.GetComponentInChildren<Renderer>().bounds;
 
 				Collider[] cols = Physics.OverlapBox(pos, bounds.extents, joiningPoint.rotation);
+				//Collider[] cols = Physics.OverlapBox(pos, bounds.extents, joiningPoint.rotation, LayerMask.GetMask("Floor"));
 
 				// TODO: WE COULD INSTEAD OUTPUT ALL VALID ENTRY POSITIONS OF ROOMS
 				// Unsure if that'd be meaningfully different than starting from a random pick and walking...

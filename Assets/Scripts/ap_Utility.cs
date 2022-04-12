@@ -5,6 +5,8 @@ using UnityEngine;
 public static class ap_Utility
 {
 
+	public static int layer_floor = 6;
+
 	/// <summary>
 	/// Rounds each component of a vector to the nearest integer
 	/// </summary>

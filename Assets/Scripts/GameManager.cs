@@ -8,23 +8,36 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
+	public static ApartmentBuilder Apartment;
 	public static GameManager Manager;
+	public static Transform Player;
 	public static PlayerStats PlayerStats;
 	public static Camera PlayerCam;
 	public static PlayerInputHandler PlayerInputHandler;
 	public static PlayerFPAnimator PlayerFPAnim;
 
+	public static string PlayerTag = "Player";
+
 	public bool isBellActive = false;
 	protected float bellEndTime = 0f;
 
-	public string EventLowIntensity = "Low_Intensity";
-	public string EventHighIntensity = "High_Intensity";
-	public string EventStopAll = "Stop_All";
+	public static int CurrentFloor = 1;
+
+	//public string EventLowIntensity = "Low_Intensity";
+	//public string EventHighIntensity = "High_Intensity";
+	public string PlayAmbiance = "Play_Ambience";
+	public string EventLowIntensity = "Play_Song_EmptyHalls";
+	public string EventHighIntensity = "Play_Song_Ghost_Attack";
+	//public string EventStopAll = "Stop_All";
+
+
 
 	private void Awake()
 	{
 		Manager = this;
+		Apartment = FindObjectOfType<ApartmentBuilder>() as ApartmentBuilder;
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
+		Player = PlayerStats.transform;
 		PlayerInputHandler = PlayerStats.GetComponent<PlayerInputHandler>();
 		PlayerFPAnim = PlayerStats.GetComponentInChildren<PlayerFPAnimator>();
 
@@ -44,6 +57,23 @@ public class GameManager : MonoBehaviour
 			}
 				
 		}
+	}
+
+	protected bool changingFloors = false;
+	public bool CanStartChangeFloors()
+	{
+		if (changingFloors)
+			return false;
+
+		Time.timeScale = 0f;
+		changingFloors = true;
+		return changingFloors;
+	}
+
+	public void ChangedFloors()
+	{
+		changingFloors = false;
+		Time.timeScale = 1.0f;
 	}
 
 	public bool TryStartBell()
@@ -67,7 +97,8 @@ public class GameManager : MonoBehaviour
 
 	public void BGMLowIntensity()
 	{
-		AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
+		//AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
+		AkSoundEngine.PostEvent(PlayAmbiance, gameObject);
 	}
 
 	public void BGMHighIntensity()
@@ -77,7 +108,7 @@ public class GameManager : MonoBehaviour
 
 	public void BGMStopAll()
 	{
-		AkSoundEngine.PostEvent(EventStopAll, gameObject);
+		//AkSoundEngine.PostEvent(EventStopAll, gameObject);
 	}
 
 
