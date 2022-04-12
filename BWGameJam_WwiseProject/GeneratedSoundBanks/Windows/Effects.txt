@@ -1,21 +1,19 @@
 Event	ID	Name			Wwise Object Path	Notes
 	278617630	Play_Ambience			\Default Work Unit\Play_Ambience	
-	1945722105	Play_Bell			\Default Work Unit\Play_Bell	
+	1024894558	Play_Song_Empty_Halls			\Default Work Unit\Play_Song_Empty_Halls	
+	1088671819	Play_Song_Ghost_Attack_			\Default Work Unit\Play_Song_Ghost_Attack_	
 	3655372345	Play_Doors			\Default Work Unit\Play_Doors	
 
 In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	40111818	Empty Halls	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Music\Empty Halls_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Music\Empty Halls		23027320
 	57549931	Door6	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Doors\Door6_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door6		317932
 	172522107	SFX Ambient 2	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Ambience\SFX Ambient 2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambience\SFX Ambient 2		11413144
-	219339399	Bell5	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Bell\Bell5_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Bell\Bell5		855604
 	243298615	Door2	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Doors\Door2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door2		677440
-	298971942	Bell4	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Bell\Bell4_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Bell\Bell4		832672
 	328377784	SFX Ambient 1	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Ambience\SFX Ambient 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambience\SFX Ambient 1		11413144
 	365823509	Door4	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Doors\Door4_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door4		303536
 	380399987	Door7	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Doors\Door7_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door7		288760
-	525996231	Bell2	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Bell\Bell2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Bell\Bell2		781516
 	784077585	Door5	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Doors\Door5_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door5		499692
+	811785081	Ghost Attack!	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Music\Ghost Attack!_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Music\Ghost Attack!		12041128
 	889165507	Door1	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Doors\Door1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door1		113048
-	909248949	Bell3	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Bell\Bell3_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Bell\Bell3		769168
 	939187383	Door3	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Doors\Door3_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door3		620992
-	993283863	Bell1	C:\Users\theca\Documents\GitHub\BWGameJam\BWGameJam_WwiseProject\.cache\Windows\SFX\Effects\Bell\Bell1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Bell\Bell1		813268
 
