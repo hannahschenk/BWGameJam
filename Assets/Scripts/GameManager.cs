@@ -8,14 +8,20 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
+	public static ApartmentBuilder Apartment;
 	public static GameManager Manager;
+	public static Transform Player;
 	public static PlayerStats PlayerStats;
 	public static Camera PlayerCam;
 	public static PlayerInputHandler PlayerInputHandler;
 	public static PlayerFPAnimator PlayerFPAnim;
 
+	public static string PlayerTag = "Player";
+
 	public bool isBellActive = false;
 	protected float bellEndTime = 0f;
+
+	public static int CurrentFloor = 1;
 
 	//public string EventLowIntensity = "Low_Intensity";
 	//public string EventHighIntensity = "High_Intensity";
@@ -29,7 +35,9 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		Manager = this;
+		Apartment = FindObjectOfType<ApartmentBuilder>() as ApartmentBuilder;
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
+		Player = PlayerStats.transform;
 		PlayerInputHandler = PlayerStats.GetComponent<PlayerInputHandler>();
 		PlayerFPAnim = PlayerStats.GetComponentInChildren<PlayerFPAnimator>();
 
@@ -49,6 +57,23 @@ public class GameManager : MonoBehaviour
 			}
 				
 		}
+	}
+
+	protected bool changingFloors = false;
+	public bool CanStartChangeFloors()
+	{
+		if (changingFloors)
+			return false;
+
+		Time.timeScale = 0f;
+		changingFloors = true;
+		return changingFloors;
+	}
+
+	public void ChangedFloors()
+	{
+		changingFloors = false;
+		Time.timeScale = 1.0f;
 	}
 
 	public bool TryStartBell()

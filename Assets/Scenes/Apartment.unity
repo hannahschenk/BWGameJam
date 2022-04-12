@@ -593,7 +593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &768078087
 Transform:
   m_ObjectHideFlags: 0
@@ -883,7 +883,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1535318468
 Transform:
   m_ObjectHideFlags: 0
@@ -916,7 +916,7 @@ MonoBehaviour:
   usePrebuiltFloor: 0
   Floor: {fileID: 0}
   startRoomType: {fileID: 3976085811170480564, guid: db56e8cb667d70642ae18a9c87f04323, type: 3}
-  endRoomType: {fileID: 2283118750560467285, guid: f0d9f8cb1ba0cc348af1441dfc3ddcfc, type: 3}
+  endRoomType: {fileID: 8660075664326238294, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
   corridorTypes:
   - {fileID: 9119996944310820296, guid: 5791c9098a3d6ae4a926e31c17d426ee, type: 3}
   rightTurnTypes:
@@ -945,7 +945,7 @@ MonoBehaviour:
   - {fileID: 6403912347932177956, guid: 584a26185cf830d419988f8b0f20c404, type: 3}
   - {fileID: 2492685225022382950, guid: ca08927c4f5afa44d9bbd1ef5f488baf, type: 3}
   buildRailings: 1
-  currentSeed: 1872007762
+  currentSeed: 0
   debugForksPerSegment: 1
   debugRoomAssembly: 0
   debugRoomTesting: 0
@@ -1067,6 +1067,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemBell
       objectReference: {fileID: 0}
+    - target: {fileID: 761579015010112538, guid: 4f291618224ce6b4ebd575f19d13702b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 761579015010112539, guid: 4f291618224ce6b4ebd575f19d13702b, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -1170,7 +1174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7070759748359856043, guid: 1733a08b8d97c88449c1bdf6f70bcf5e, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1733a08b8d97c88449c1bdf6f70bcf5e, type: 3}
@@ -1192,7 +1196,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1855520559
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1703,8 +1707,73 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCapsule (Cel Camera Arms)
       objectReference: {fileID: 0}
+    - target: {fileID: 6424635003414057961, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
+      propertyPath: near clip plane
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30338c7158acdcf49b4517daee1cdebf, type: 3}
+--- !u!1001 &5270165340549144708
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524274, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524275, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_Name
+      value: Room Med End
+      objectReference: {fileID: 0}
+    - target: {fileID: 7791425014092524275, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5b649aa2b02b7d94ca74050850d6e13d, type: 3}
 --- !u!1001 &6591675989988331740
 PrefabInstance:
   m_ObjectHideFlags: 0
