@@ -201,6 +201,9 @@ public class ApartmentBuilder : MonoBehaviour
 			BuildWalls();
 		} else {
 
+			//if (GameManager.CurrentFloor > 1)
+			//	Debug.Break();
+
 			floorsBuilt = 0;
 			elevation = 0;
 			//elevation = 0 - (maxFloors / 2) * floorHeight; //test elevation, start at middle floor
@@ -543,7 +546,8 @@ public class ApartmentBuilder : MonoBehaviour
 
 					BuildTile(newTileType, joiningPoint, out Tile newTile);
 					//Instantiate(newTileType, newTile.transform.position + (Vector3.up * 2.5f), newTile.transform.rotation, newTile.transform);
-					Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, newTile.transform);
+					if (newTile != null)
+						Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, currentFloor);
 
 					if (!newTile) {
 						Debug.Log("Couldn't build sidepath segment at {0}", exitParentTile.gameObject);
@@ -763,8 +767,11 @@ public class ApartmentBuilder : MonoBehaviour
 
 				// We can even be picky here, if it's not building enough medium rooms!
 
+				int area = 0;
+				roomComponentsArea.TryGetValue(newTileType, out area);
+				if (area <= 0)
+					break;
 
-				roomComponentsArea.TryGetValue(newTileType, out int area);
 				_remainingArea -= area;
 
 				if (debugRoomAssembly)
@@ -772,8 +779,8 @@ public class ApartmentBuilder : MonoBehaviour
 
 
 				BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
-
-				Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentTile.transform);
+				if (currentTile != null)
+					Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
 
 				roomsBuilt++;
 
@@ -865,6 +872,7 @@ public class ApartmentBuilder : MonoBehaviour
 				Bounds bounds = tile.GetComponentInChildren<Renderer>().bounds;
 
 				Collider[] cols = Physics.OverlapBox(pos, bounds.extents, joiningPoint.rotation);
+				//Collider[] cols = Physics.OverlapBox(pos, bounds.extents, joiningPoint.rotation, LayerMask.GetMask("Floor"));
 
 				// TODO: WE COULD INSTEAD OUTPUT ALL VALID ENTRY POSITIONS OF ROOMS
 				// Unsure if that'd be meaningfully different than starting from a random pick and walking...

@@ -18,6 +18,7 @@ public class FloorExit : MonoBehaviour
         
     }
 
+	//void OnTriggerEnter(Collider col)
 	void OnTriggerEnter(Collider col)
 	{
 		if (!col.CompareTag(GameManager.PlayerTag))
@@ -25,6 +26,8 @@ public class FloorExit : MonoBehaviour
 
 		if (!GameManager.Manager.CanStartChangeFloors())
 			return;
+
+		Debug.Log("Changing floors!");
 
 		GameManager.CurrentFloor = currentFloor + 2;
 		GameManager.Apartment.NewLevel();
