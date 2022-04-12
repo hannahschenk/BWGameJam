@@ -25,6 +25,28 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_Song_Empty_Halls" ID="{3B143902-0C9E-496E-929A-A25F77D9A1AD}">
+					<ChildrenList>
+						<Action Name="" ID="{3B033573-284A-40D7-8545-959519352D26}" ShortID="253563257">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Empty Halls" ID="{80528C85-30A8-4B75-8E0C-7FD8546EBC55}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Song_Ghost_Attack_" ID="{93AF122F-9AB8-481A-9E43-DBD9A095B769}">
+					<ChildrenList>
+						<Action Name="" ID="{7AEF1F86-7BD9-4865-9438-CB15B451D88C}" ShortID="482283717">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Ghost Attack!" ID="{B0EAAFD0-5141-409F-8A28-647C5981AFAF}" WorkUnitID="{35D9C32A-AFB4-4120-BB88-92955D299AB3}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>
