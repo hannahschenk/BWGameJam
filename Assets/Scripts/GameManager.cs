@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 	public static GameManager Manager;
 	public static PlayerStats PlayerStats;
 	public static Camera PlayerCam;
+	public static PlayerInputHandler PlayerInputHandler;
+	public static PlayerFPAnimator PlayerFPAnim;
 
 	public bool isBellActive = false;
 	protected float bellEndTime = 0f;
@@ -23,6 +25,8 @@ public class GameManager : MonoBehaviour
 	{
 		Manager = this;
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
+		PlayerInputHandler = PlayerStats.GetComponent<PlayerInputHandler>();
+		PlayerFPAnim = PlayerStats.GetComponentInChildren<PlayerFPAnimator>();
 
 		PlayerCam = PlayerStats.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
 	}

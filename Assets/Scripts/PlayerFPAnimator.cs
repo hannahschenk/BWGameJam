@@ -6,6 +6,9 @@ public class PlayerFPAnimator : MonoBehaviour
 {
 	protected PlayerStats stats;
 	protected Animator anim;
+	protected PlayerInputHandler input;
+
+	protected Weapon currentWeapon;
 
 	protected int animTriggerFoundItem;
 	protected int animBoolHasItem;
@@ -17,9 +20,37 @@ public class PlayerFPAnimator : MonoBehaviour
 	public Transform hand;
 	//protected Dictionary<Transform, Weapon> weapons = new Dictionary<Transform, Weapon>();
 	protected Weapon[] weapons;
+	protected int MaxWeapons = 0;
 
 
-	protected int currentWeapon = 0;
+	protected int currentWeaponIndex = -1;
+	//protected int _CurrentWeapon = 0;
+	//protected int CurrentWeapon
+	//{
+	//	get
+	//	{
+	//		return _CurrentWeapon;
+	//	}
+	//	set
+	//	{
+	//		_CurrentWeapon = Mathf.Clamp(value, 0, weapons.Length);
+	//	}
+	//}
+	protected float weaponTimeout = 0.4f;
+	protected float nextWeaponWieldTime = 0f;
+	protected float nextWeaponSwapTime = 0f;
+
+	public bool HasItem
+	{
+		get
+		{
+			return anim.GetBool(animBoolHasItem);
+		}
+		set
+		{
+			anim.SetBool(animBoolHasItem, value);
+		}
+	}
 
 
 	// Start is called before the first frame update
@@ -27,12 +58,12 @@ public class PlayerFPAnimator : MonoBehaviour
     {
 		anim = GetComponent<Animator>();
 		stats = GameManager.PlayerStats;
+		input = GameManager.PlayerInputHandler;
 		CacheAnimReferences();
     }
 
 	protected void CacheAnimReferences()
 	{
-
 		animTriggerFoundItem = Animator.StringToHash("foundItem");
 		animBoolHasItem = Animator.StringToHash("hasItem");
 		animTriggerAttack = Animator.StringToHash("Attack");
@@ -43,32 +74,207 @@ public class PlayerFPAnimator : MonoBehaviour
 		//weapons.AddRange(hand.GetComponentInChildren<Weapon>());
 
 		weapons = hand.GetComponentsInChildren<Weapon>();
+		MaxWeapons = weapons.Length;
+
+		for (int i = 0; i < weapons.Length; i++) {
+			weapons[i].id = i;
+		}
+		//Debug.LogFormat("{0} weapons!", weapons.Length);
 
 		//Weapon[] ws = hand.GetComponentsInChildren<Weapon>();
-		//foreach (Weapon w in ws) {
-		//	weapons.Add(w.transform, w);
-		//}
+	}
+
+	protected void Update()
+	{
+		//UpdateWeaponSwapInput();
+
+		//TryWieldUpdate();
+	}
+
+	protected void UpdateWeaponSwapInput()
+	{
+		//if (Time.time < nextWeaponSwapTime)
+		//	return;
+		if (Time.time < nextWeaponWieldTime)
+			return;
+
+		//if (!stats.HasWeapons())
+		//return;
+
+		if (input.scroll == 0)
+			return;
+
+		int nextWeapon = Mathf.Max(currentWeaponIndex, 0);
+
+		if (input.scroll > 0)
+			nextWeapon--;
+		else if (input.scroll < 0)
+			nextWeapon++;
+
+		if (nextWeapon < 0)
+			nextWeapon = (weapons.Length - 1);
+		if (nextWeapon >= weapons.Length)
+			nextWeapon = 0;
+
+		if (currentWeaponIndex == nextWeapon) // same weapon, do nothing
+			return;
+		Debug.LogFormat("Trying to unwield weapon {0}", currentWeaponIndex);
+
+		if (currentWeaponIndex >= 0) {
+			weapons[currentWeaponIndex].Unwield();
+		}
+		currentWeapon = null;
+
+		currentWeaponIndex = nextWeapon;
+
+		//nextWeaponSwapTime = Time.time + weaponTimeout;
+		nextWeaponWieldTime = Time.deltaTime + weaponTimeout;
+
+		// When you gain a weapon, how does it know which ID to check?
+
 
 	}
+
+	protected void TryWieldUpdate()
+	{
+		if (Time.time < nextWeaponWieldTime)
+			return;
+
+		if (currentWeaponIndex >= 0 && weapons[currentWeaponIndex] != currentWeapon) {
+
+			Debug.LogFormat("Trying to wield weapon {0}", currentWeaponIndex);
+			weapons[currentWeaponIndex].Wield();
+			currentWeapon = weapons[currentWeaponIndex];
+			//weapons[CurrentWeapon].TryWield();
+			nextWeaponWieldTime = Time.deltaTime + weaponTimeout;
+
+		}
+
+		if (currentWeaponIndex < 0 && HasItem) {
+			CarryingItem(false);
+		}
+
+		// Wield the current weapon
+		//if (CurrentWeapon < 0) { // Nothing wielded
+		//	CurrentWeapon = weapons[0].id;
+		//	weapons[0].Wield();
+		//}
+	}
+
 
 	//protected void Update()
 	//{
-	//	UpdateWeaponInput();
+	//	UpdateWeaponSwapInput();
+
+	//	//Debug.LogFormat("CurrentWeapon: {0}", CurrentWeapon);
+
+	//	TryWieldWeapon();
 	//}
 
-	protected void UpdateWeaponInput()
-	{
-		//e.g., mouse scroll, weapon int
+	//protected void UpdateWeaponSwapInput()
+	//{
+	//	if (!stats.HasWeapons())
+	//		return;
 
-		//if scroll
-		// newWeapon = currentWeapon % weapons.Count
-		// TryWield(newWeapon)
-	}
+	//	Debug.Log("Has weapons!");
+
+	//	if (Time.time < nextWeaponWieldTime)
+	//		return;
+
+	//	//e.g., mouse scroll, weapon int
+
+	//	SwapWeapon(input.scroll);
+
+	//	//if (input.scroll < 0) {
+	//	//	//Next weapon
+	//	//	Debug.LogFormat("Next weapon!");
+	//	//	//CurrentWeapon = CurrentWeapon + 1;
+
+	//	//	if (weapons[CurrentWeapon++].)
+	//	//	CurrentWeapon++;
+	//	//	TryWieldWeapon();
+
+	//	//	nextWeaponWieldTime = Time.time + weaponTimeout;
+
+	//	//} else if (input.scroll > 0) {
+	//	//	//Previous weapon
+	//	//	Debug.LogFormat("Previous weapon!");
+	//	//	//CurrentWeapon = CurrentWeapon - 1;
+	//	//	CurrentWeapon--;
+	//	//	TryWieldWeapon();
+	//	//	nextWeaponWieldTime = Time.time + weaponTimeout;
+	//	//}
+
+	//	//if scroll
+	//	// newWeapon = currentWeapon % weapons.Count
+	//	// TryWield(newWeapon)
+	//}
+
+	//protected void SwapWeapon(float direction)
+	//{
+	//	if (direction == 0f)
+	//		return;
+
+	//	//int weaponIndex = 0;
+
+	//	int nextWeapon = CurrentWeapon;
+
+	//	if (direction > 0)
+	//		nextWeapon--;
+	//	else if (direction < 0)
+	//		nextWeapon++;
+
+	//	if (nextWeapon < 0)
+	//		nextWeapon = (weapons.Length - 1);
+	//	if (nextWeapon >= weapons.Length)
+	//		nextWeapon = 0;
+
+	//	//if (direction > 0)
+	//	//	weaponIndex--;
+	//	//else if (direction < 0)
+	//	//	weaponIndex++;
+
+	//	//int nextWeapon = CurrentWeapon + weaponIndex;
+	//	Debug.LogFormat("Currently on Weapon {0}, trying to swap to {1}!", CurrentWeapon, nextWeapon);
+
+	//	if (CurrentWeapon == nextWeapon && weapons[CurrentWeapon].Wielded)
+	//		return;
+
+	//	if (weapons[nextWeapon].CanWield()) {
+	//		Debug.Log("Can wield next weapon");
+
+	//		weapons[CurrentWeapon].Unwield();
+	//		weapons[nextWeapon].Wield();
+
+	//		nextWeaponWieldTime = Time.time + weaponTimeout;
+	//	} else {
+	//		Debug.Log("Cannot wield next weapon");
+	//	}
+
+
+	//}
+
+	//protected void TryWieldWeapon()
+	//{
+	//	//weapons[CurrentWeapon].TryWield();
+	//	Debug.LogFormat("Trying to Wield Weapon {0}", CurrentWeapon);
+	//	anim.SetBool(animBoolHasItem, weapons[CurrentWeapon].TryWield());
+	//}
+
+	//protected void UnWieldWeapon()
+	//{
+	//	weapons[CurrentWeapon].Unwield();
+	//}
+
+	//protected void TryNextWeapon()
+	//{
+
+	//}
 
 	// Plays animation to extend hand
 	public void FoundItem()
 	{
-		anim.SetTrigger(animTriggerFoundItem); ;
+		anim.SetTrigger(animTriggerFoundItem);
 	}
 
 	// Event played when hand is fully extended, forwarded to PlayerStats.cs
@@ -78,24 +284,33 @@ public class PlayerFPAnimator : MonoBehaviour
 		stats.PickupItem();
 	}
 
+	// Plays animation to carry an item
+	public void CarryingItem(bool state = true)
+	{
+		anim.SetBool(animBoolHasItem, state);
+	}
+
 	// Called by PlayerStats after an item is successfully added to the inventory
 	public void UpdateItemsState()
 	{
+		//if (anim.GetBool(animBoolHasItem)) {
+		//	return;
+		//}
+
+
 		// Updates the animator variables (so the player's animations can change accordingly)
-		//anim.SetBool(animBoolHasItem, (stats.HasBell || stats.HasSickle));
+		anim.SetBool(animBoolHasItem, (stats.HasBell || stats.HasSickle));
+
 
 		//bool hasItem = false;
 
-		anim.SetBool(animBoolHasItem, weapons[currentWeapon].CanWield());
+		//anim.SetBool(animBoolHasItem, weapons[CurrentWeapon].CanWield());
 
 
-
-
-
-		// Updates the weapon states
-		//for (int i = 0; i < weapons.Length; i++) {
-		//	weapons[i].UpdateHeldState();
-		//}
+		//Updates the weapon states
+		for (int i = 0; i < weapons.Length; i++) {
+			weapons[i].UpdateHeldState();
+		}
 	}
 
 	//public void UpdateSickle(bool state)
