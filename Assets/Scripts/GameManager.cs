@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
 		PlayAmbience();
 
 		Invoke("FadeIn", startBlackScreenHoldTime);
+		Invoke("OnFadeIn", startBlackScreenHoldTime + (screenFadeTime / 3.0f));
 		//FadeIn();
 		//StartBlackScreen(30f, true);
 	}
@@ -121,6 +122,8 @@ public class GameManager : MonoBehaviour
 
 	private void Update()
 	{
+		//Debug.LogFormat("Can Player Move? {0}", CanMove);
+
 		if (isBellActive) {
 			if (Time.time >= bellEndTime) {
 				EndBell();
@@ -163,6 +166,7 @@ public class GameManager : MonoBehaviour
 
 	public void FadeOut()
 	{
+		Debug.LogFormat("Starting FadeOut at {0}", Time.time);
 		fadeGoalTime = Time.time + screenFadeTime;
 		BlackScreen.color = colorEmpty;
 		BlackScreen.gameObject.SetActive(true);
@@ -274,29 +278,43 @@ public class GameManager : MonoBehaviour
 		BlackScreen.color = newColor;
 
 		if (a == end) {
-			//Debug.LogFormat("Ended FadeIn at {0}", Time.time);
+			Debug.LogFormat("Ended Fade at {0}", Time.time);
 			BlackScreen.gameObject.SetActive(false);
 			fadeDirection = 0f;
 		}
 	}
 
-	protected bool changingFloors = false;
+	protected void OnFadeIn()
+	{
+		Debug.Log("FadeIn finished, enabling movement");
+		changingFloors = false;
+		CanMove = true;
+	}
+
+	protected static bool changingFloors = false;
 	public bool CanStartChangeFloors()
 	{
 		if (changingFloors)
 			return false;
 
-		CanMove = false;
-		Time.timeScale = 0f;
 		changingFloors = true;
+		Debug.Log("Changing floors - Starting Fade Out");
+
+		CanMove = false;
+		//Time.timeScale = 0f;
+		FadeOut();
+		Invoke("FadeIn", fadeGoalTime);
+		Invoke("OnFadeIn", fadeGoalTime + (fadeGoalTime / 3f));
 		return changingFloors;
 	}
 
 	public void ChangedFloors()
 	{
-		changingFloors = false;
-		Time.timeScale = 1.0f;
-		CanMove = true;
+		Debug.Log("Finished changing floors!");
+
+		//changingFloors = false;
+		//Time.timeScale = 1.0f;
+		//CanMove = true;
 	}
 
 	public bool TryStartBell()
@@ -320,6 +338,9 @@ public class GameManager : MonoBehaviour
 
 	public void FadeOutAudio()
 	{
+
+		//Time.ti
+
 		if (Time.time > audioFadeOutGoalTime)
 			return;
 

@@ -98,9 +98,10 @@ public class PlayerFPAnimator : MonoBehaviour
 
 		UpdateWeaponSwapInput();
 
-		if (swapping) {
-			OnWeaponSwap();
-		}
+		CheckForSwapAnimation();
+		//if (swapping) {
+		//	OnWeaponSwap();
+		//}
 
 		//if (swapping && Time.time >= nextWeaponSwapTime) {
 		//	OnWeaponSwap();
@@ -124,21 +125,41 @@ public class PlayerFPAnimator : MonoBehaviour
 			return;
 		}
 
-		Debug.Log("Scroll Wheel input detected! Trying to swap...");
+		//Debug.Log("Scroll Wheel input detected! Trying to swap...");
 
 		if (!weapons[GetNextWeapon()].CanWield())
 			return;
 
-		//anim.SetTrigger(animTriggerSwap);
+		anim.SetTrigger(animTriggerSwap);
 		swapping = true;
 
 		//nextWeaponSwapTime = Time.time + 1.0f;
 		nextWeaponSwapTime = Time.time + weaponTimeout;
-
 	}
 
-	protected void OnWeaponSwap()
+	protected void CheckForSwapAnimation()
 	{
+		if (!swapping)
+			return;
+
+		//if (anim.trigg)
+
+		//if (
+		//  anim.IsInTransition(0) &&
+		//  anim.GetNextAnimatorStateInfo(0).nameHash == animController.stateA
+		//) {
+		//	//Do reaction
+		//}
+		//anim.GetNextAnimatorStateInfo(0).nameHash
+		//int fullPathHash = anim.GetNextAnimatorStateInfo(0).fullPathHash;
+		//Debug.LogFormat("GetNext -- FullPathHash: {0}", fullPathHash);
+		//anim.GetNextAnimatorStateInfo(0).
+		//anim.state
+	}
+
+	public void OnWeaponSwap()
+	{
+		Debug.Log("Switching weapons!");
 		swapping = false;
 
 		if (currentWeapon != null) {

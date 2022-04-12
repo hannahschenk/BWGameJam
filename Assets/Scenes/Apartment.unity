@@ -683,6 +683,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  screenFadeTime: 6
+  startBlackScreenHoldTime: 4
 --- !u!1 &768078086
 GameObject:
   m_ObjectHideFlags: 0
@@ -1109,7 +1111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 761579015010112538, guid: 4f291618224ce6b4ebd575f19d13702b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 761579015010112539, guid: 4f291618224ce6b4ebd575f19d13702b, type: 3}
       propertyPath: m_RootOrder
@@ -1214,7 +1216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7070759748359856043, guid: 1733a08b8d97c88449c1bdf6f70bcf5e, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1733a08b8d97c88449c1bdf6f70bcf5e, type: 3}
@@ -1266,7 +1268,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1855520559
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1644,6 +1646,10 @@ PrefabInstance:
     - target: {fileID: 8563583562486405742, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8580732278328691323, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9051150360744296660, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
       propertyPath: m_Name

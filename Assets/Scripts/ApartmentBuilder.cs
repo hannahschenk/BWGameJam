@@ -166,6 +166,8 @@ public class ApartmentBuilder : MonoBehaviour
 	public void NewLevel()
 	{
 
+		Debug.Log("Generating Level...");
+
 		EmptyLevel();
 
 		if (debugRoomTesting)
@@ -704,7 +706,8 @@ public class ApartmentBuilder : MonoBehaviour
 				// NEED TO SOMEHOW BE ABLE TO GO /BACK/ TO TRY ANOTHER ROOM STARTING NODE (e.g., more attached to the selection process for nodes)
 				// Might make more sense to 'build' rooms as we select them, instead of being so separated.
 				if (!fitTile && roomsBuilt == 0) {
-					Debug.LogFormat("ERROR: Floor {0} Room {0} - No rooms built, and couldn't fit any tiles here at all", floorsBuilt, i);
+					if (debugRoomAssembly)
+						Debug.LogFormat("ERROR: Floor {0} Room {0} - No rooms built, and couldn't fit any tiles here at all", floorsBuilt, i);
 					//currentFloor = new GameObject("Floor " + floorsBuilt).transform;
 					GameObject error = new GameObject("ERROR: Room " + i);
 					error.transform.SetParent(joiningPoints[0]);

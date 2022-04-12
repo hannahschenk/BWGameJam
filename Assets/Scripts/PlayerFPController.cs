@@ -144,6 +144,9 @@ public class PlayerFPController : MonoBehaviour
 
 	private void LateUpdate()
 	{
+		if (!GameManager.CanMove)
+			return;
+
 		CameraRotation();
 	}
 

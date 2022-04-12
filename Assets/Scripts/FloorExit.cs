@@ -6,6 +6,10 @@ public class FloorExit : MonoBehaviour
 {
 	public int currentFloor = 1;
 
+	//protected bool canExit = true;
+	//protected int exit = 0;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,14 +28,25 @@ public class FloorExit : MonoBehaviour
 		if (!col.CompareTag(GameManager.PlayerTag))
 			return;
 
-		if (!GameManager.Manager.CanStartChangeFloors())
-			return;
+		//if (exit > 0)
+		//		return;
+		//exit++;
+		//if (!canExit)
+		//return;
 
-		Debug.Log("Changing floors!");
+		//canExit = false;
+		Debug.LogFormat("{0} hit Exit Trigger, on object instance ID {1}", col, gameObject.GetInstanceID());
+		if (!GameManager.Manager.CanStartChangeFloors()) {
+			Debug.LogFormat("Instance ID {0} cannot change floors", gameObject.GetInstanceID());
+			return;
+		}
+		Debug.LogFormat("Instance ID {0} is trigger floor change", gameObject.GetInstanceID());
+		Debug.Log("Changing floors: Incrementing Current Floor, Initiating Level Generation, Warping Player...");
+
+		GameManager.Player.SetPositionAndRotation(Vector3.zero + (GameManager.Apartment.GetFloorHeight(GameManager.CurrentFloor) * Vector3.up), Quaternion.FromToRotation(GameManager.Player.forward, Vector3.forward));
 
 		GameManager.CurrentFloor = currentFloor + 2;
 		GameManager.Apartment.NewLevel();
-		GameManager.Player.SetPositionAndRotation(Vector3.zero + (GameManager.Apartment.GetFloorHeight(GameManager.CurrentFloor) * Vector3.up), Quaternion.FromToRotation(GameManager.Player.forward, Vector3.forward));
 
 	}
 
