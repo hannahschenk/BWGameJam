@@ -165,6 +165,18 @@ public class PlayerStats : MonoBehaviour
 		anim.UpdateItemsState();
 	}
 
+	// Fancy way of writing an OR operator that can be extended infinitely
+	public bool HasWeapons()
+	{
+		if (HasSickle)
+			return true;
+
+		if (HasBell)
+			return true;
+
+		return false;
+	}
+
 	public void Heal(float healAmount)
 	{
 		Health += healAmount;

@@ -1,0 +1,15 @@
+Event	ID	Name			Wwise Object Path	Notes
+	278617630	Play_Ambience			\Default Work Unit\Play_Ambience	
+	3655372345	Play_Doors			\Default Work Unit\Play_Doors	
+
+In Memory Audio	ID	Name	Audio source file		Wwise Object Path	Notes	Data Size
+	57549931	Door6	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Effects\Doors\Door6_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door6		317932
+	172522107	SFX Ambient 2	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Ambience\SFX Ambient 2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambience\SFX Ambient 2		11413144
+	243298615	Door2	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Effects\Doors\Door2_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door2		677440
+	328377784	SFX Ambient 1	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Ambience\SFX Ambient 1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Ambience\SFX Ambient 1		11413144
+	365823509	Door4	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Effects\Doors\Door4_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door4		303536
+	380399987	Door7	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Effects\Doors\Door7_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door7		288760
+	784077585	Door5	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Effects\Doors\Door5_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door5		499692
+	889165507	Door1	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Effects\Doors\Door1_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door1		113048
+	939187383	Door3	U:\Unity\Projects\BWGameJam\BWGameJam_WwiseProject\.cache\Mac\SFX\Effects\Doors\Door3_10C4C929.wem		\Actor-Mixer Hierarchy\Default Work Unit\Doors\Door3		620992
+

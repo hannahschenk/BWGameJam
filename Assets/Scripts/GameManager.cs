@@ -11,18 +11,27 @@ public class GameManager : MonoBehaviour
 	public static GameManager Manager;
 	public static PlayerStats PlayerStats;
 	public static Camera PlayerCam;
+	public static PlayerInputHandler PlayerInputHandler;
+	public static PlayerFPAnimator PlayerFPAnim;
 
 	public bool isBellActive = false;
 	protected float bellEndTime = 0f;
 
-	public string EventLowIntensity = "Low_Intensity";
-	public string EventHighIntensity = "High_Intensity";
-	public string EventStopAll = "Stop_All";
+	//public string EventLowIntensity = "Low_Intensity";
+	//public string EventHighIntensity = "High_Intensity";
+	public string PlayAmbiance = "Play_Ambience";
+	public string EventLowIntensity = "Play_Song_EmptyHalls";
+	public string EventHighIntensity = "Play_Song_Ghost_Attack";
+	//public string EventStopAll = "Stop_All";
+
+
 
 	private void Awake()
 	{
 		Manager = this;
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
+		PlayerInputHandler = PlayerStats.GetComponent<PlayerInputHandler>();
+		PlayerFPAnim = PlayerStats.GetComponentInChildren<PlayerFPAnimator>();
 
 		PlayerCam = PlayerStats.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
 	}
@@ -63,7 +72,8 @@ public class GameManager : MonoBehaviour
 
 	public void BGMLowIntensity()
 	{
-		AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
+		//AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
+		AkSoundEngine.PostEvent(PlayAmbiance, gameObject);
 	}
 
 	public void BGMHighIntensity()
@@ -73,7 +83,7 @@ public class GameManager : MonoBehaviour
 
 	public void BGMStopAll()
 	{
-		AkSoundEngine.PostEvent(EventStopAll, gameObject);
+		//AkSoundEngine.PostEvent(EventStopAll, gameObject);
 	}
 
 

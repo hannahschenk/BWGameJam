@@ -337,6 +337,7 @@ MonoBehaviour:
   cursorInputForLook: 1
   crouch: 0
   primary: 0
+  scroll: 0
   secondary: 0
 --- !u!1001 &1580851688468008518
 PrefabInstance:
@@ -502,6 +503,10 @@ PrefabInstance:
     - target: {fileID: 812867799246529839, guid: 1d1c95335fa3094409f99db39ff53871, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456822250652487533, guid: 1d1c95335fa3094409f99db39ff53871, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7372977049337357187, guid: 1d1c95335fa3094409f99db39ff53871, type: 3}
       propertyPath: m_LocalScale.x
