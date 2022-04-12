@@ -16,7 +16,7 @@
 			<ShortName>Init</ShortName>
 			<Path>Init.bnk</Path>
 		</SoundBank>
-		<SoundBank Id="1942696649" Language="SFX" Hash="22992418">
+		<SoundBank Id="1942696649" Language="SFX" Hash="752852203">
 			<ObjectPath>\SoundBanks\Default Work Unit\Effects</ObjectPath>
 			<ShortName>Effects</ShortName>
 			<Path>Effects.bnk</Path>
@@ -62,6 +62,22 @@
 						<File Id="939187383" Language="SFX">
 							<ShortName>Effects\Doors\Door3.wav</ShortName>
 							<Path>SFX\Effects\Doors\Door3_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1024894558" Name="Play_Song_Empty_Halls" ObjectPath="\Events\Default Work Unit\Play_Song_Empty_Halls" DurationType="OneShot" DurationMin="130.539993" DurationMax="130.539993">
+					<IncludedMemoryFiles>
+						<File Id="40111818" Language="SFX">
+							<ShortName>Music\Empty Halls.wav</ShortName>
+							<Path>SFX\Music\Empty Halls_10C4C929.wem</Path>
+						</File>
+					</IncludedMemoryFiles>
+				</Event>
+				<Event Id="1088671819" Name="Play_Song_Ghost_Attack_" ObjectPath="\Events\Default Work Unit\Play_Song_Ghost_Attack_" DurationType="OneShot" DurationMin="68.260002" DurationMax="68.260002">
+					<IncludedMemoryFiles>
+						<File Id="811785081" Language="SFX">
+							<ShortName>Music\Ghost Attack!.wav</ShortName>
+							<Path>SFX\Music\Ghost Attack!_10C4C929.wem</Path>
 						</File>
 					</IncludedMemoryFiles>
 				</Event>

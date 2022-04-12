@@ -131,6 +131,9 @@ public class PlayerFPController : MonoBehaviour
 
 	private void Update()
 	{
+		if (!GameManager.CanMove)
+			return;
+
 		JumpAndGravity();
 		GroundedCheck();
 		CrouchInput();
