@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.PostProcessing;
 
 /// <summary>
 /// Helper class for important references in-game; only inquire in START or later.
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
 	public static PlayerFPAnimator PlayerFPAnimHandler;
 	public static Animator PlayerAnimator;
 	public static string PlayerTag = "Player";
+	public static PostProcessVolume Volume;
 
 	public AudioClip bgmLowIntensity;
 	public AudioClip bgmHighIntensity;
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
 	public AudioClip[] ambience;
 	protected int ambIndex = 0;
 
+	public float bellDuration = 10f;
 	public bool isBellActive = false;
 	protected float bellEndTime = 0f;
 
@@ -106,6 +110,7 @@ public class GameManager : MonoBehaviour
 		PlayerAnimator = PlayerFPAnimHandler.GetComponent<Animator>();
 
 		PlayerCam = Player.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
+		Volume = PlayerCam.GetComponent<PostProcessVolume>();
 	}
 
 	protected void ConfigureFade()
@@ -137,14 +142,13 @@ public class GameManager : MonoBehaviour
 
 		PlayAmbience();
 
+		if (skipIntro)
+			return;
 		DisableMovementAndFadeIn();
 	}
 
 	protected void DisableMovementAndFadeIn()
 	{
-		if (skipIntro)
-			return;
-
 		CanMove = false;
 		Invoke("FadeIn", startBlackScreenHoldTime);
 		Invoke("EnableMovement", startBlackScreenHoldTime); //+ (screenFadeTime / 3.0f));
@@ -191,7 +195,7 @@ public class GameManager : MonoBehaviour
 	public void FadeIn()
 	{
 		//Debug.LogFormat("Starting FadeIn at {0}, should blend over {1} seconds and end at {2}", Time.time, screenFadeInTime, Time.time + screenFadeInTime);
-
+		BlackScreen.gameObject.SetActive(true);
 		BlackScreen.canvasRenderer.SetAlpha(alphaMax);
 		IEnumerator newFade = FadeCanvas(BlackScreen.canvasRenderer, alphaMin, screenFadeInTime, false);
 		StartCoroutine(newFade);
@@ -202,7 +206,7 @@ public class GameManager : MonoBehaviour
 		//Debug.LogFormat("Starting FadeOut at {0}, should blend over {1} seconds and end at {2}", Time.time, screenFadeInTime, Time.time + screenFadeInTime);
 		//Debug.LogFormat("Starting FadeOut at {0}", Time.time);
 		
-		//BlackScreen.gameObject.SetActive(true);
+		BlackScreen.gameObject.SetActive(true);
 		BlackScreen.canvasRenderer.SetAlpha(alphaMin);
 		
 		IEnumerator newFade = FadeCanvas(BlackScreen.canvasRenderer, alphaMax, screenFadeOutTime, false, ap_Utility.LerpTypes.EaseOut);
@@ -277,18 +281,20 @@ public class GameManager : MonoBehaviour
 		if (isBellActive)
 			return false;
 
-		StartBell(15f);
+		StartBell(bellDuration);
 		return true;
 	}
 
 	public void StartBell(float duration)
 	{
+		//Debug.LogFormat("Starting bell at {0}", Time.time);
 		isBellActive = true;
 		bellEndTime = Time.time + duration;
 	}
 
 	public void EndBell()
 	{
+		//Debug.LogFormat("Ending bell at {0}", Time.time);
 		isBellActive = false;
 	}
 

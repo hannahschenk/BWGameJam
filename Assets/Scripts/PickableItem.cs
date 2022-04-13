@@ -53,6 +53,7 @@ public class PickableItem : MonoBehaviour
 
 	protected virtual void Die()
 	{
+		//Debug.Log("Skipping item destroy for testing");
 		GameObject.Destroy(gameObject);
 	}
 }

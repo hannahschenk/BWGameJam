@@ -56,14 +56,14 @@ public class Weapon : MonoBehaviour
 
 	public virtual void Unwield()
 	{
-		FPAnimHandler.CarryingItem(false);
+		//FPAnimHandler.CarryingItem(false);
 		child.SetActive(false);
 		Wielded = false;
 	}
 
 	public virtual void Wield()
 	{
-		FPAnimHandler.CarryingItem();
+		//FPAnimHandler.CarryingItem();
 		child.SetActive(true);
 		Wielded = true;
 	}

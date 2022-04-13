@@ -8,7 +8,8 @@ public class UpdateItemsOnEnterState : StateMachineBehaviour
 	public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
 		base.OnStateEnter(animator, stateInfo, layerIndex);
-		GameManager.PlayerFPAnimHandler.UpdateItemsState();
+		//GameManager.PlayerFPAnimHandler.UpdateItemsState();
+		GameManager.PlayerFPAnimHandler.UpdateItemsStateAndWield();
 	}
 
 }

@@ -24,7 +24,7 @@ public sealed class ap_Helper
 	public static void PlayRandomAudioClip(AudioSource audio, List<AudioClip> clips, Vector2 pitchRange)
 	{
 		if (GetRandomAudioClip(clips, pitchRange, out AudioClip clip, out float pitch)) {
-			Debug.Log("Playing audio clip!");
+			//Debug.Log("Playing audio clip!");
 			audio.pitch = pitch;
 			audio.PlayOneShot(clip);
 		}

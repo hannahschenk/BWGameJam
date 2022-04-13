@@ -2,23 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StarterAssets;
+using UnityEngine.Rendering.PostProcessing;
 
 public class PlayerStats : MonoBehaviour
 {
 
-	public string PlayerTag = "Player";
+	public readonly string PlayerTag = "Player";
 	protected Transform playerCam;
 	protected PlayerFPAnimator anim;
 
 	protected PlayerInputHandler _input;
-	
 	protected PickableItem item;
+
+	//public Vignette vignette;
+	//public PostProcessProfile vignetteProfile;
+	protected PostProcessVolume volume;
+	protected Vignette vignette;
 
 	protected float interactReach = 2.5f;
 	protected float interactTimeout = 0.1f;
 	protected float interactTimeoutDelta = 0f;
 
-	protected float _MaxHealth = 100f;
+	protected float _MaxHealth = 90f;
 	public float MaxHealth
 	{
 		get
@@ -43,7 +48,7 @@ public class PlayerStats : MonoBehaviour
 		}
 	}
 	[SerializeField]
-	protected float _health = 100f;
+	protected float _health;
 
 	protected bool _Sickle = false;
 	public bool HasSickle
@@ -73,12 +78,14 @@ public class PlayerStats : MonoBehaviour
 
 	protected Dictionary<Rigidbody, PickableItem> items = new Dictionary<Rigidbody, PickableItem>();
 
+	protected AudioSource _audio;
+	public Vector2 pitchRange = new Vector2(0.95f, 1.05f);
+	public List<AudioClip> hurtSfx = new List<AudioClip>();
 
-
-	void Awake()
-	{
-		Health = MaxHealth;
-	}
+	//void Awake()
+	//{
+	//	//ResetHealth();
+	//}
 
     // Start is called before the first frame update
     void Start()
@@ -86,10 +93,35 @@ public class PlayerStats : MonoBehaviour
 		anim = GetComponentInChildren<PlayerFPAnimator>();
 		playerCam = GameManager.PlayerCam.transform;
 		_input = GetComponent<PlayerInputHandler>();
+		_audio = GetComponent<AudioSource>();
+
+		SetupVignette();
+
+		Refresh();
 	}
 
-	private void Reset()
+	protected void ResetHealth()
 	{
+		Health = MaxHealth;
+	}
+	
+	protected void SetupVignette()
+	{
+
+		volume = playerCam.GetComponent<PostProcessVolume>();
+
+		if (!volume)
+			return;
+
+		if (!volume.profile.TryGetSettings<Vignette>(out vignette))
+			return;
+
+	}
+
+	private void Refresh()
+	{
+		ResetHealth();
+		UpdateVignette();
 		LoseBell();
 		LoseSickle();
 	}
@@ -115,10 +147,10 @@ public class PlayerStats : MonoBehaviour
 			interactTimeoutDelta -= Time.deltaTime;
 	}
 
-	private void FixedUpdate()
-	{
-		//CheckForInteractables();
-	}
+	//private void FixedUpdate()
+	//{
+	//	//CheckForInteractables();
+	//}
 
 	protected void CheckForInteractables()
 	{
@@ -162,7 +194,9 @@ public class PlayerStats : MonoBehaviour
 		if (!item)
 			return;
 		item.OnPickup();
-		anim.UpdateItemsState();
+		//anim.UpdateItemsState();
+		//Debug.LogFormat("PIcking up {0}, HaveSickle? {1}, HaveBell? {2}", item, HasSickle, HasBell);
+		anim.UpdateItemsStateAndWield();
 	}
 
 	// Fancy way of writing an OR operator that can be extended infinitely
@@ -177,55 +211,75 @@ public class PlayerStats : MonoBehaviour
 		return false;
 	}
 
+	protected float minVignetteIntensity = 0.1f;
+	protected float maxVignetteIntensity = 0.5f; //0.6f;
+
 	public void UpdateVignette()
 	{
-		//Intensity:
-		//0f [full health], 0.6f [low health]
+		if (!vignette)
+			return;
 
+		float healthRatio = 1 - (Health / MaxHealth);
+
+		//float percentage = ap_Utility.EaseIn(healthRatio);
+		//float percentage = ap_Utility.EaseOut(healthRatio); // 0.7f: 1 hit great, 2 hits too much // 0.6f: 1 hit faint, 2 hits too much
+		//float percentage = ap_Utility.Smoothstep(healthRatio); // 0.7f: 1 hit faint, 2 hits too much
+		//float percentage = ap_Utility.Smootherstep(healthRatio); //0.6f: 1 hit faint, 2 hits... maybe okay //1.0f: 1 hit too faint, 2 hits too much
+
+		float percentage = healthRatio; 
+		//0.7f: 1 hit faint, 2 hits okay 
+		//0.6f: 1 hit faint, 2 hits okay 
+		//0.2,0.6f: initial seems good, can't really tell, 1 hit: good? 2 hits: good
+		//0.10.5f: seems good, better to err on the slightly subtle side I think
+
+		vignette.intensity.Override(Mathf.Lerp(minVignetteIntensity, maxVignetteIntensity, percentage));
 
 	}
 
 	public void Heal(float healAmount)
 	{
 		Health += healAmount;
+		UpdateVignette();
 	}
 
 	public void Hurt(float hurtAmount)
 	{
-		Health -= hurtAmount;
-
+		Health = Mathf.Max(0f, Health - hurtAmount);
+		UpdateVignette();
 		if (Health <= 0f) {
+			ap_Helper.PlayRandomAudioClip(_audio, hurtSfx, pitchRange);
 			Die();
+		} else {
+			ap_Helper.PlayRandomAudioClip(_audio, hurtSfx, pitchRange);
 		}
 	}
 
 	public void GainSickle()
 	{
 		HasSickle = true;
-		//anim.UpdateSickle(HasSickle);
 	}
 
 	public void LoseSickle()
 	{
 		HasSickle = false;
-		//anim.UpdateSickle(HasSickle);
 	}
 
 	public void GainBell()
 	{
 		HasBell = true;
-		//anim.UpdateBell(HasBell);
 	}
 
 	public void LoseBell()
 	{
 		HasBell = false;
-		//anim.UpdateBell(HasBell);
 	}
 
 	public void Die()
 	{
 		// Play anim, etc
 		// Reset, etc
+		//GameManager.Die()
+		//ResetPosition()
+		//Refresh()??? Or,. revert to last level setup?
 	}
 }

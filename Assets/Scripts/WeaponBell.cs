@@ -11,7 +11,8 @@ public class WeaponBell : Weapon
 
 	public override void OnPrimaryFire()
 	{
-		FPAnimHandler.Defend();
+		if (CanWield())
+			FPAnimHandler.Defend();
 	}
 
 	public void BellRing()

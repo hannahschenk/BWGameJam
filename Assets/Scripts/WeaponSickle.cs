@@ -12,7 +12,8 @@ public class WeaponSickle : Weapon
 
 	public override void OnPrimaryFire()
 	{
-		FPAnimHandler.Attack();
+		if (CanWield())
+			FPAnimHandler.Attack();
 	}
 
 }

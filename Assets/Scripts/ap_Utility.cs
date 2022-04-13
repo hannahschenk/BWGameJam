@@ -129,12 +129,22 @@ public static class ap_Utility
 		}
 	}
 
-	public static float EaseOut(float t) // Fast at first, slow at end
+	/// <summary>
+	/// Fast at first, slow at end
+	/// </summary>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	public static float EaseOut(float t)
 	{
 		return Mathf.Sin(t * Mathf.PI * 0.5f);
 	}
 
-	public static float EaseIn(float t) // Slow at first, quicker at end
+	/// <summary>
+	/// Slow at first, quicker at end
+	/// </summary>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	public static float EaseIn(float t)
 	{
 		return 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
 	}
@@ -144,12 +154,22 @@ public static class ap_Utility
 		return t * t;
 	}
 
-	public static float Smoothstep(float t) // Slow at start and end, faster in the middle
+	/// <summary>
+	/// Slow at start and end, faster in the middle
+	/// </summary>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	public static float Smoothstep(float t)
 	{
 		return t * t * (3f - 2f * t);
 	}
 
-	public static float Smootherstep(float t) // Even slower at the start and end, faster in the middle
+	/// <summary>
+	/// Even slower at the start and end, faster in the middle
+	/// </summary>
+	/// <param name="t"></param>
+	/// <returns></returns>
+	public static float Smootherstep(float t)
 	{
 		return t * t * t * (t * (6f * t - 15f) + 10f);
 	}

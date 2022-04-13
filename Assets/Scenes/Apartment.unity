@@ -774,6 +774,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1191467138 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9051150360744296660, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
+  m_PrefabInstance: {fileID: 8923191458159576873}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1191467146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1191467138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f895eb2619f1b41b9d7eff0848dd66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeScale: 1
 --- !u!4 &1321051958 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7070759748359856042, guid: 1733a08b8d97c88449c1bdf6f70bcf5e, type: 3}
@@ -1762,6 +1780,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3097611744854101698, guid: 82d7df6c7a32ec34db5452b0eb4055e0, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8905438155171243244, guid: 82d7df6c7a32ec34db5452b0eb4055e0, type: 3}
       propertyPath: m_RootOrder
       value: 12
@@ -1867,5 +1889,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCapsule (Cel Camera Arms) Default Audio
       objectReference: {fileID: 0}
+    - target: {fileID: 9051150360744296663, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
+      propertyPath: _health
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 9051150360744296663, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
+      propertyPath: vignetteProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: ee0c7ae213860cb48beab0e979cbf8dc, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
