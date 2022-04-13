@@ -5,7 +5,20 @@ using UnityEngine;
 public class PlayerFPAnimator : MonoBehaviour
 {
 	protected PlayerStats stats;
-	public Animator animator;
+
+	protected Animator _animator;
+	public Animator animator
+	{
+		get
+		{
+			return _animator;
+		}
+		protected set
+		{
+			_animator = value;
+		}
+	}
+
 	protected PlayerInputHandler input;
 
 	protected Weapon currentWeapon;
@@ -394,7 +407,7 @@ public class PlayerFPAnimator : MonoBehaviour
 
 	public void BellRing()
 	{
-		Debug.Log("Ringing bell!");
+		//Debug.Log("Ringing bell!");
 		currentWeapon.SendMessage("BellRing", SendMessageOptions.DontRequireReceiver);
 	}
 

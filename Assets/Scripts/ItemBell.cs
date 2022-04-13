@@ -11,6 +11,8 @@ public class ItemBell : PickableItem
 
 	public override void OnPickup()
 	{
+		base.OnPickup();
+
 		stats.GainBell();
 
 		Die();

@@ -86,25 +86,9 @@ public class Weapon : MonoBehaviour
 
 	}
 
-	public virtual bool GetRandomAudioClip(out AudioClip clip, out float pitch)
-	{
-		clip = null;
-		pitch = 0f;
-
-		if (sfx.Count == 0)
-			return false;
-
-		clip = sfx[Random.Range(0, sfx.Count)];
-		pitch = Random.Range(pitchRange.x, pitchRange.y);
-		return true;
-	}
-
 	public virtual void PlayRandomAudioClip()
 	{
-		if (GetRandomAudioClip(out AudioClip clip, out float pitch)) {
-			audio.pitch = pitch;
-			audio.PlayOneShot(clip);
-		}
+		ap_Helper.PlayRandomAudioClip(audio, sfx, pitchRange);
 	}
 
 }

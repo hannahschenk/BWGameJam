@@ -177,6 +177,14 @@ public class PlayerStats : MonoBehaviour
 		return false;
 	}
 
+	public void UpdateVignette()
+	{
+		//Intensity:
+		//0f [full health], 0.6f [low health]
+
+
+	}
+
 	public void Heal(float healAmount)
 	{
 		Health += healAmount;

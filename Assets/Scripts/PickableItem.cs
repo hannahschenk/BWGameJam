@@ -5,12 +5,17 @@ using UnityEngine;
 public class PickableItem : MonoBehaviour
 {
 
+	public Vector2 pitchRange = new Vector2(0.9f, 1.1f);
+	public List<AudioClip> sfx = new List<AudioClip>();
+
 	protected PlayerStats stats;
+	protected AudioSource _audio;
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
 		stats = GameManager.PlayerStats;
+		_audio = GetComponent<AudioSource>();
     }
 
     //// Update is called once per frame
@@ -26,7 +31,13 @@ public class PickableItem : MonoBehaviour
 
 	public virtual void OnPickup()
 	{
+		//Debug.Log("Playing pickup audio");
+		//ap_Helper.PlayRandomAudioClip(_audio, sfx, pitchRange);
 
+		if (!ap_Helper.GetRandomAudioClip(sfx, pitchRange, out AudioClip clip, out float pitch))
+			return;
+
+		ap_Helper.PlayClipAt(_audio, transform.position, clip);
 	}
 
 	//protected virtual void OnCollisionEnter(Collision col)

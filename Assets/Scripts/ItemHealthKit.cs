@@ -17,6 +17,7 @@ public class ItemHealthKit : PickableItem
 
 	public override void OnPickup()
 	{
+		base.OnPickup();
 		stats.Heal(healAmount);
 		Die();
 	}

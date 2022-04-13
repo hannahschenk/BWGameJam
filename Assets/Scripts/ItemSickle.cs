@@ -13,6 +13,7 @@ public class ItemSickle : PickableItem
 
 	public override void OnPickup()
 	{
+		base.OnPickup();
 
 		stats.GainSickle();
 
