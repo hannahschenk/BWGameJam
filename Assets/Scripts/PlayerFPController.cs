@@ -172,6 +172,24 @@ public class PlayerFPController : MonoBehaviour
 		if (_crouchTimeoutDelta > 0.0f)
 			return;
 
+		//float heightMidpoint = defaultCapsuleHeight - (defaultCapsuleHeight * CrouchPlayerScale);
+		float heightMidpoint = (defaultCapsuleHeight - 0.15f);
+
+		//Physics.IgnoreCollision()
+		Collider[] cols = Physics.OverlapSphere(transform.position + (Vector3.up * heightMidpoint), 0.15f);
+
+		if (cols.Length > 0) {
+			bool self = true;
+			foreach (Collider col in cols) {
+				if (!col.CompareTag(GameManager.PlayerTag))
+					self = false;
+			}
+			if (!self)
+				return;
+		}
+
+		
+
 		_pinput.crouch = false;
 		isCrouching = false;
 		_crouchTimeoutDelta = CrouchTimeout;
@@ -191,7 +209,6 @@ public class PlayerFPController : MonoBehaviour
 		if (_crouchTimeoutDelta > 0.0f)
 			return;
 
-		_pinput.crouch = false;
 		isCrouching = true;
 		_crouchTimeoutDelta = CrouchTimeout;
 			
@@ -219,6 +236,7 @@ public class PlayerFPController : MonoBehaviour
 			else
 				StopCrouch();
 
+			_pinput.crouch = false;
 		}
 
 

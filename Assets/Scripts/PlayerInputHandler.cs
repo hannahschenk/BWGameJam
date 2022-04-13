@@ -25,16 +25,22 @@ public class PlayerInputHandler : StarterAssets.StarterAssetsInputs
 
 	public void CrouchInput(bool newCrouchState)
 	{
+		if (!GameManager.CanMove)
+			return;
+
 		crouch = newCrouchState;
 	}
 
 	public void OnPrimaryAction(InputValue value)
 	{
+		if (!GameManager.CanMove)
+			return;
+
 		GameManager.PlayerFPAnimHandler.OnPrimaryAction();
 		//primary = value.isPressed;
 	}
 
-	//Interact
+	//Interact Input Value
 	public void OnSecondaryAction(InputValue value)
 	{
 		SecondaryInput(value.isPressed);
@@ -42,6 +48,9 @@ public class PlayerInputHandler : StarterAssets.StarterAssetsInputs
 
 	public void OnSwitchWeapon(InputValue value)
 	{
+		if (!GameManager.CanMove)
+			return;
+
 		if (cursorInputForLook) {
 			scroll = value.Get<float>();
 		}
@@ -58,8 +67,12 @@ public class PlayerInputHandler : StarterAssets.StarterAssetsInputs
 
 	}
 
+	// Interact state
 	public void SecondaryInput(bool newSecondaryState)
 	{
+		if (!GameManager.CanMove)
+			return;
+
 		secondary = newSecondaryState;
 	}
 

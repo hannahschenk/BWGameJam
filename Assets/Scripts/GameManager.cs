@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
 		FadeOutAudio();
 		FadeInAudio();
 		//HoldBlackScreen();
-		TryFade();
+		//TryFade();
 
 		if (Time.time >= nextAmbienceCheckTime) {
 			CheckAmbience();
@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
 		if (asAmbience.isPlaying)
 			return;
 
-		Debug.Log("Ambience not playing, switching track!");
+		//Debug.Log("Ambience not playing, switching track!");
 		ambIndex = (ambIndex + 1) % ambience.Length;
 		asAmbience.clip = ambience[ambIndex];
 		asAmbience.Play();
@@ -174,9 +174,14 @@ public class GameManager : MonoBehaviour
 	{
 		Debug.LogFormat("Starting FadeOut at {0}", Time.time);
 		fadeGoalTime = Time.time + screenFadeTime;
-		BlackScreen.color = colorEmpty;
+		//BlackScreen.color = Color.black;
+
 		BlackScreen.gameObject.SetActive(true);
-		fadeDirection = 1f;
+		BlackScreen.canvasRenderer.SetAlpha(0f);
+		BlackScreen.CrossFadeAlpha(1f, screenFadeTime, true);
+
+
+		//fadeDirection = 1f;
 	}
 
 	//public void StartBlackScreen(float time, bool fade)
@@ -292,7 +297,7 @@ public class GameManager : MonoBehaviour
 
 	protected void OnFadeIn()
 	{
-		Debug.Log("FadeIn finished, enabling movement");
+		Debug.LogFormat("FadeIn finished at {0}, enabling movement", Time.time);
 		changingFloors = false;
 		CanMove = true;
 	}
@@ -309,8 +314,8 @@ public class GameManager : MonoBehaviour
 		CanMove = false;
 		//Time.timeScale = 0f;
 		FadeOut();
-		Invoke("FadeIn", fadeGoalTime);
-		Invoke("OnFadeIn", fadeGoalTime + (fadeGoalTime / 3f));
+		Invoke("FadeIn", screenFadeTime);
+		Invoke("OnFadeIn", screenFadeTime + (screenFadeTime / 3f));
 		return changingFloors;
 	}
 

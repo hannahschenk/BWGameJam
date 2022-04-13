@@ -152,11 +152,11 @@ public class PlayerFPAnimator : MonoBehaviour
 
 	public void OnWeaponSwap()
 	{
-		Debug.Log("Switching weapons!");
+		//Debug.Log("Switching weapons!");
 		swapping = false;
 
 		if (currentWeapon != null) {
-			Debug.LogFormat("Attempting to unwield {0}", currentWeapon);
+			//Debug.LogFormat("Attempting to unwield {0}", currentWeapon);
 			currentWeapon.Unwield();
 		}
 
