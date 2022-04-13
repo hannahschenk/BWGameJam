@@ -14,8 +14,11 @@ public class GameManager : MonoBehaviour
 
 	public static ApartmentBuilder Apartment;
 	public static GameManager Manager;
+
 	public static Transform Player;
 	public static PlayerStats PlayerStats;
+	public static PlayerFPController PlayerController;
+
 	public static Camera PlayerCam;
 	public static PlayerInputHandler PlayerInputHandler;
 	public static PlayerFPAnimator PlayerFPAnimHandler;
@@ -44,9 +47,9 @@ public class GameManager : MonoBehaviour
 	public Image BlackScreen;
 	protected Color colorEmpty = new Color(0f, 0f, 0f, 0f);
 	//protected float screenFadeTime = 8f;
-	protected float fadeGoalTime = 0f;
+	//protected float fadeGoalTime = 0f;
 
-	protected float blackScreenTime = 0f;
+	//protected float blackScreenTime = 0f;
 
 	protected float musicFadeTime = 10f;
 	protected float audioFadeOutGoalTime = -1f;
@@ -54,7 +57,8 @@ public class GameManager : MonoBehaviour
 	protected AudioClip queuedMusic = null;
 
 	//public AnimationCurve screenFadeCurve;
-	public float screenFadeTime = 6f;
+	public float screenFadeInTime = 6f;
+	public float screenFadeOutTime = 1f;
 	public float startBlackScreenHoldTime = 4f;
 
 	//public string EventLowIntensity = "Low_Intensity";
@@ -64,6 +68,8 @@ public class GameManager : MonoBehaviour
 	//public string EventHighIntensity = "Play_Song_Ghost_Attack";
 	//public string EventStopAll = "Stop_All";
 
+	protected float alphaMin = 0f;
+	protected float alphaMax = 1f;
 
 
 	private void Awake()
@@ -71,12 +77,15 @@ public class GameManager : MonoBehaviour
 		Manager = this;
 		Apartment = FindObjectOfType<ApartmentBuilder>() as ApartmentBuilder;
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
+
 		Player = PlayerStats.transform;
-		PlayerInputHandler = PlayerStats.GetComponent<PlayerInputHandler>();
-		PlayerFPAnimHandler = PlayerStats.GetComponentInChildren<PlayerFPAnimator>();
+		PlayerController = Player.GetComponent<PlayerFPController>();
+
+		PlayerInputHandler = Player.GetComponent<PlayerInputHandler>();
+		PlayerFPAnimHandler = Player.GetComponentInChildren<PlayerFPAnimator>();
 		PlayerAnimator = PlayerFPAnimHandler.GetComponent<Animator>();
 
-		PlayerCam = PlayerStats.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
+		PlayerCam = Player.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
 
 		ConfigureAudio();
 		ConfigureFade();
@@ -159,11 +168,11 @@ public class GameManager : MonoBehaviour
 
 	public void FadeIn()
 	{
-		Debug.LogFormat("Starting FadeIn at {0}", Time.time);
-		fadeGoalTime = Time.time + screenFadeTime;
+		//Debug.LogFormat("Starting FadeIn at {0}, should blend over {1} seconds and end at {2}", Time.time, screenFadeInTime, Time.time + screenFadeInTime);
+		//fadeGoalTime = Time.time + screenFadeTime;
 
 		BlackScreen.canvasRenderer.SetAlpha(1f);
-		BlackScreen.CrossFadeAlpha(0f, screenFadeTime, true);
+		BlackScreen.CrossFadeAlpha(0f, screenFadeInTime, false);
 
 		//BlackScreen.color = Color.black;
 		//BlackScreen.gameObject.SetActive(true);
@@ -172,13 +181,13 @@ public class GameManager : MonoBehaviour
 
 	public void FadeOut()
 	{
-		Debug.LogFormat("Starting FadeOut at {0}", Time.time);
-		fadeGoalTime = Time.time + screenFadeTime;
+		//Debug.LogFormat("Starting FadeOut at {0}, should blend over {1} seconds and end at {2}", Time.time, screenFadeInTime, Time.time + screenFadeInTime);
+		//fadeGoalTime = Time.time + screenFadeTime;
 		//BlackScreen.color = Color.black;
 
-		BlackScreen.gameObject.SetActive(true);
+		//BlackScreen.gameObject.SetActive(true);
 		BlackScreen.canvasRenderer.SetAlpha(0f);
-		BlackScreen.CrossFadeAlpha(1f, screenFadeTime, true);
+		BlackScreen.CrossFadeAlpha(1f, screenFadeOutTime, false);
 
 
 		//fadeDirection = 1f;
@@ -242,82 +251,140 @@ public class GameManager : MonoBehaviour
 		return 1 - ((endTIme - Time.time) / fadeTime);
 	}
 
-	protected float fadeDirection = 0;
-	protected float alphaMin = 0f;
-	protected float alphaMax = 1f;
+	//protected float fadeDirection = 0;
 
-	public void TryFade()
-	{
-		if (fadeDirection == 0f)
-			return;
+	//public void TryFade()
+	//{
+	//	if (fadeDirection == 0f)
+	//		return;
 
-		if (!BlackScreen.gameObject.activeInHierarchy)
-			return;
+	//	if (!BlackScreen.gameObject.activeInHierarchy)
+	//		return;
 
-		//if (Time.time < blackScreenTime)
-		//	return;
+	//	//if (Time.time < blackScreenTime)
+	//	//	return;
 
-		//if (Time.time > fadeGoalTime)
-		//	return;
+	//	//if (Time.time > fadeGoalTime)
+	//	//	return;
 
-		//float fadeRatio = (Time.time / fadeGoalTime);
-		float fadeRatio = GetFadeRatio(fadeGoalTime, screenFadeTime);
+	//	//float fadeRatio = (Time.time / fadeGoalTime);
+	//	//float fadeRatio = GetFadeRatio(fadeGoalTime, screenFadeTime);
 
-		//float fadeRatio = screenFadeCurve.Evaluate(GetFadeRatio(fadeGoalTime, screenFadeTime));
+	//	//float fadeRatio = screenFadeCurve.Evaluate(GetFadeRatio(fadeGoalTime, screenFadeTime));
 
-		float a = 0f;
-		float start = 0f;
-		float end = 0f;
+	//	float a = 0f;
+	//	float start = 0f;
+	//	float end = 0f;
 
-		if (fadeDirection > 0) {
-			start = alphaMin;
-			end = alphaMax;
-		} else if (fadeDirection < 0) {
-			start = alphaMax;
-			end = alphaMin;
-		}
+	//	if (fadeDirection > 0) {
+	//		start = alphaMin;
+	//		end = alphaMax;
+	//	} else if (fadeDirection < 0) {
+	//		start = alphaMax;
+	//		end = alphaMin;
+	//	}
 
-		a = Mathf.Lerp(start, end, fadeRatio);
+	//	a = Mathf.Lerp(start, end, fadeRatio);
 
-		if (fadeRatio >= 0.98f) {
-			a = end;
-		}
+	//	if (fadeRatio >= 0.98f) {
+	//		a = end;
+	//	}
 
-		//Debug.LogFormat("Ratio: {0}, a: {1}", fadeRatio, a );
+	//	//Debug.LogFormat("Ratio: {0}, a: {1}", fadeRatio, a );
 
-		Color newColor = new Color(0f, 0f, 0f, a);
-		BlackScreen.color = newColor;
+	//	Color newColor = new Color(0f, 0f, 0f, a);
+	//	BlackScreen.color = newColor;
 
-		if (a == end) {
-			Debug.LogFormat("Ended Fade at {0}", Time.time);
-			BlackScreen.gameObject.SetActive(false);
-			fadeDirection = 0f;
-		}
-	}
+	//	if (a == end) {
+	//		Debug.LogFormat("Ended Fade at {0}", Time.time);
+	//		BlackScreen.gameObject.SetActive(false);
+	//		fadeDirection = 0f;
+	//	}
+	//}
 
 	protected void OnFadeIn()
 	{
-		Debug.LogFormat("FadeIn finished at {0}, enabling movement", Time.time);
+		Debug.LogFormat("Enabling movement", Time.time);
 		changingFloors = false;
 		CanMove = true;
 	}
 
+
+
 	protected static bool changingFloors = false;
-	public bool CanStartChangeFloors()
+
+	protected static bool reachedExit = false;
+	//protected string warpPlayer = "WarpPlayerAndRebuild";
+	Coroutine warpPlayer = null;
+
+	public void ReachedExit()
 	{
-		if (changingFloors)
-			return false;
+		if (reachedExit)
+			return;
 
-		changingFloors = true;
-		Debug.Log("Changing floors - Starting Fade Out");
+		reachedExit = true;
 
+		//if (IsInvoking(warpPlayer))
+		//	return;
+
+		if (warpPlayer != null)
+			return;
+
+		Debug.Log("Manager.ReachedExit firing!");
 		CanMove = false;
-		//Time.timeScale = 0f;
+
 		FadeOut();
-		Invoke("FadeIn", screenFadeTime);
-		Invoke("OnFadeIn", screenFadeTime + (screenFadeTime / 3f));
-		return changingFloors;
+
+		warpPlayer = StartCoroutine(WarpPlayerAndRebuild(screenFadeOutTime + 2));
 	}
+
+	//protected void WarpPlayerAndRebuild()
+	//{
+		
+	//	WaitForEndOfFrame;
+	//}
+
+
+	protected IEnumerator WarpPlayerAndRebuild(float delay)
+	{
+		//while (Time.time < startTime) {
+		//	yield return null;
+		//}
+
+		yield return new WaitForSecondsRealtime(delay);
+
+		PlayerController.enabled = false;
+		Vector3 newPos = Vector3.zero + (Apartment.GetFloorHeight(CurrentFloor) * Vector3.up);
+		Player.SetPositionAndRotation(newPos, Quaternion.FromToRotation(Player.forward, Vector3.forward));
+		yield return null;
+
+		Apartment.NewLevel();
+		yield return null;
+
+		reachedExit = false;
+		PlayerController.enabled = true;
+		FadeIn();
+		CanMove = true;
+		StopCoroutine(warpPlayer);
+		warpPlayer = null;
+	}
+
+
+	//public bool CanStartChangeFloors()
+	//{
+	//	if (changingFloors)
+	//		return false;
+
+	//	changingFloors = true;
+	//	Debug.Log("Changing floors - Starting Fade Out");
+
+	//	CanMove = false;
+	//	//Time.timeScale = 0f;
+	//	FadeOut();
+	//	Invoke("FadeIn", screenFadeTime);
+	//	Invoke("OnFadeIn", screenFadeTime + (screenFadeTime / 3f));
+	//	return changingFloors;
+	//}
 
 	public void ChangedFloors()
 	{

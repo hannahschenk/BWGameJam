@@ -659,31 +659,8 @@ MonoBehaviour:
   asMusic: {fileID: 0}
   asAmbience: {fileID: 0}
   BlackScreen: {fileID: 479528637}
-  screenFadeCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  screenFadeTime: 6
+  screenFadeInTime: 6
+  screenFadeOutTime: 3
   startBlackScreenHoldTime: 4
 --- !u!1 &768078086
 GameObject:
@@ -1601,7 +1578,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2113048675154277079, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
       propertyPath: m_TagString
-      value: MainCamera
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8563583562486405742, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
       propertyPath: m_RootOrder
@@ -1617,7 +1594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8563583562486405742, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -30
       objectReference: {fileID: 0}
     - target: {fileID: 8563583562486405742, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
       propertyPath: m_LocalRotation.w

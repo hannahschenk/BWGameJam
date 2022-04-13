@@ -77,7 +77,7 @@ public class PlayerFPController : MonoBehaviour
 	private CapsuleCollider _capsule;
 	private PlayerInputHandler _pinput;
 
-	private GameObject _mainCamera;
+	private Camera _camera;
 
 	private const float _threshold = 0.01f;
 	protected bool isCrouching = false;
@@ -111,13 +111,13 @@ public class PlayerFPController : MonoBehaviour
 	protected float defaultCapsuleHeight;
 	protected Vector3 defaultCameraPos;
 
-	private void Awake()
-	{
-		// get a reference to our main camera
-		if (_mainCamera == null) {
-			_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-		}
-	}
+	//private void Awake()
+	//{
+	//	// get a reference to our main camera
+	//	if (_Camera == null) {
+	//		_Camera = GameObject.FindGameObjectWithTag("MainCamera");
+	//	}
+	//}
 
 	private void Start()
 	{
@@ -126,13 +126,14 @@ public class PlayerFPController : MonoBehaviour
 		_pinput = GetComponent<PlayerInputHandler>();
 		//_pinput = _pinput as PlayerInputs;
 		_playerInput = GetComponent<PlayerInput>();
+		_camera = GameManager.PlayerCam;
 
 		// reset our timeouts on start
 		_jumpTimeoutDelta = JumpTimeout;
 		_fallTimeoutDelta = FallTimeout;
 
 		defaultCapsuleHeight = _controller.height;
-		defaultCameraPos = _mainCamera.transform.localPosition;
+		defaultCameraPos = _camera.transform.localPosition;
 	}
 
 	private void Update()
@@ -197,7 +198,7 @@ public class PlayerFPController : MonoBehaviour
 		//transform.localScale = Vector3.one;
 		_capsule.height = defaultCapsuleHeight;
 		_controller.height = defaultCapsuleHeight;
-		_mainCamera.transform.localPosition = defaultCameraPos;
+		_camera.transform.localPosition = defaultCameraPos;
 
 	}
 
@@ -218,7 +219,7 @@ public class PlayerFPController : MonoBehaviour
 
 		_capsule.height = defaultCapsuleHeight * CrouchPlayerScale;
 		_controller.height = _capsule.height;
-		_mainCamera.transform.localPosition = new Vector3(defaultCameraPos.x, defaultCameraPos.y * CrouchPlayerScale, defaultCameraPos.z);
+		_camera.transform.localPosition = new Vector3(defaultCameraPos.x, defaultCameraPos.y * CrouchPlayerScale, defaultCameraPos.z);
 
 	}
 
