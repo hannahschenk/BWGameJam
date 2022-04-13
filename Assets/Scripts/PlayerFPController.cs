@@ -74,6 +74,7 @@ public class PlayerFPController : MonoBehaviour
 
 	private PlayerInput _playerInput;
 	private CharacterController _controller;
+	private CapsuleCollider _capsule;
 	private PlayerInputHandler _pinput;
 
 	private GameObject _mainCamera;
@@ -107,7 +108,8 @@ public class PlayerFPController : MonoBehaviour
 
 	private bool IsCurrentDeviceMouse => _playerInput.currentControlScheme == "KeyboardMouse";
 
-	private Vector3 capsuleSize = Vector3.zero;
+	protected float defaultCapsuleHeight;
+	protected Vector3 defaultCameraPos;
 
 	private void Awake()
 	{
@@ -120,6 +122,7 @@ public class PlayerFPController : MonoBehaviour
 	private void Start()
 	{
 		_controller = GetComponent<CharacterController>();
+		_capsule = GetComponentInChildren<CapsuleCollider>();
 		_pinput = GetComponent<PlayerInputHandler>();
 		//_pinput = _pinput as PlayerInputs;
 		_playerInput = GetComponent<PlayerInput>();
@@ -127,6 +130,9 @@ public class PlayerFPController : MonoBehaviour
 		// reset our timeouts on start
 		_jumpTimeoutDelta = JumpTimeout;
 		_fallTimeoutDelta = FallTimeout;
+
+		defaultCapsuleHeight = _controller.height;
+		defaultCameraPos = _mainCamera.transform.localPosition;
 	}
 
 	private void Update()
@@ -170,7 +176,10 @@ public class PlayerFPController : MonoBehaviour
 		isCrouching = false;
 		_crouchTimeoutDelta = CrouchTimeout;
 
-		transform.localScale = Vector3.one;
+		//transform.localScale = Vector3.one;
+		_capsule.height = defaultCapsuleHeight;
+		_controller.height = defaultCapsuleHeight;
+		_mainCamera.transform.localPosition = defaultCameraPos;
 
 	}
 
@@ -186,11 +195,13 @@ public class PlayerFPController : MonoBehaviour
 		isCrouching = true;
 		_crouchTimeoutDelta = CrouchTimeout;
 			
-		Vector3 scale = transform.localScale;
+		//Vector3 scale = transform.localScale;
+		//scale.y = CrouchPlayerScale;
+		//transform.localScale = scale;
 
-		scale.y = CrouchPlayerScale;
-
-		transform.localScale = scale;
+		_capsule.height = defaultCapsuleHeight * CrouchPlayerScale;
+		_controller.height = _capsule.height;
+		_mainCamera.transform.localPosition = new Vector3(defaultCameraPos.x, defaultCameraPos.y * CrouchPlayerScale, defaultCameraPos.z);
 
 	}
 

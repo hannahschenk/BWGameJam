@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Animations;
+//using UnityEngine.Animations;
 
 /// <summary>
 /// Helper class for important references in-game; only inquire in START or later.
@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
 	protected float audioFadeInGoalTime = -1f;
 	protected AudioClip queuedMusic = null;
 
-	public AnimationCurve screenFadeCurve;
+	//public AnimationCurve screenFadeCurve;
 	public float screenFadeTime = 6f;
 	public float startBlackScreenHoldTime = 4f;
 
@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 		PlayAmbience();
 
 		Invoke("FadeIn", startBlackScreenHoldTime);
-		Invoke("OnFadeIn", startBlackScreenHoldTime + (screenFadeTime / 3.0f));
+		Invoke("OnFadeIn", startBlackScreenHoldTime); //+ (screenFadeTime / 3.0f));
 		//FadeIn();
 		//StartBlackScreen(30f, true);
 	}
@@ -161,9 +161,13 @@ public class GameManager : MonoBehaviour
 	{
 		Debug.LogFormat("Starting FadeIn at {0}", Time.time);
 		fadeGoalTime = Time.time + screenFadeTime;
-		BlackScreen.color = Color.black;
-		BlackScreen.gameObject.SetActive(true);
-		fadeDirection = -1f;
+
+		BlackScreen.canvasRenderer.SetAlpha(1f);
+		BlackScreen.CrossFadeAlpha(0f, screenFadeTime, true);
+
+		//BlackScreen.color = Color.black;
+		//BlackScreen.gameObject.SetActive(true);
+		//fadeDirection = -1f;
 	}
 
 	public void FadeOut()
@@ -252,9 +256,9 @@ public class GameManager : MonoBehaviour
 		//	return;
 
 		//float fadeRatio = (Time.time / fadeGoalTime);
-		//float fadeRatio = GetFadeRatio(fadeGoalTime, fadeTime);
+		float fadeRatio = GetFadeRatio(fadeGoalTime, screenFadeTime);
 
-		float fadeRatio = screenFadeCurve.Evaluate(GetFadeRatio(fadeGoalTime, screenFadeTime));
+		//float fadeRatio = screenFadeCurve.Evaluate(GetFadeRatio(fadeGoalTime, screenFadeTime));
 
 		float a = 0f;
 		float start = 0f;
@@ -423,6 +427,44 @@ public class GameManager : MonoBehaviour
 	{
 		//AkSoundEngine.PostEvent(EventStopAll, gameObject);
 	}
+
+	//public IEnumerator FadeCanvasImage(Image image, float direction, float endTime, float duration, bool callback = false)
+	//{
+
+	//	while (direction != 0) {
+
+	//		float fadeRatio = screenFadeCurve.Evaluate(GetFadeRatio(endTime, duration));
+
+	//		float a = 0f;
+	//		float start = 0f;
+	//		float end = 0f;
+
+	//		if (direction > 0) {
+	//			start = alphaMin;
+	//			end = alphaMax;
+	//		} else if (direction < 0) {
+	//			start = alphaMax;
+	//			end = alphaMin;
+	//		}
+
+	//		a = Mathf.Lerp(start, end, fadeRatio);
+
+	//		if (fadeRatio >= 0.99f) {
+	//			a = end;
+	//		}
+
+	//		Color newColor = new Color(0f, 0f, 0f, a);
+	//		//image.CrossFadeAlpha()
+
+
+	//		yield return null;
+	//	}
+	//}
+
+	//public float GetTimeProgressRatio(float endTime, float progressDuration)
+	//{
+	//	return 1 - ((endTime - Time.time) / progressDuration);
+	//}
 
 
 
