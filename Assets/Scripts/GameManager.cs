@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-//using UnityEngine.Animations;
 
 /// <summary>
 /// Helper class for important references in-game; only inquire in START or later.
@@ -23,8 +22,6 @@ public class GameManager : MonoBehaviour
 	public static PlayerInputHandler PlayerInputHandler;
 	public static PlayerFPAnimator PlayerFPAnimHandler;
 	public static Animator PlayerAnimator;
-	//public static AudioSource Audio;
-
 	public static string PlayerTag = "Player";
 
 	public AudioClip bgmLowIntensity;
@@ -39,19 +36,16 @@ public class GameManager : MonoBehaviour
 	public static int CurrentFloor = 1;
 
 	public AudioSource asMusic;
-	protected float musicMaxVolume = 1.0f;
+	protected float musicMaxVolume = 0.90f;
+	protected float musicMaxLoadScreen = 1.0f;
+
 
 	public AudioSource asAmbience;
-	protected float ambienceVolume = 0.25f;
+	protected float ambienceVolume = 0.20f;
 
 	public Image BlackScreen;
-	protected Color colorEmpty = new Color(0f, 0f, 0f, 0f);
-	//protected float screenFadeTime = 8f;
-	//protected float fadeGoalTime = 0f;
 
-	//protected float blackScreenTime = 0f;
-
-	protected float musicFadeTime = 10f;
+	protected float musicFadeTime = 8f;
 	protected float audioFadeOutGoalTime = -1f;
 	protected float audioFadeInGoalTime = -1f;
 	protected AudioClip queuedMusic = null;
@@ -70,6 +64,9 @@ public class GameManager : MonoBehaviour
 
 	protected float alphaMin = 0f;
 	protected float alphaMax = 1f;
+
+	protected static bool reachedExit = false;
+	protected Coroutine warpPlayer = null;
 
 
 	private void Awake()
@@ -95,8 +92,6 @@ public class GameManager : MonoBehaviour
 	{
 		BlackScreen.color = Color.black;
 		BlackScreen.gameObject.SetActive(true);
-		//blackScreenTime = Time.time + 10f;
-		//Debug.LogFormat("CurrentTime: {0}, StartFadeInAt: {1}", Time.time, blackScreenTime);
 	}
 
 	protected void ConfigureAudio()
@@ -169,153 +164,34 @@ public class GameManager : MonoBehaviour
 	public void FadeIn()
 	{
 		//Debug.LogFormat("Starting FadeIn at {0}, should blend over {1} seconds and end at {2}", Time.time, screenFadeInTime, Time.time + screenFadeInTime);
-		//fadeGoalTime = Time.time + screenFadeTime;
 
-		BlackScreen.canvasRenderer.SetAlpha(1f);
-		BlackScreen.CrossFadeAlpha(0f, screenFadeInTime, false);
-
-		//BlackScreen.color = Color.black;
-		//BlackScreen.gameObject.SetActive(true);
-		//fadeDirection = -1f;
+		BlackScreen.canvasRenderer.SetAlpha(alphaMax);
+		IEnumerator newFade = FadeCanvas(BlackScreen.canvasRenderer, alphaMin, screenFadeInTime, false);
+		StartCoroutine(newFade);
 	}
 
 	public void FadeOut()
 	{
 		//Debug.LogFormat("Starting FadeOut at {0}, should blend over {1} seconds and end at {2}", Time.time, screenFadeInTime, Time.time + screenFadeInTime);
-		//fadeGoalTime = Time.time + screenFadeTime;
-		//BlackScreen.color = Color.black;
-
+		//Debug.LogFormat("Starting FadeOut at {0}", Time.time);
+		
 		//BlackScreen.gameObject.SetActive(true);
-		BlackScreen.canvasRenderer.SetAlpha(0f);
-		BlackScreen.CrossFadeAlpha(1f, screenFadeOutTime, false);
-
-
-		//fadeDirection = 1f;
+		BlackScreen.canvasRenderer.SetAlpha(alphaMin);
+		
+		IEnumerator newFade = FadeCanvas(BlackScreen.canvasRenderer, alphaMax, screenFadeOutTime, false, ap_Utility.LerpTypes.EaseOut);
+		StartCoroutine(newFade);
 	}
-
-	//public void StartBlackScreen(float time, bool fade)
-	//{
-	//	blackScreenTime = Time.time + time;
-	//	Debug.LogFormat("CurrentTime: {0}, HoldingBlackScreenUntil: {1}", Time.time, blackScreenTime);
-
-	//	BlackScreen.color = Color.black;
-	//	BlackScreen.gameObject.SetActive(time == 0);
-	//	StartCoroutine(HoldBlackScreen(fade));
-	//}
-
-	//public void EndBlackScreen()
-	//{
-
-	//}
-
-	//IEnumerator HoldBlackScreen(bool fade)
-	//{
-	//	while (blackScreenTime != 0f) {
-
-	//		if (blackScreenTime < 0f) {
-	//			yield return null;
-	//		}
-
-	//		if (Time.time < blackScreenTime) {
-	//			Debug.Log("Holding Black Screen!");
-	//			yield return null;
-	//		}
-
-	//		Debug.LogFormat("BST over: Time: {0}, BST: {1}", Time.time, blackScreenTime);
-
-	//		blackScreenTime = 0f;
-
-	//		if (fade)
-	//			FadeIn();
-
-	//	}
-	//	//StopCoroutine()
-	//	//StopCoroutine(this);
-
-	//}
-
-	//public void HoldBlackScreen()
-	//{
-	//	if (blackScreenTime < 0f)
-	//		return;
-
-	//	if (Time.time < blackScreenTime)
-	//		return;
-
-	//	blackScreenTime = 0f;
-
-	//}
 
 	protected float GetFadeRatio(float endTIme, float fadeTime)
 	{
 		return 1 - ((endTIme - Time.time) / fadeTime);
 	}
 
-	//protected float fadeDirection = 0;
-
-	//public void TryFade()
-	//{
-	//	if (fadeDirection == 0f)
-	//		return;
-
-	//	if (!BlackScreen.gameObject.activeInHierarchy)
-	//		return;
-
-	//	//if (Time.time < blackScreenTime)
-	//	//	return;
-
-	//	//if (Time.time > fadeGoalTime)
-	//	//	return;
-
-	//	//float fadeRatio = (Time.time / fadeGoalTime);
-	//	//float fadeRatio = GetFadeRatio(fadeGoalTime, screenFadeTime);
-
-	//	//float fadeRatio = screenFadeCurve.Evaluate(GetFadeRatio(fadeGoalTime, screenFadeTime));
-
-	//	float a = 0f;
-	//	float start = 0f;
-	//	float end = 0f;
-
-	//	if (fadeDirection > 0) {
-	//		start = alphaMin;
-	//		end = alphaMax;
-	//	} else if (fadeDirection < 0) {
-	//		start = alphaMax;
-	//		end = alphaMin;
-	//	}
-
-	//	a = Mathf.Lerp(start, end, fadeRatio);
-
-	//	if (fadeRatio >= 0.98f) {
-	//		a = end;
-	//	}
-
-	//	//Debug.LogFormat("Ratio: {0}, a: {1}", fadeRatio, a );
-
-	//	Color newColor = new Color(0f, 0f, 0f, a);
-	//	BlackScreen.color = newColor;
-
-	//	if (a == end) {
-	//		Debug.LogFormat("Ended Fade at {0}", Time.time);
-	//		BlackScreen.gameObject.SetActive(false);
-	//		fadeDirection = 0f;
-	//	}
-	//}
-
 	protected void OnFadeIn()
 	{
-		Debug.LogFormat("Enabling movement", Time.time);
-		changingFloors = false;
+		//Debug.LogFormat("Enabling movement", Time.time);
 		CanMove = true;
 	}
-
-
-
-	protected static bool changingFloors = false;
-
-	protected static bool reachedExit = false;
-	//protected string warpPlayer = "WarpPlayerAndRebuild";
-	Coroutine warpPlayer = null;
 
 	public void ReachedExit()
 	{
@@ -324,13 +200,10 @@ public class GameManager : MonoBehaviour
 
 		reachedExit = true;
 
-		//if (IsInvoking(warpPlayer))
-		//	return;
-
 		if (warpPlayer != null)
 			return;
 
-		Debug.Log("Manager.ReachedExit firing!");
+		//Debug.LogFormat("Manager.ReachedExit firing at {0}!", Time.time);
 		CanMove = false;
 
 		FadeOut();
@@ -338,19 +211,8 @@ public class GameManager : MonoBehaviour
 		warpPlayer = StartCoroutine(WarpPlayerAndRebuild(screenFadeOutTime + 2));
 	}
 
-	//protected void WarpPlayerAndRebuild()
-	//{
-		
-	//	WaitForEndOfFrame;
-	//}
-
-
 	protected IEnumerator WarpPlayerAndRebuild(float delay)
 	{
-		//while (Time.time < startTime) {
-		//	yield return null;
-		//}
-
 		yield return new WaitForSecondsRealtime(delay);
 
 		PlayerController.enabled = false;
@@ -367,32 +229,6 @@ public class GameManager : MonoBehaviour
 		CanMove = true;
 		StopCoroutine(warpPlayer);
 		warpPlayer = null;
-	}
-
-
-	//public bool CanStartChangeFloors()
-	//{
-	//	if (changingFloors)
-	//		return false;
-
-	//	changingFloors = true;
-	//	Debug.Log("Changing floors - Starting Fade Out");
-
-	//	CanMove = false;
-	//	//Time.timeScale = 0f;
-	//	FadeOut();
-	//	Invoke("FadeIn", screenFadeTime);
-	//	Invoke("OnFadeIn", screenFadeTime + (screenFadeTime / 3f));
-	//	return changingFloors;
-	//}
-
-	public void ChangedFloors()
-	{
-		Debug.Log("Finished changing floors!");
-
-		//changingFloors = false;
-		//Time.timeScale = 1.0f;
-		//CanMove = true;
 	}
 
 	public bool TryStartBell()
@@ -417,12 +253,9 @@ public class GameManager : MonoBehaviour
 	public void FadeOutAudio()
 	{
 
-		//Time.ti
-
 		if (Time.time > audioFadeOutGoalTime)
 			return;
 
-		//float ratio = (Time.time / audioFadeOutGoalTime);
 		float ratio = GetFadeRatio(audioFadeOutGoalTime, musicFadeTime);
 		float volume = (ratio * musicMaxVolume) - musicMaxVolume;
 
@@ -442,7 +275,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (Time.time > audioFadeInGoalTime)
 			return;
-		//float ratio = (Time.time / audioFadeInGoalTime);
+
 		float ratio = GetFadeRatio(audioFadeInGoalTime, musicFadeTime);
 		float volume = ratio * musicMaxVolume;
 
@@ -451,11 +284,6 @@ public class GameManager : MonoBehaviour
 
 		asMusic.volume = volume;
 	}
-
-	//public void QueuedMusic()
-	//{
-
-	//}
 
 	public void PlayBGMLowIntensity()
 	{
@@ -466,12 +294,7 @@ public class GameManager : MonoBehaviour
 		}
 
 		asMusic.clip = bgmLowIntensity;
-		//fadeInGoalTime = Time.time + musicFadeTime;
 		asMusic.Play();
-
-
-		//AkSoundEngine.PostEvent(EventLowIntensity, gameObject);
-		//AkSoundEngine.PostEvent(PlayAmbiance, gameObject);
 	}
 
 	public void PlayAmbience()
@@ -483,8 +306,6 @@ public class GameManager : MonoBehaviour
 
 	public void PlayBGMHighIntensity()
 	{
-		//AkSoundEngine.PostEvent(EventHighIntensity, gameObject);
-
 		if (asMusic.clip == bgmLowIntensity) {
 			audioFadeOutGoalTime = Time.time + (musicFadeTime/2);
 			queuedMusic = bgmHighIntensity;
@@ -500,55 +321,28 @@ public class GameManager : MonoBehaviour
 		//AkSoundEngine.PostEvent(EventStopAll, gameObject);
 	}
 
-	//public IEnumerator FadeCanvasImage(Image image, float direction, float endTime, float duration, bool callback = false)
-	//{
+	//TODO: THIS SHOULDN'T BE HERE, REEEE
+	public IEnumerator FadeCanvas(CanvasRenderer canvas, float alpha, float duration, bool ignoreTimeScale, ap_Utility.LerpTypes lerpType = ap_Utility.LerpTypes.EaseIn)
+	{
 
-	//	while (direction != 0) {
+		float startAlpha = canvas.GetAlpha();
+		float targetAlpha = alpha;
 
-	//		float fadeRatio = screenFadeCurve.Evaluate(GetFadeRatio(endTime, duration));
+		float elapsedTime = 0f;
 
-	//		float a = 0f;
-	//		float start = 0f;
-	//		float end = 0f;
+		while (elapsedTime < duration) {
 
-	//		if (direction > 0) {
-	//			start = alphaMin;
-	//			end = alphaMax;
-	//		} else if (direction < 0) {
-	//			start = alphaMax;
-	//			end = alphaMin;
-	//		}
+			elapsedTime += ignoreTimeScale ? Time.unscaledDeltaTime : Time.deltaTime;
 
-	//		a = Mathf.Lerp(start, end, fadeRatio);
+			float percentage = Mathf.Clamp01(ap_Utility.GetLerpType(elapsedTime / duration, lerpType));
 
-	//		if (fadeRatio >= 0.99f) {
-	//			a = end;
-	//		}
+			float newAlpha = Mathf.Lerp(startAlpha, targetAlpha, percentage);
+			canvas.SetAlpha(newAlpha);
+			yield return null;
+		}
 
-	//		Color newColor = new Color(0f, 0f, 0f, a);
-	//		//image.CrossFadeAlpha()
+		canvas.SetAlpha(targetAlpha);
+		//Debug.LogFormat("Finishing Fade at {0}", Time.time);
+	}
 
-
-	//		yield return null;
-	//	}
-	//}
-
-	//public float GetTimeProgressRatio(float endTime, float progressDuration)
-	//{
-	//	return 1 - ((endTime - Time.time) / progressDuration);
-	//}
-
-
-
-	// Start is called before the first frame update
-	//void Start()
-	//   {
-	//	//Debug.LogFormat("Player's Health is {0}", PlayerStats.Health);
-	//   }
-
-	// Update is called once per frame
-	//void Update()
-	//{
-
-	//}
 }

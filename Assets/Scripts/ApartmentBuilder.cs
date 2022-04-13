@@ -247,17 +247,17 @@ public class ApartmentBuilder : MonoBehaviour
 			}
 		}
 
-		FloorBuilt();
+		//FloorBuilt();
 
 		//		BuildWalls(); //Probably the last step, would also pave over unused exits, etc.
 
 		//makeLevel = false;
 	}
 
-	protected void FloorBuilt()
-	{
-		GameManager.Manager.ChangedFloors();
-	}
+	//protected void FloorBuilt()
+	//{
+	//	GameManager.Manager.ChangedFloors();
+	//}
 
 	protected void CheckExistingFloor()
 	{

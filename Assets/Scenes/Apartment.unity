@@ -659,9 +659,9 @@ MonoBehaviour:
   asMusic: {fileID: 0}
   asAmbience: {fileID: 0}
   BlackScreen: {fileID: 479528637}
-  screenFadeInTime: 6
+  screenFadeInTime: 8
   screenFadeOutTime: 3
-  startBlackScreenHoldTime: 4
+  startBlackScreenHoldTime: 8
 --- !u!1 &768078086
 GameObject:
   m_ObjectHideFlags: 0
@@ -1007,7 +1007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1535318468
 Transform:
   m_ObjectHideFlags: 0

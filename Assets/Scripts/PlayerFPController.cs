@@ -187,9 +187,7 @@ public class PlayerFPController : MonoBehaviour
 			}
 			if (!self)
 				return;
-		}
-
-		
+		}		
 
 		_pinput.crouch = false;
 		isCrouching = false;

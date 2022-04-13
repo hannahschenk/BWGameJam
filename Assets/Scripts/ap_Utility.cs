@@ -96,4 +96,61 @@ public static class ap_Utility
 		return walls;
 	}
 
+
+	// Helper functions for alternate gradients than just linear.
+	// Typically would use AnimationCurve for these, but the curves
+	// throw lots of editor errors in my current version of Unity,
+	// so implementing manually instead.
+
+	public enum LerpTypes
+	{
+		EaseOut,
+		EaseIn,
+		Smoothstep,
+		Smootherstep,
+		Quadratic
+	}
+
+	public static float GetLerpType(float t, LerpTypes lerp)
+	{
+		switch (lerp) {
+			case LerpTypes.EaseOut:
+				return EaseOut(t);
+			case LerpTypes.EaseIn:
+				return EaseIn(t);
+			case LerpTypes.Smoothstep:
+				return Smoothstep(t);
+			case LerpTypes.Smootherstep:
+				return Smootherstep(t);
+			case LerpTypes.Quadratic:
+				return Quadratic(t);
+			default:
+				return t;
+		}
+	}
+
+	public static float EaseOut(float t) // Fast at first, slow at end
+	{
+		return Mathf.Sin(t * Mathf.PI * 0.5f);
+	}
+
+	public static float EaseIn(float t) // Slow at first, quicker at end
+	{
+		return 1f - Mathf.Cos(t * Mathf.PI * 0.5f);
+	}
+
+	public static float Quadratic(float t)
+	{
+		return t * t;
+	}
+
+	public static float Smoothstep(float t) // Slow at start and end, faster in the middle
+	{
+		return t * t * (3f - 2f * t);
+	}
+
+	public static float Smootherstep(float t) // Even slower at the start and end, faster in the middle
+	{
+		return t * t * t * (t * (6f * t - 15f) + 10f);
+	}
 }
