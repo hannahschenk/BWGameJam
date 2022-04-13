@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2113048675154277079}
   m_LocalRotation: {x: -2.0065727e-10, y: -9.094947e-13, z: -6.1869524e-12, w: 1}
-  m_LocalPosition: {x: -0, y: 1.645, z: 0}
+  m_LocalPosition: {x: -0, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3244848038339886232}
@@ -310,7 +310,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9051150360744296660}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -854,6 +854,10 @@ PrefabInstance:
       propertyPath: m_ReceiveShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4449714969941606429, guid: 1229b62352edc8c47adcf20fd10b18d0, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4450166035489494102, guid: 1229b62352edc8c47adcf20fd10b18d0, type: 3}
       propertyPath: m_Layer
       value: 2
@@ -1110,6 +1114,10 @@ PrefabInstance:
       propertyPath: m_ReceiveShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8816375134994474559, guid: 1229b62352edc8c47adcf20fd10b18d0, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8979524113278433962, guid: 1229b62352edc8c47adcf20fd10b18d0, type: 3}
       propertyPath: m_Layer
       value: 2
@@ -1159,4 +1167,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f69c4789d067c3246a1f2715181473e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
   hand: {fileID: 2864103665222050550}

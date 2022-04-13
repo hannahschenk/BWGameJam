@@ -10,4 +10,9 @@ public class WeaponSickle : Weapon
 		return stats.HasSickle;
 	}
 
+	public override void OnPrimaryFire()
+	{
+		FPAnimHandler.Attack();
+	}
+
 }

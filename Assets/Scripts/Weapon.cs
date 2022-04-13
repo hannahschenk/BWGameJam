@@ -6,7 +6,10 @@ public class Weapon : MonoBehaviour
 {
 	protected GameObject child;
 	protected PlayerStats stats;
-	protected PlayerFPAnimator anim;
+
+	protected PlayerFPAnimator FPAnimHandler;
+	protected Animator playerAnimator;
+
 	public int id = 0;
 
 	protected bool _Wielded;
@@ -27,7 +30,8 @@ public class Weapon : MonoBehaviour
     {
 		child = transform.GetChild(0).gameObject;
 		stats = GameManager.PlayerStats;
-		anim = GameManager.PlayerFPAnim;
+		FPAnimHandler = GameManager.PlayerFPAnimHandler;
+		playerAnimator = GameManager.PlayerAnimator;
 		UpdateHeldState();
     }
 
@@ -47,14 +51,14 @@ public class Weapon : MonoBehaviour
 
 	public virtual void Unwield()
 	{
-		anim.CarryingItem(false);
+		FPAnimHandler.CarryingItem(false);
 		child.SetActive(false);
 		Wielded = false;
 	}
 
 	public virtual void Wield()
 	{
-		anim.CarryingItem();
+		FPAnimHandler.CarryingItem();
 		child.SetActive(true);
 		Wielded = true;
 	}

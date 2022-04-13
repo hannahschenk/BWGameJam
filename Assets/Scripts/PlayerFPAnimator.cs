@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerFPAnimator : MonoBehaviour
 {
 	protected PlayerStats stats;
-	protected Animator anim;
+	public Animator animator;
 	protected PlayerInputHandler input;
 
 	protected Weapon currentWeapon;
@@ -47,11 +47,11 @@ public class PlayerFPAnimator : MonoBehaviour
 	{
 		get
 		{
-			return anim.GetBool(animBoolHasItem);
+			return animator.GetBool(animBoolHasItem);
 		}
 		set
 		{
-			anim.SetBool(animBoolHasItem, value);
+			animator.SetBool(animBoolHasItem, value);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class PlayerFPAnimator : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		anim = GetComponent<Animator>();
+		animator = GameManager.PlayerAnimator;
 		stats = GameManager.PlayerStats;
 		input = GameManager.PlayerInputHandler;
 		CacheAnimReferences();
@@ -98,14 +98,6 @@ public class PlayerFPAnimator : MonoBehaviour
 
 		UpdateWeaponSwapInput();
 
-		CheckForSwapAnimation();
-		//if (swapping) {
-		//	OnWeaponSwap();
-		//}
-
-		//if (swapping && Time.time >= nextWeaponSwapTime) {
-		//	OnWeaponSwap();
-		//}
 
 		//TryWieldUpdate();
 	}
@@ -130,31 +122,32 @@ public class PlayerFPAnimator : MonoBehaviour
 		if (!weapons[GetNextWeapon()].CanWield())
 			return;
 
-		anim.SetTrigger(animTriggerSwap);
+		animator.SetTrigger(animTriggerSwap);
 		swapping = true;
 
 		//nextWeaponSwapTime = Time.time + 1.0f;
 		nextWeaponSwapTime = Time.time + weaponTimeout;
 	}
 
-	protected void CheckForSwapAnimation()
+	public void OnPrimaryAction()
 	{
-		if (!swapping)
+		if (swapping)
 			return;
 
-		//if (anim.trigg)
+		if (currentWeapon == null)
+			return;
 
-		//if (
-		//  anim.IsInTransition(0) &&
-		//  anim.GetNextAnimatorStateInfo(0).nameHash == animController.stateA
-		//) {
-		//	//Do reaction
-		//}
-		//anim.GetNextAnimatorStateInfo(0).nameHash
-		//int fullPathHash = anim.GetNextAnimatorStateInfo(0).fullPathHash;
-		//Debug.LogFormat("GetNext -- FullPathHash: {0}", fullPathHash);
-		//anim.GetNextAnimatorStateInfo(0).
-		//anim.state
+		currentWeapon.OnPrimaryFire();
+	}
+
+	public void Attack()
+	{
+		animator.SetTrigger(animTriggerAttack);
+	}
+
+	public void Defend()
+	{
+		animator.SetTrigger(animTriggerDefend);
 	}
 
 	public void OnWeaponSwap()
@@ -381,7 +374,7 @@ public class PlayerFPAnimator : MonoBehaviour
 	// Plays animation to extend hand
 	public void FoundItem()
 	{
-		anim.SetTrigger(animTriggerFoundItem);
+		animator.SetTrigger(animTriggerFoundItem);
 	}
 
 	// Event played when hand is fully extended, forwarded to PlayerStats.cs
@@ -394,7 +387,7 @@ public class PlayerFPAnimator : MonoBehaviour
 	// Plays animation to carry an item
 	public void CarryingItem(bool state = true)
 	{
-		anim.SetBool(animBoolHasItem, state);
+		animator.SetBool(animBoolHasItem, state);
 	}
 
 	// Called by PlayerStats after an item is successfully added to the inventory
@@ -405,7 +398,9 @@ public class PlayerFPAnimator : MonoBehaviour
 		//}
 
 		// Updates the animator variables (so the player's animations can change accordingly)
-		anim.SetBool(animBoolHasItem, (stats.HasBell || stats.HasSickle));
+		animator.SetBool(animBoolHasItem, (stats.HasBell || stats.HasSickle));
+		animator.SetBool(animBoolCanAttack, stats.HasSickle);
+		animator.SetBool(animBoolCanDefend, stats.HasBell);
 
 
 		if (currentWeapon == null) {

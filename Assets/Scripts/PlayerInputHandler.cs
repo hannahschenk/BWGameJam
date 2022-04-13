@@ -30,9 +30,11 @@ public class PlayerInputHandler : StarterAssets.StarterAssetsInputs
 
 	public void OnPrimaryAction(InputValue value)
 	{
-		primary = value.isPressed;
+		GameManager.PlayerFPAnimHandler.OnPrimaryAction();
+		//primary = value.isPressed;
 	}
 
+	//Interact
 	public void OnSecondaryAction(InputValue value)
 	{
 		SecondaryInput(value.isPressed);

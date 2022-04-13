@@ -8,4 +8,9 @@ public class WeaponBell : Weapon
 	{
 		return stats.HasBell;
 	}
+
+	public override void OnPrimaryFire()
+	{
+		FPAnimHandler.Defend();
+	}
 }

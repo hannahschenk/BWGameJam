@@ -18,7 +18,8 @@ public class GameManager : MonoBehaviour
 	public static PlayerStats PlayerStats;
 	public static Camera PlayerCam;
 	public static PlayerInputHandler PlayerInputHandler;
-	public static PlayerFPAnimator PlayerFPAnim;
+	public static PlayerFPAnimator PlayerFPAnimHandler;
+	public static Animator PlayerAnimator;
 	//public static AudioSource Audio;
 
 	public static string PlayerTag = "Player";
@@ -72,7 +73,8 @@ public class GameManager : MonoBehaviour
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
 		Player = PlayerStats.transform;
 		PlayerInputHandler = PlayerStats.GetComponent<PlayerInputHandler>();
-		PlayerFPAnim = PlayerStats.GetComponentInChildren<PlayerFPAnimator>();
+		PlayerFPAnimHandler = PlayerStats.GetComponentInChildren<PlayerFPAnimator>();
+		PlayerAnimator = PlayerFPAnimHandler.GetComponent<Animator>();
 
 		PlayerCam = PlayerStats.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
 
