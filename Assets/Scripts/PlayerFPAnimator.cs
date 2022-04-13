@@ -21,7 +21,7 @@ public class PlayerFPAnimator : MonoBehaviour
 	public Transform hand;
 	//protected Dictionary<Transform, Weapon> weapons = new Dictionary<Transform, Weapon>();
 	protected Weapon[] weapons;
-	protected int MaxWeapons = 0;
+	//protected int MaxWeapons = 0;
 
 
 	protected int currentWeaponIndex = -1;
@@ -81,11 +81,11 @@ public class PlayerFPAnimator : MonoBehaviour
 		//weapons.AddRange(hand.GetComponentInChildren<Weapon>());
 
 		weapons = hand.GetComponentsInChildren<Weapon>();
-		MaxWeapons = weapons.Length;
+		//MaxWeapons = weapons.Length;
 
-		for (int i = 0; i < weapons.Length; i++) {
-			weapons[i].id = i;
-		}
+		//for (int i = 0; i < weapons.Length; i++) {
+		//	weapons[i].id = i;
+		//}
 		//Debug.LogFormat("{0} weapons!", weapons.Length);
 
 		//Weapon[] ws = hand.GetComponentsInChildren<Weapon>();
@@ -384,6 +384,20 @@ public class PlayerFPAnimator : MonoBehaviour
 		stats.PickupItem();
 	}
 
+	public void AnimEventOnBellRung()
+	{
+		//Debug.Log("AnimEventOnBellRung!");
+		//stats.LoseBell();
+		GameManager.Manager.TryStartBell();
+		BellRing();
+	}
+
+	public void BellRing()
+	{
+		Debug.Log("Ringing bell!");
+		currentWeapon.SendMessage("BellRing", SendMessageOptions.DontRequireReceiver);
+	}
+
 	// Plays animation to carry an item
 	public void CarryingItem(bool state = true)
 	{
@@ -403,7 +417,7 @@ public class PlayerFPAnimator : MonoBehaviour
 		animator.SetBool(animBoolCanDefend, stats.HasBell);
 
 
-		if (currentWeapon == null) {
+		if (currentWeapon == null || !currentWeapon.CanWield()) {
 			if (stats.HasSickle) {
 				currentWeapon = weapons[0];
 				currentWeaponIndex = 0;

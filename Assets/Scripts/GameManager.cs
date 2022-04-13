@@ -277,6 +277,7 @@ public class GameManager : MonoBehaviour
 		if (isBellActive)
 			return false;
 
+		StartBell(15f);
 		return true;
 	}
 

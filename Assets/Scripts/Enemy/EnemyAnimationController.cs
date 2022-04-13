@@ -13,7 +13,8 @@ public class EnemyAnimationController : MonoBehaviour
 	protected int animBoolTookHit;
 	protected int animBoolCanAttackPlayer;
 	protected int animBoolIsDead;
-	protected int animTriggerBellRung;
+	//protected int animTriggerBellRung;
+	protected int animBoolBellRung;
 
 	public bool IsWalking
 	{
@@ -99,10 +100,22 @@ public class EnemyAnimationController : MonoBehaviour
 		}
 	}
 
-	public void BellRung()
+	public bool IsBellActive
 	{
-		animator.SetTrigger(animTriggerBellRung);
+		get
+		{
+			return animator.GetBool(animBoolBellRung);
+		}
+		protected set
+		{
+			animator.SetBool(animBoolBellRung, value);
+		}
 	}
+
+	//public void BellRung()
+	//{
+	//	animator.SetTrigger(animTriggerBellRung);
+	//}
 
 	private void Awake()
 	{
@@ -120,8 +133,13 @@ public class EnemyAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+		UpdateAnimstate();
     }
+
+	protected void UpdateAnimstate()
+	{
+		IsBellActive = GameManager.Manager.isBellActive;
+	}
 
 	protected void CacheAnimReferences()
 	{
@@ -132,6 +150,7 @@ public class EnemyAnimationController : MonoBehaviour
 		animBoolTookHit = Animator.StringToHash("tookHit");
 		animBoolCanAttackPlayer = Animator.StringToHash("canAttackPlayer");
 		animBoolIsDead = Animator.StringToHash("isDead");
-		animTriggerBellRung = Animator.StringToHash("bellRung");
+		//animTriggerBellRung = Animator.StringToHash("bellRung");
+		animBoolBellRung = Animator.StringToHash("bellActive");
 	}
 }

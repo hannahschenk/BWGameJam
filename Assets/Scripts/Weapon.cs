@@ -9,8 +9,12 @@ public class Weapon : MonoBehaviour
 
 	protected PlayerFPAnimator FPAnimHandler;
 	protected Animator playerAnimator;
+	protected new AudioSource audio;
 
-	public int id = 0;
+	public Vector2 pitchRange = new Vector2(0.9f, 1.1f);
+	public List<AudioClip> sfx = new List<AudioClip>();
+
+	//public int id = 0;
 
 	protected bool _Wielded;
 	public bool Wielded
@@ -32,6 +36,7 @@ public class Weapon : MonoBehaviour
 		stats = GameManager.PlayerStats;
 		FPAnimHandler = GameManager.PlayerFPAnimHandler;
 		playerAnimator = GameManager.PlayerAnimator;
+		audio = GetComponent<AudioSource>();
 		UpdateHeldState();
     }
 
@@ -79,6 +84,27 @@ public class Weapon : MonoBehaviour
 	public virtual void OnPrimaryFire()
 	{
 
+	}
+
+	public virtual bool GetRandomAudioClip(out AudioClip clip, out float pitch)
+	{
+		clip = null;
+		pitch = 0f;
+
+		if (sfx.Count == 0)
+			return false;
+
+		clip = sfx[Random.Range(0, sfx.Count)];
+		pitch = Random.Range(pitchRange.x, pitchRange.y);
+		return true;
+	}
+
+	public virtual void PlayRandomAudioClip()
+	{
+		if (GetRandomAudioClip(out AudioClip clip, out float pitch)) {
+			audio.pitch = pitch;
+			audio.PlayOneShot(clip);
+		}
 	}
 
 }

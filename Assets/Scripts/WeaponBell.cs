@@ -13,4 +13,9 @@ public class WeaponBell : Weapon
 	{
 		FPAnimHandler.Defend();
 	}
+
+	public void BellRing()
+	{
+		PlayRandomAudioClip();
+	}
 }
