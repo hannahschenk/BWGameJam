@@ -9,7 +9,18 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 
-	public static bool CanMove = true;
+	public static bool _CanMove = true;
+	public static bool CanMove
+	{
+		get
+		{
+			return _CanMove;
+		}
+		protected set
+		{
+			_CanMove = value;
+		}
+	}
 
 	public static ApartmentBuilder Apartment;
 	public static GameManager Manager;
@@ -55,6 +66,8 @@ public class GameManager : MonoBehaviour
 	public float screenFadeOutTime = 1f;
 	public float startBlackScreenHoldTime = 4f;
 
+	public bool skipIntro = false;
+
 	//public string EventLowIntensity = "Low_Intensity";
 	//public string EventHighIntensity = "High_Intensity";
 	//public string PlayAmbiance = "Play_Ambience";
@@ -73,7 +86,16 @@ public class GameManager : MonoBehaviour
 	{
 		Manager = this;
 		Apartment = FindObjectOfType<ApartmentBuilder>() as ApartmentBuilder;
+
+		ConfigureAudio();
+		ConfigureFade();
+	}
+
+	protected void CachePlayerRefs()
+	{
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
+		if (!PlayerStats)
+			return;
 
 		Player = PlayerStats.transform;
 		PlayerController = Player.GetComponent<PlayerFPController>();
@@ -83,13 +105,12 @@ public class GameManager : MonoBehaviour
 		PlayerAnimator = PlayerFPAnimHandler.GetComponent<Animator>();
 
 		PlayerCam = Player.GetComponentInChildren<Camera>(); //old way that has to deal with multiple cameras, don't want to raycast from the scene camera if we have one lol
-
-		ConfigureAudio();
-		ConfigureFade();
 	}
 
 	protected void ConfigureFade()
 	{
+		if (skipIntro)
+			return;
 		BlackScreen.color = Color.black;
 		BlackScreen.gameObject.SetActive(true);
 	}
@@ -110,17 +131,22 @@ public class GameManager : MonoBehaviour
 
 	private void Start()
 	{
-		CanMove = false;
-
 		PlayBGMLowIntensity();
 		audioFadeInGoalTime = Time.time + (musicFadeTime);
 
 		PlayAmbience();
 
+		DisableMovementAndFadeIn();
+	}
+
+	protected void DisableMovementAndFadeIn()
+	{
+		if (skipIntro)
+			return;
+
+		CanMove = false;
 		Invoke("FadeIn", startBlackScreenHoldTime);
-		Invoke("OnFadeIn", startBlackScreenHoldTime); //+ (screenFadeTime / 3.0f));
-		//FadeIn();
-		//StartBlackScreen(30f, true);
+		Invoke("EnableMovement", startBlackScreenHoldTime); //+ (screenFadeTime / 3.0f));
 	}
 
 	protected float ambienceUpdateTime = 1.0f;
@@ -187,10 +213,20 @@ public class GameManager : MonoBehaviour
 		return 1 - ((endTIme - Time.time) / fadeTime);
 	}
 
-	protected void OnFadeIn()
+	//protected void OnFadeIn()
+	//{
+	//	//Debug.LogFormat("Enabling movement", Time.time);
+	//	CanMove = true;
+	//}
+
+	public void EnableMovement()
 	{
-		//Debug.LogFormat("Enabling movement", Time.time);
 		CanMove = true;
+	}
+
+	public void DisableMovement()
+	{
+		CanMove = false;
 	}
 
 	public void ReachedExit()
@@ -204,7 +240,8 @@ public class GameManager : MonoBehaviour
 			return;
 
 		//Debug.LogFormat("Manager.ReachedExit firing at {0}!", Time.time);
-		CanMove = false;
+		//CanMove = false;
+		Invoke("DisableMovement", (screenFadeOutTime));
 
 		FadeOut();
 
@@ -217,7 +254,10 @@ public class GameManager : MonoBehaviour
 
 		PlayerController.enabled = false;
 		Vector3 newPos = Vector3.zero + (Apartment.GetFloorHeight(CurrentFloor) * Vector3.up);
-		Player.SetPositionAndRotation(newPos, Quaternion.FromToRotation(Player.forward, Vector3.forward));
+		//Quaternion rot = Quaternion.FromToRotation(Player.forward, Vector3.forward);
+		Quaternion rot = Quaternion.LookRotation(Vector3.forward, Vector3.up);
+
+		Player.SetPositionAndRotation(newPos, rot);
 		yield return null;
 
 		Apartment.NewLevel();
