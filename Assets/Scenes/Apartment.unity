@@ -448,23 +448,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &607079946 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8599360706390183426, guid: 82d7df6c7a32ec34db5452b0eb4055e0, type: 3}
-  m_PrefabInstance: {fileID: 8905438155830151785}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &607079948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 607079946}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd675a76741e3424d8ead25ee9c4c665, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &768078086
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,7 +803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1538636772
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1124,7 +1107,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1855520559
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1839,7 +1822,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9051150360744296660, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4639d580b85fa49488b8b69d0d5b8c6d, type: 3}

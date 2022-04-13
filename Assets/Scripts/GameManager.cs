@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
 		Manager = this;
 		Apartment = FindObjectOfType<ApartmentBuilder>() as ApartmentBuilder;
 
+		CachePlayerRefs();
 		ConfigureAudio();
 		ConfigureFade();
 	}
@@ -94,7 +95,7 @@ public class GameManager : MonoBehaviour
 	protected void CachePlayerRefs()
 	{
 		PlayerStats = FindObjectOfType<PlayerStats>() as PlayerStats;
-		if (!PlayerStats)
+		if (PlayerStats == null)
 			return;
 
 		Player = PlayerStats.transform;

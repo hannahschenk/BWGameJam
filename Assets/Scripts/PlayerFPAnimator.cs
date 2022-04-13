@@ -411,7 +411,7 @@ public class PlayerFPAnimator : MonoBehaviour
 				currentWeapon = weapons[1];
 				currentWeaponIndex = 1;
 			}
-			Debug.LogFormat("UpdatingItemState: HasBell: {0}, HasSickle: {1}, attempting to wield {2} index of {3}", stats.HasBell, stats.HasSickle, currentWeapon, currentWeaponIndex);
+			//Debug.LogFormat("UpdatingItemState: HasBell: {0}, HasSickle: {1}, attempting to wield {2} index of {3}", stats.HasBell, stats.HasSickle, currentWeapon, currentWeaponIndex);
 			currentWeapon.Wield();
 			//currentWeapon.UpdateHeldState();
 		}
