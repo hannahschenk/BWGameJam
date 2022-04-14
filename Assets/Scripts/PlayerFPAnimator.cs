@@ -138,6 +138,11 @@ public class PlayerFPAnimator : MonoBehaviour
 		animator.SetTrigger(animTriggerAttack);
 	}
 
+	public void AttackEnd()
+	{
+		(weapons[0] as WeaponSickle).OnAttackEnd();
+	}
+
 	public void Defend()
 	{
 		animator.SetTrigger(animTriggerDefend);

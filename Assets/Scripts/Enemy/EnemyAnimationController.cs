@@ -153,4 +153,10 @@ public class EnemyAnimationController : MonoBehaviour
 		//animTriggerBellRung = Animator.StringToHash("bellRung");
 		animBoolBellRung = Animator.StringToHash("bellActive");
 	}
+
+	public void Kill()
+	{
+		TookHit = true;
+		//IsDead = true;
+	}
 }

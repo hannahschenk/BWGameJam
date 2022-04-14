@@ -73,8 +73,8 @@ public class PlayerFPController : MonoBehaviour
 	private float _crouchTimeoutDelta;
 
 	private PlayerInput _playerInput;
-	private CharacterController _controller;
-	private CapsuleCollider _capsule;
+	public CharacterController characterController;
+	public CapsuleCollider capsule;
 	private PlayerInputHandler _pinput;
 
 	private Camera _camera;
@@ -121,8 +121,8 @@ public class PlayerFPController : MonoBehaviour
 
 	private void Start()
 	{
-		_controller = GetComponent<CharacterController>();
-		_capsule = GetComponentInChildren<CapsuleCollider>();
+		characterController = GetComponent<CharacterController>();
+		capsule = GetComponentInChildren<CapsuleCollider>();
 		_pinput = GetComponent<PlayerInputHandler>();
 		//_pinput = _pinput as PlayerInputs;
 		_playerInput = GetComponent<PlayerInput>();
@@ -132,7 +132,7 @@ public class PlayerFPController : MonoBehaviour
 		_jumpTimeoutDelta = JumpTimeout;
 		_fallTimeoutDelta = FallTimeout;
 
-		defaultCapsuleHeight = _controller.height;
+		defaultCapsuleHeight = characterController.height;
 		defaultCameraPos = _camera.transform.localPosition;
 	}
 
@@ -194,8 +194,8 @@ public class PlayerFPController : MonoBehaviour
 		_crouchTimeoutDelta = CrouchTimeout;
 
 		//transform.localScale = Vector3.one;
-		_capsule.height = defaultCapsuleHeight;
-		_controller.height = defaultCapsuleHeight;
+		capsule.height = defaultCapsuleHeight;
+		characterController.height = defaultCapsuleHeight;
 		_camera.transform.localPosition = defaultCameraPos;
 
 	}
@@ -215,8 +215,8 @@ public class PlayerFPController : MonoBehaviour
 		//scale.y = CrouchPlayerScale;
 		//transform.localScale = scale;
 
-		_capsule.height = defaultCapsuleHeight * CrouchPlayerScale;
-		_controller.height = _capsule.height;
+		capsule.height = defaultCapsuleHeight * CrouchPlayerScale;
+		characterController.height = capsule.height;
 		_camera.transform.localPosition = new Vector3(defaultCameraPos.x, defaultCameraPos.y * CrouchPlayerScale, defaultCameraPos.z);
 
 	}
@@ -279,7 +279,7 @@ public class PlayerFPController : MonoBehaviour
 		if (_pinput.move == Vector2.zero) targetSpeed = 0.0f;
 
 		// a reference to the players current horizontal velocity
-		Vector3 currentHorizontalVelocity = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z);
+		Vector3 currentHorizontalVelocity = new Vector3(characterController.velocity.x, 0.0f, characterController.velocity.z);
 		//float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 		float currentHorizontalSpeed = currentHorizontalVelocity.magnitude;
 
@@ -315,7 +315,7 @@ public class PlayerFPController : MonoBehaviour
 
 		// move the player
 		//_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-		_controller.Move(movementDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+		characterController.Move(movementDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 	}
 
 	private void JumpAndGravity()

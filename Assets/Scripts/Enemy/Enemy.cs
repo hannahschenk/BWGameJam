@@ -4,8 +4,26 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+	public Vector2 pitchRange = new Vector2(0.9f, 1.1f);
+	public List<AudioClip> stabSfx = new List<AudioClip>();
+
+	protected EnemyAnimationController enemyController;
+	protected Animator animator;
+	protected CapsuleCollider capsule;
+	protected AudioSource audioSource;
+
+	private void Awake()
+	{
+		capsule = GetComponentInChildren<CapsuleCollider>();
+		enemyController = GetComponentInChildren<EnemyAnimationController>();
+		animator = GetComponentInChildren<Animator>();
+		audioSource = GetComponentInChildren<AudioSource>();
+
+	}
+
+	// Start is called before the first frame update
+	void Start()
     {
         
     }
@@ -15,4 +33,27 @@ public class Enemy : MonoBehaviour
     {
         
     }
+
+	public void Kill()
+	{
+		if (enemyController.IsDead)
+			return;
+
+		if (enemyController.TookHit)
+			return;
+
+		PlayHurtSfx();
+		enemyController.Kill();
+		capsule.enabled = false;
+	}
+
+	protected void PlayHurtSfx()
+	{
+
+		Vector3 hitPos = capsule.center;
+
+		ap_Helper.GetRandomAudioClip(stabSfx, pitchRange, out AudioClip clip, out float pitch);
+		ap_Helper.PlayClipAt(audioSource, hitPos, clip);
+
+	}
 }
