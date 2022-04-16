@@ -64,6 +64,9 @@ public class ApartmentBuilder : MonoBehaviour
 	Dictionary<Tile, int> roomComponentsArea = new Dictionary<Tile, int>();
 
 	public bool buildRailings = true;
+	public bool buildCeilings = true;
+	public bool disableCeilingShadows = false;
+	public bool onlyGenerateCurrentFloorFully = true;
 	public int currentSeed = 0;
 
 	[Range(0, 3)]
@@ -173,7 +176,8 @@ public class ApartmentBuilder : MonoBehaviour
 		if (debugRoomTesting)
 			return;
 
-		MakeLevel();
+		//MakeLevel();
+		StartCoroutine(MakeLevelCoroutine());
 	}
 
 	protected void Update()
@@ -194,6 +198,70 @@ public class ApartmentBuilder : MonoBehaviour
 	public float GetFloorHeight(int floor)
 	{
 		return (floor - 1) * floorHeight;
+	}
+
+	protected bool ShouldFullyGenerateFloor()
+	{
+		if (floorsBuilt > maxFloors)
+			return false;
+
+		if (floorsBuilt != GameManager.CurrentFloor && onlyGenerateCurrentFloorFully)
+			return false;
+
+		return true;
+	}
+
+	protected IEnumerator MakeLevelCoroutine()
+	{
+
+		floorsBuilt = 0;
+		elevation = 0;
+		//elevation = 0 - (maxFloors / 2) * floorHeight; //test elevation, start at middle floor
+		//elevation = 0 - (floorHeight * 2.0f); //test elevation, start at floor 2
+
+		while (floorsBuilt < maxFloors) {
+
+			Random.InitState(floorSeeds[floorsBuilt]);
+
+			floorsBuilt++;
+
+			BuildFloor();
+
+			//Debug.LogFormat("Built floor, {0} available exits left",availableExits.Count);
+
+			TagCourtyardRailings();
+
+			//if ((!onlyGenerateCurrentFloorFully && floorsBuilt == GameManager.CurrentFloor) && floorsBuilt <= maxFloors) {
+			if (ShouldFullyGenerateFloor()) { 
+
+
+				yield return StartCoroutine(BuildSideWingsCoroutine());
+				//BuildSideWings();
+
+				//Debug.LogFormat("Built side wings, {0} available exits left", availableExits.Count);
+
+			}
+
+			//FindSuitableRoomPositions();
+
+			yield return StartCoroutine(AssembleRoomsFromBlocks(GetRoomPositions()));
+
+			//Debug.LogFormat("Built rooms, {0} available exits left", availableExits.Count);
+
+			BuildWalls();
+
+			// Build Exterior Panel
+			Vector3 panelPos = new Vector3(3f, elevation, -3f);
+			//Quaternion.FromToRotation(Vector3.forward, Vector3.right);
+			Instantiate(exteriorPanels[Random.Range(0, exteriorPanels.Length)], panelPos, Quaternion.FromToRotation(Vector3.forward, Vector3.right), currentFloor);
+
+			elevation += floorHeight;
+			ClearVars();
+			yield return null;
+		}
+
+		FloorBuilt();
+
 	}
 
 	protected void MakeLevel()
@@ -223,7 +291,10 @@ public class ApartmentBuilder : MonoBehaviour
 
 				TagCourtyardRailings();
 
-				if (floorsBuilt == GameManager.CurrentFloor && floorsBuilt <= maxFloors) {
+				//if (floorsBuilt == GameManager.CurrentFloor && floorsBuilt <= maxFloors) 
+				if (ShouldFullyGenerateFloor())
+				{
+
 
 					BuildSideWings();
 
@@ -254,10 +325,11 @@ public class ApartmentBuilder : MonoBehaviour
 		//makeLevel = false;
 	}
 
-	//protected void FloorBuilt()
-	//{
-	//	GameManager.Manager.ChangedFloors();
-	//}
+	protected void FloorBuilt()
+	{
+		GameManager.Manager.OnFloorBuilt();
+		//GameManager.Manager.ChangedFloors();
+	}
 
 	protected void CheckExistingFloor()
 	{
@@ -496,6 +568,88 @@ public class ApartmentBuilder : MonoBehaviour
 			availableWalls.Remove(joiningPoint);
 	}
 
+
+	IEnumerator BuildSideWingsCoroutine()
+	{
+		Transform[] wingExits = availableExits.ToArray();
+		//Debug.LogFormat("Building Sidewings for Floor {0}, starting with {1} available exits (before adding paths)", currentFloor, wingExits.Length);
+
+		//availableExits.CopyTo(wingExits);
+
+		for (int i = 0; i < wingExits.Length; i++) {
+
+			Transform joiningPoint = wingExits[i];
+			Tile exitParentTile = joiningPoint.GetComponentInParent<Tile>();
+			//Tile.TileType sourceForkType;
+			//if (exitParentTile)
+			//	sourceForkType = exitParentTile.TileType;
+			//else {
+			//	Debug.Log("ERROR: Couldn't find exit {0}'s parent tile type", joiningPoint);
+			//	return;
+			//}
+
+			//Tile.TileType sourceForkType = joiningPoint.GetComponentInParent<Tile>().TileType;
+
+			Tile newTileType = null;
+			int segment = 0;
+
+			for (int j = 0; j < 3; j++) {
+
+				if (j < 2) {
+					newTileType = corridorTypes[Random.Range(0, corridorTypes.Length)];
+				} else {
+
+					//if (sourceForkType == Tile.TileType.TeeLeft)
+					//	newTileType = forkTypes[Random.Range(0, forkTypes.Length)];
+					//else
+					//	newTileType = roomTypes[Random.Range(0, roomTypes.Length)];
+
+					if (segment < 1) {
+						//Debug.Log("Building Fork");
+						newTileType = forkTypes[Random.Range(0, forkTypes.Length)];
+						//j = 0;
+						segment++;
+					} /*else {
+						Debug.Log("End of Sidepath, building Room");
+						newTileType = roomTypes[Random.Range(0, roomTypes.Length)];
+						//continue;
+					}*/
+				}
+
+				if (newTileType) {
+
+					BuildTile(newTileType, joiningPoint, out Tile newTile);
+
+					if (buildCeilings && newTile != null) { // SIDE WING CEILINGS (coroutine)
+						Tile ceiling = Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, currentFloor);
+
+						if (disableCeilingShadows)
+							ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+					}
+
+					if (!newTile) {
+						Debug.Log("Couldn't build sidepath segment at {0}", exitParentTile.gameObject);
+						break;
+					}
+
+					if (newTile.TileType == TileType.Fork) {
+						//Debug.LogFormat("Storing New Fork, it has {0} exits available", GetAvailableExits(newTile).Count);
+						exitParentTile = newTile; //remember this tile for return
+					}
+					joiningPoint = GetRandomExit(newTile);
+				}
+
+				if (exitParentTile.TileType == TileType.Fork && j > 1 && GetAvailableExits(exitParentTile).Count > 0) {
+					//Debug.Log("Built Sidepaths A from Fork, Attempting to return to Fork");
+					joiningPoint = GetRandomExit(exitParentTile);
+					j = 0;
+				}
+				yield return null;
+			}
+			yield return null;
+		}
+	}
+
 	protected void BuildSideWings()
 	{
 		
@@ -547,9 +701,13 @@ public class ApartmentBuilder : MonoBehaviour
 				if (newTileType) {
 
 					BuildTile(newTileType, joiningPoint, out Tile newTile);
-					//Instantiate(newTileType, newTile.transform.position + (Vector3.up * 2.5f), newTile.transform.rotation, newTile.transform);
-					if (newTile != null)
-						Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, currentFloor);
+
+					if (buildCeilings && newTile != null) { //SIDE WINGS CEILINGS
+						Tile ceiling = Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, currentFloor);
+
+						if (disableCeilingShadows)
+							ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+					}
 
 					if (!newTile) {
 						Debug.Log("Couldn't build sidepath segment at {0}", exitParentTile.gameObject);
@@ -612,7 +770,9 @@ public class ApartmentBuilder : MonoBehaviour
 
 		// Assemble method -- messy, builds on itself or the hallway, hard to control
 		//AssembleRoomsFromBlocks(roomPositions);
-		if (floorsBuilt == GameManager.CurrentFloor && floorsBuilt <= maxFloors) {
+		//if (floorsBuilt == GameManager.CurrentFloor && floorsBuilt <= maxFloors) 
+		if (ShouldFullyGenerateFloor())
+		{
 			AssembleRoomsFromBlocks2(roomPositions);
 		}
 		
@@ -623,6 +783,161 @@ public class ApartmentBuilder : MonoBehaviour
 		// Prebuilt method
 		//PlacePrebuiltRooms(roomPositions);
 
+	}
+
+	protected List<Transform> GetRoomPositions()
+	{
+		Transform[] possibleRoomPositions = new Transform[availableExits.Count + availableWalls.Count];
+		availableExits.CopyTo(possibleRoomPositions);
+		availableWalls.CopyTo(possibleRoomPositions, availableExits.Count);
+
+
+		//int maxRoomsPerFloor = floorParams[floorsBuilt].maxRoomsPerFloor;
+		int maxRoomsPerFloor = Mathf.RoundToInt(Random.Range(roomsPerFloorRange.x, roomsPerFloorRange.y));
+
+		// List of actual rooms to build, after rolling for amount to build
+		List<Transform> roomPositions = GetRandomRoomNodesAndRemoveFromArray(maxRoomsPerFloor, possibleRoomPositions);
+
+		// Decorate the remaning room positions
+		AddClosedDoors(possibleRoomPositions);
+
+		return roomPositions;
+
+		// Assemble method -- messy, builds on itself or the hallway, hard to control
+		//AssembleRoomsFromBlocks(roomPositions);
+		//if (floorsBuilt == GameManager.CurrentFloor && floorsBuilt <= maxFloors) {
+		//	AssembleRoomsFromBlocks2(roomPositions);
+		//}
+	}
+
+	protected IEnumerator AssembleRoomsFromBlocks(List<Transform> roomPositions)
+	{
+		//if (floorsBuilt != GameManager.CurrentFloor || floorsBuilt > maxFloors)
+		if (!ShouldFullyGenerateFloor())
+			yield break;
+
+		int failedRooms = 0;
+		int totalRoomsBuilt = 0;
+		int totalAreaLeft = 0;
+
+		//foreach (Transform roomStartNode in roomPositions) {
+		for (int i = 0; i < roomPositions.Count; i++) {
+
+			Tile currentTile = null;
+
+			//List<Tile> roomsToBuild = new List<Tile>(); //component blocks in the rooms to build
+			//List<GameObject> roomObjectsBuilt = new List<GameObject>();
+
+			List<Tile> candidateTiles = new List<Tile>(roomComponentTypes); //Candidate tiles that we can build
+			Dictionary<Tile, Vector3> candidateTilesAtPositions = new Dictionary<Tile, Vector3>();
+
+			int _remainingArea = Random.Range(96, maxRoomArea);
+
+			//Transform joiningPoint = roomPositions[i];
+			List<Transform> joiningPoints = new List<Transform>();
+
+			joiningPoints.Add(roomPositions[i]);
+
+			int roomsBuilt = 0;
+			//int rewinds = 0;
+
+			if (debugRoomAssembly)
+				Debug.LogFormat("-------------------Room {0} started!-------------------------", i);
+
+			// Try to place room tiles, ensuring they fit our area budget, and can be placed without any collisions.
+			while (_remainingArea > 0) {
+
+				candidateTiles = CheckTilesArea(candidateTiles, _remainingArea);
+
+				if (debugRoomAssembly)
+					Debug.LogFormat("Room {0}: {1} tiles can fit in the room area", i, candidateTiles.Count);
+
+				bool fitTile = false;
+				int currentJoiningPoint = Random.Range(0, joiningPoints.Count);
+				int attempts = 0;
+				Transform joiningPoint = null;
+				while (!fitTile && attempts < joiningPoints.Count) {
+					fitTile = CanFitTile(candidateTiles, joiningPoints[currentJoiningPoint], out candidateTilesAtPositions);
+
+					if (fitTile) {
+						joiningPoint = joiningPoints[currentJoiningPoint];
+						break;
+					}
+
+					currentJoiningPoint = (currentJoiningPoint + 1) % joiningPoints.Count;
+					attempts++;
+				}
+
+				// NEED TO SOMEHOW BE ABLE TO GO /BACK/ TO TRY ANOTHER ROOM STARTING NODE (e.g., more attached to the selection process for nodes)
+				// Might make more sense to 'build' rooms as we select them, instead of being so separated.
+				if (!fitTile && roomsBuilt == 0) {
+					if (debugRoomAssembly)
+						Debug.LogFormat("ERROR: Floor {0} Room {0} - No rooms built, and couldn't fit any tiles here at all", floorsBuilt, i);
+					//currentFloor = new GameObject("Floor " + floorsBuilt).transform;
+					GameObject error = new GameObject("ERROR: Room " + i);
+					error.transform.SetParent(joiningPoints[0]);
+				}
+
+
+				if (!fitTile && roomsBuilt > 0) {
+					if (debugRoomAssembly)
+						Debug.LogFormat("Room {0}: Couldn't fit any more tiles to {1}, can't backtrack any further, remaining area: {2}", i, currentTile, _remainingArea);
+				}
+
+
+				if (candidateTilesAtPositions.Count <= 0) {
+					//e.g., restart, report this failure somewhere....
+					failedRooms++;
+					break;
+				}
+
+				// Success! We can build from our list
+
+				List<Tile> selectedTiles = Enumerable.ToList(candidateTilesAtPositions.Keys);
+				Tile newTileType = selectedTiles[Random.Range(0, candidateTilesAtPositions.Count)];
+				candidateTilesAtPositions.TryGetValue(newTileType, out Vector3 pos);
+
+				// We can even be picky here, if it's not building enough medium rooms!
+
+				int area = 0;
+				roomComponentsArea.TryGetValue(newTileType, out area);
+				if (area <= 0)
+					break;
+
+				_remainingArea -= area;
+
+				if (debugRoomAssembly)
+					Debug.LogFormat("Room {0}: Success! Building tile {1}, remaining area: {2}", i, newTileType, _remainingArea);
+
+
+				BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
+				//roomObjectsBuilt.Add(currentTile.gameObject);
+				if (buildCeilings && currentTile != null) { // ROOM CEILINGS (coroutine)
+					Tile ceiling = Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
+
+					if (disableCeilingShadows)
+						ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
+					//roomObjectsBuilt.Add(ceiling.gameObject);
+				}
+
+				roomsBuilt++;
+
+				joiningPoints.Remove(joiningPoint);
+				joiningPoints.AddRange(GetAvailableExits(currentTile));
+				yield return null;
+			}
+			totalRoomsBuilt += roomsBuilt;
+			totalAreaLeft += _remainingArea;
+			if (debugRoomAssembly)
+				Debug.LogFormat("-------------------Room {0} finished!-------------------------", i);
+
+			//StaticBatchingUtility.Combine(roomObjectsBuilt.ToArray(), roomPositions[i].gameObject);
+
+			yield return null;
+		}
+		Debug.LogFormat("Floor {0}: Built {1} rooms, with a total unrealized area of {2}", floorsBuilt, totalRoomsBuilt, totalAreaLeft);
+		yield return null;
 	}
 
 	protected void AddClosedDoors(Transform[] possibleRoomPositions)
@@ -782,8 +1097,12 @@ public class ApartmentBuilder : MonoBehaviour
 
 
 				BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
-				if (currentTile != null)
-					Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
+				if (buildCeilings && currentTile != null) { // ROOM CEILINGS (coroutine)
+					Tile ceiling = Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
+
+					if (disableCeilingShadows)
+						ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+				}
 
 				roomsBuilt++;
 

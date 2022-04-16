@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviour
 	public float startBlackScreenHoldTime = 4f;
 
 	public bool skipIntro = false;
+	public bool debugInstantStart = false;
 
 	//public string EventLowIntensity = "Low_Intensity";
 	//public string EventHighIntensity = "High_Intensity";
@@ -115,7 +116,7 @@ public class GameManager : MonoBehaviour
 
 	protected void ConfigureFade()
 	{
-		if (skipIntro)
+		if (debugInstantStart)
 			return;
 		BlackScreen.color = Color.black;
 		BlackScreen.gameObject.SetActive(true);
@@ -142,9 +143,29 @@ public class GameManager : MonoBehaviour
 
 		PlayAmbience();
 
-		if (skipIntro)
+		//if (skipIntro)
+		//	return;
+		if (debugInstantStart)
 			return;
-		DisableMovementAndFadeIn();
+
+		//DisableMovementAndFadeIn();
+		DisableMovement();
+	}
+
+	public void OnFloorBuilt()
+	{
+		
+		if (CurrentFloor <= 1 && (debugInstantStart || !skipIntro)) {
+
+			if (debugInstantStart)
+				return;
+
+			Invoke("TransitionFromExit", startBlackScreenHoldTime);
+
+		} else {
+			TransitionFromExit();
+		}
+
 	}
 
 	protected void DisableMovementAndFadeIn()
@@ -266,14 +287,24 @@ public class GameManager : MonoBehaviour
 		yield return null;
 
 		Apartment.NewLevel();
-		yield return null;
+		//yield return null;
 
+		//TransitionFromExit();
+	}
+
+	// Called via OnFloorBuilt();
+	protected void TransitionFromExit()
+	{
 		reachedExit = false;
 		PlayerController.enabled = true;
 		FadeIn();
 		CanMove = true;
-		StopCoroutine(warpPlayer);
-		warpPlayer = null;
+
+		if (warpPlayer != null) {
+			StopCoroutine(warpPlayer);
+			warpPlayer = null;
+		}
+		
 	}
 
 	public bool TryStartBell()

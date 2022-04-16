@@ -923,7 +923,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1026827615
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1452,7 +1452,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &1855520559
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1943,6 +1943,10 @@ PrefabInstance:
       propertyPath: BlackScreen
       value: 
       objectReference: {fileID: 479528637}
+    - target: {fileID: 4503810529194860178, guid: 0350da33da3906c439e93a5b5c304cfe, type: 3}
+      propertyPath: debugInstantStart
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0350da33da3906c439e93a5b5c304cfe, type: 3}
 --- !u!1001 &5270165340549144708
@@ -2019,6 +2023,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5389474725422830712, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
+      propertyPath: maxFloors
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
+      propertyPath: buildCeilings
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
+      propertyPath: debugRoomAssembly
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
+      propertyPath: onlyGenerateCurrentFloorFully
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5389474725422830719, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
@@ -2409,6 +2429,10 @@ PrefabInstance:
     - target: {fileID: 8905438155171243245, guid: 82d7df6c7a32ec34db5452b0eb4055e0, type: 3}
       propertyPath: m_Layer
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8905438155171243245, guid: 82d7df6c7a32ec34db5452b0eb4055e0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8914573923950149034, guid: 82d7df6c7a32ec34db5452b0eb4055e0, type: 3}
       propertyPath: m_Layer
