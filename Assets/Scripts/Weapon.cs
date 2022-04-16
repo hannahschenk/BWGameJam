@@ -91,4 +91,14 @@ public class Weapon : MonoBehaviour
 		ap_Helper.PlayRandomAudioClip(audio, sfx, pitchRange);
 	}
 
+	public virtual void AttackAbilityBegin()
+	{
+
+	}
+
+	public virtual void AttackAbilityFinish()
+	{
+
+	}
+
 }

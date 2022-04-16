@@ -19,4 +19,22 @@ public class WeaponBell : Weapon
 	{
 		PlayRandomAudioClip();
 	}
+
+	public override void AttackAbilityBegin()
+	{
+		//FPAnimHandler.UpdateItemsState();
+		//UpdateItemsStateAndWield();
+
+		GameManager.Manager.TryStartBell();
+		BellRing();
+	}
+
+	public override void AttackAbilityFinish()
+	{
+
+		stats.LoseBell();
+		FPAnimHandler.UpdateItemsState();
+		//FPAnimHandler.UpdateItemsStateAndWield();
+
+	}
 }

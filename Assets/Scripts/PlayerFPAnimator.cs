@@ -138,9 +138,14 @@ public class PlayerFPAnimator : MonoBehaviour
 		animator.SetTrigger(animTriggerAttack);
 	}
 
-	public void AttackEnd()
+	public void AttackAbilityBegin()
 	{
-		(weapons[0] as WeaponSickle).OnAttackEnd();
+		currentWeapon.AttackAbilityBegin();
+	}
+
+	public void AttackAbilityFinish()
+	{
+		currentWeapon.AttackAbilityFinish();
 	}
 
 	public void Defend()
@@ -191,16 +196,16 @@ public class PlayerFPAnimator : MonoBehaviour
 		stats.PickupItem();
 	}
 
-	public void AnimEventOnBellRung()
-	{
-		stats.LoseBell();
+	//public void AnimEventOnBellRung()
+	//{
+	//	stats.LoseBell();
 
-		UpdateItemsState();
-		//UpdateItemsStateAndWield();
+	//	UpdateItemsState();
+	//	//UpdateItemsStateAndWield();
 
-		GameManager.Manager.TryStartBell();
-		BellRing();
-	}
+	//	GameManager.Manager.TryStartBell();
+	//	BellRing();
+	//}
 
 	public void BellRing()
 	{

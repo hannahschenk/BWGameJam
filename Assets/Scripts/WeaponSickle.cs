@@ -37,16 +37,28 @@ public class WeaponSickle : Weapon
 			return;
 
 		FPAnimHandler.Attack();
-		isAttacking = true;
-		Debug.LogFormat("Attacking!");
+		//Debug.LogFormat("Attacking!");
 		//Debug.Break();
 	}
 
-	public virtual void OnAttackEnd()
+	public override void AttackAbilityBegin()
 	{
-		isAttacking = false;
-		Debug.Log("No longer attacking!");
+		//base.AttackAbilityStart();
+		Debug.LogFormat("Attacking!");
+		isAttacking = true;
 	}
+
+	public override void AttackAbilityFinish()
+	{
+		//base.AttackAbilityFinish();
+		isAttacking = false;
+	}
+
+	//public virtual void OnAttackEnd()
+	//{
+	//	isAttacking = false;
+	//	Debug.Log("No longer attacking!");
+	//}
 
 	public virtual void OnCollisionStay(Collision collision)
 	//public virtual void OnCollisioinEnter(Collision collision)
