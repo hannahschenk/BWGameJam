@@ -6,6 +6,10 @@ public class EnemyAnimationController : MonoBehaviour
 {
 	protected Animator animator;
 
+	public float walkingThreshold = 3f;
+	public float runningThreshold = 6f;
+	protected Vector3 velocity = Vector3.zero;
+
 	protected int animBoolIsWalking;
 	protected int animBoolIsRunning;
 	protected int animBoolIsIdle;
@@ -15,6 +19,8 @@ public class EnemyAnimationController : MonoBehaviour
 	protected int animBoolIsDead;
 	//protected int animTriggerBellRung;
 	protected int animBoolBellRung;
+
+	protected new Rigidbody rigidbody;
 
 	public bool IsWalking
 	{
@@ -120,6 +126,7 @@ public class EnemyAnimationController : MonoBehaviour
 	private void Awake()
 	{
 		animator = GetComponent<Animator>();
+		rigidbody = GetComponent<Rigidbody>();
 
 		CacheAnimReferences();
 	}
@@ -127,18 +134,46 @@ public class EnemyAnimationController : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		IsIdle = true;
+		
     }
 
     // Update is called once per frame
     void Update()
     {
-		UpdateAnimstate();
+		if (TookHit || IsDead)
+			return;
+
+		CheckBellState();
+		CheckMovement();
     }
 
-	protected void UpdateAnimstate()
+	protected void CheckBellState()
 	{
 		IsBellActive = GameManager.Manager.isBellActive;
+	}
+
+	protected void CheckMovement()
+	{
+		velocity = rigidbody.velocity;
+		float sqrVel = velocity.sqrMagnitude;
+
+
+		//IsIdle = sqrVel <= 0f;
+		//IsWalking = sqrVel <= (walkingThreshold * walkingThreshold);
+		//IsRunning = sqrVel <= (runningThreshold * runningThreshold);
+
+		if (sqrVel <= 0f) {
+			IsIdle = true;
+			IsWalking = IsRunning = false;
+		} else if (sqrVel <= walkingThreshold * walkingThreshold) {
+			IsWalking = true;
+			IsIdle = IsRunning = false;
+		} else {
+			IsRunning = true;
+			IsIdle = IsWalking = false;
+		}
+
+
 	}
 
 	protected void CacheAnimReferences()

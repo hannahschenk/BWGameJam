@@ -265,8 +265,6 @@ public class GameManager : MonoBehaviour
 		if (warpPlayer != null)
 			return;
 
-		//Debug.LogFormat("Manager.ReachedExit firing at {0}!", Time.time);
-		//CanMove = false;
 		Invoke("DisableMovement", (screenFadeOutTime));
 
 		FadeOut();

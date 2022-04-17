@@ -83,6 +83,14 @@ public class ApartmentBuilder : MonoBehaviour
 	{
 		CheckRoomComponents();
 
+		RestartGame();
+	}
+
+	public void RestartGame(bool resetSeed = false)
+	{
+		if (resetSeed)
+			currentSeed = 0;
+
 		GenerateApartmentParams();
 
 		NewLevel();
