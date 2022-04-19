@@ -8,6 +8,9 @@ public class Tile : MonoBehaviour
 
 	public TileType TileType = TileType.Corridor;
 
+	public int wing = -1;
+	public int sidewing = -1;
+
 	protected Color inactiveGizmo = new Color(1f, 1f, 1f, 0.25f);
 
 	protected void OnDrawGizmosSelected()

@@ -272,6 +272,8 @@ public class GameManager : MonoBehaviour
 		warpPlayer = StartCoroutine(WarpPlayerAndRebuild(screenFadeOutTime + 2));
 	}
 
+
+
 	protected IEnumerator WarpPlayerAndRebuild(float delay)
 	{
 		yield return new WaitForSecondsRealtime(delay);

@@ -2038,7 +2038,7 @@ PrefabInstance:
       objectReference: {fileID: 479528637}
     - target: {fileID: 4503810529194860178, guid: 0350da33da3906c439e93a5b5c304cfe, type: 3}
       propertyPath: debugInstantStart
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0350da33da3906c439e93a5b5c304cfe, type: 3}
@@ -2120,11 +2120,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
       propertyPath: maxFloors
-      value: 20
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
+      propertyPath: currentSeed
+      value: 1025156520
       objectReference: {fileID: 0}
     - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
       propertyPath: buildCeilings
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5389474725422830718, guid: ef3c54aa0850b7548a0d6f5de79aa792, type: 3}
       propertyPath: debugRoomAssembly

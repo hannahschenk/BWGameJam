@@ -254,13 +254,14 @@ public class ApartmentBuilder : MonoBehaviour
 
 			yield return StartCoroutine(AssembleRoomsFromBlocks(GetRoomPositions()));
 
+			yield return StartCoroutine(BuildSidePaths());
+
 			//Debug.LogFormat("Built rooms, {0} available exits left", availableExits.Count);
 
 			BuildWalls();
 
 			// Build Exterior Panel
 			Vector3 panelPos = new Vector3(3f, elevation, -3f);
-			//Quaternion.FromToRotation(Vector3.forward, Vector3.right);
 			Instantiate(exteriorPanels[Random.Range(0, exteriorPanels.Length)], panelPos, Quaternion.FromToRotation(Vector3.forward, Vector3.right), currentFloor);
 
 			elevation += floorHeight;
@@ -359,6 +360,7 @@ public class ApartmentBuilder : MonoBehaviour
 		currentFloor.SetParent(transform);
 
 		Tile startTile = Instantiate(startRoomType, new Vector3(0f, elevation, 0f), Quaternion.identity, currentFloor);
+		startTile.wing = 0;
 		RecordTile(startTile);
 
 		//startRoomType.transform.size
@@ -451,6 +453,8 @@ public class ApartmentBuilder : MonoBehaviour
 
 		int maxWings = 5;
 		int wingsBuilt = 1;
+		int currentWingLocation = 1;
+
 		int currentTileSlot = 0;
 		while (_remainingRooms > 0 && wingsBuilt <= maxWings) {
 
@@ -530,7 +534,16 @@ public class ApartmentBuilder : MonoBehaviour
 				return;
 			}
 
-			BuildTile(newTileType, joiningPoint, out _lastTile);
+			BuildTile(newTileType, joiningPoint, currentFloor, out _lastTile);
+
+			if (_lastTile) {
+				_lastTile.wing = currentWingLocation;
+
+				if (_lastTile.TileType == TileType.TeeLeft)
+					currentWingLocation++;
+
+			}
+
 			if (newTileType == endRoomType) {
 				_lastTile.GetComponentInChildren<FloorExit>().currentFloor = floorsBuilt;
 			}
@@ -552,19 +565,19 @@ public class ApartmentBuilder : MonoBehaviour
 	/// <param name="newTileType">The type of tile to build</param>
 	/// <param name="joiningPoint">The transform reference whose position and facing will be matched</param>
 	/// <param name="newTile">The built tile</param>
-	protected void BuildTile(Tile newTileType, Transform joiningPoint, out Tile newTile, float snap = tileGridSnap)
+	protected void BuildTile(Tile newTileType, Transform joiningPoint, Transform parent, out Tile newTile, float snap = tileGridSnap)
 	{
 		Vector3 tilePos = GetNewTilePosition(newTileType, joiningPoint);
-		BuildTile(newTileType, joiningPoint, tilePos, out newTile, snap);
+		BuildTile(newTileType, joiningPoint, tilePos, out newTile, parent, snap);
 	}
 
 
-	protected void BuildTile(Tile newTileType, Transform joiningPoint, Vector3 tilePos, out Tile newTile, float snap = tileGridSnap)
+	protected void BuildTile(Tile newTileType, Transform joiningPoint, Vector3 tilePos, out Tile newTile, Transform parent, float snap = tileGridSnap)
 	{
 		Vector3 blockCoordinates = GetBlockCoordinates(tilePos, snap);
 
 		if (!tileCoords.Contains(blockCoordinates)) {
-			newTile = Instantiate(newTileType, tilePos, joiningPoint.rotation, currentFloor);
+			newTile = Instantiate(newTileType, tilePos, joiningPoint.rotation, parent);
 			RecordTile(newTile);
 		} else {
 			newTile = null;
@@ -575,7 +588,6 @@ public class ApartmentBuilder : MonoBehaviour
 		if (!availableExits.Remove(joiningPoint))
 			availableWalls.Remove(joiningPoint);
 	}
-
 
 	IEnumerator BuildSideWingsCoroutine()
 	{
@@ -600,6 +612,7 @@ public class ApartmentBuilder : MonoBehaviour
 
 			Tile newTileType = null;
 			int segment = 0;
+			int currentWing = exitParentTile.wing;
 
 			for (int j = 0; j < 3; j++) {
 
@@ -626,7 +639,7 @@ public class ApartmentBuilder : MonoBehaviour
 
 				if (newTileType) {
 
-					BuildTile(newTileType, joiningPoint, out Tile newTile);
+					BuildTile(newTileType, joiningPoint, currentFloor, out Tile newTile);
 
 					if (buildCeilings && newTile != null) { // SIDE WING CEILINGS (coroutine)
 						Tile ceiling = Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, currentFloor);
@@ -635,7 +648,10 @@ public class ApartmentBuilder : MonoBehaviour
 							ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 					}
 
-					if (!newTile) {
+					if (newTile) {
+						newTile.wing = currentWing;
+						newTile.sidewing = segment + 1;
+					} else {
 						Debug.Log("Couldn't build sidepath segment at {0}", exitParentTile.gameObject);
 						break;
 					}
@@ -644,12 +660,19 @@ public class ApartmentBuilder : MonoBehaviour
 						//Debug.LogFormat("Storing New Fork, it has {0} exits available", GetAvailableExits(newTile).Count);
 						exitParentTile = newTile; //remember this tile for return
 					}
-					joiningPoint = GetRandomExit(newTile);
+					joiningPoint = GetAvailableExits(newTile)[0];
+					//joiningPoint = GetRandomExit(newTile);
 				}
 
 				if (exitParentTile.TileType == TileType.Fork && j > 1 && GetAvailableExits(exitParentTile).Count > 0) {
 					//Debug.Log("Built Sidepaths A from Fork, Attempting to return to Fork");
-					joiningPoint = GetRandomExit(exitParentTile);
+					//joiningPoint = GetRandomExit(exitParentTile);
+					joiningPoint = GetAvailableExits(exitParentTile)[0];
+					segment++; //for sidewing id tracking
+
+					if (segment > 2) //4th segment is part of the next wing
+						currentWing++;
+
 					j = 0;
 				}
 				yield return null;
@@ -708,7 +731,7 @@ public class ApartmentBuilder : MonoBehaviour
 
 				if (newTileType) {
 
-					BuildTile(newTileType, joiningPoint, out Tile newTile);
+					BuildTile(newTileType, joiningPoint, currentFloor, out Tile newTile);
 
 					if (buildCeilings && newTile != null) { //SIDE WINGS CEILINGS
 						Tile ceiling = Instantiate(newTileType, newTile.transform.position + (Vector3.up * floorHeight), newTile.transform.rotation, currentFloor);
@@ -717,7 +740,10 @@ public class ApartmentBuilder : MonoBehaviour
 							ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 					}
 
-					if (!newTile) {
+					if (newTile) {
+						newTile.wing = exitParentTile.wing;
+						newTile.sidewing = segment + 1;
+					} else {
 						Debug.Log("Couldn't build sidepath segment at {0}", exitParentTile.gameObject);
 						break;
 					}
@@ -795,9 +821,11 @@ public class ApartmentBuilder : MonoBehaviour
 
 	protected List<Transform> GetRoomPositions()
 	{
-		Transform[] possibleRoomPositions = new Transform[availableExits.Count + availableWalls.Count];
+		Transform[] possibleRoomPositions = new Transform[availableExits.Count + availableWalls.Count]; // Possible room positions = any remaning exits + any walls
 		availableExits.CopyTo(possibleRoomPositions);
 		availableWalls.CopyTo(possibleRoomPositions, availableExits.Count);
+		// Lose predictable linearity in this step, since exits from
+		// all over are then appended the semi-linear set of walls
 
 
 		//int maxRoomsPerFloor = floorParams[floorsBuilt].maxRoomsPerFloor;
@@ -848,6 +876,7 @@ public class ApartmentBuilder : MonoBehaviour
 
 			int roomsBuilt = 0;
 			//int rewinds = 0;
+			Transform roomNode = null;
 
 			if (debugRoomAssembly)
 				Debug.LogFormat("-------------------Room {0} started!-------------------------", i);
@@ -918,15 +947,32 @@ public class ApartmentBuilder : MonoBehaviour
 					Debug.LogFormat("Room {0}: Success! Building tile {1}, remaining area: {2}", i, newTileType, _remainingArea);
 
 
-				BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
+				if (roomNode == null) {
+					roomNode = joiningPoint;
+				}
+
+
+				// WHY ARE WE FEEDING POS HERE AGAIN?
+				//BuildTile(newTileType, joiningPoint, pos, out currentTile, currentFloor, 1f);
+				BuildTile(newTileType, joiningPoint, roomNode, out currentTile, 1f);
+				
+				
 				//roomObjectsBuilt.Add(currentTile.gameObject);
-				if (buildCeilings && currentTile != null) { // ROOM CEILINGS (coroutine)
-					Tile ceiling = Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
+				if (currentTile != null) {
 
-					if (disableCeilingShadows)
-						ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+					if (buildCeilings) { // ROOM CEILINGS (coroutine)
+						Tile ceiling = Instantiate(newTileType, currentTile.transform.position + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
+						if (disableCeilingShadows)
+							ceiling.GetComponentInChildren<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+						//roomObjectsBuilt.Add(ceiling.gameObject);
+					}
 
-					//roomObjectsBuilt.Add(ceiling.gameObject);
+					Tile rootTile = joiningPoint.GetComponentInParent<Tile>();
+					if (rootTile) {
+						currentTile.wing = rootTile.wing;
+						currentTile.sidewing = rootTile.sidewing;
+					}			
+
 				}
 
 				roomsBuilt++;
@@ -1104,7 +1150,9 @@ public class ApartmentBuilder : MonoBehaviour
 					Debug.LogFormat("Room {0}: Success! Building tile {1}, remaining area: {2}", i, newTileType, _remainingArea);
 
 
-				BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
+				BuildTile(newTileType, joiningPoint, currentFloor, out currentTile, 1f);
+				//BuildTile(newTileType, joiningPoint, pos, out currentTile, 1f);
+
 				if (buildCeilings && currentTile != null) { // ROOM CEILINGS (coroutine)
 					Tile ceiling = Instantiate(newTileType, pos + (Vector3.up * 2.5f), currentTile.transform.rotation, currentFloor);
 
@@ -1248,6 +1296,46 @@ public class ApartmentBuilder : MonoBehaviour
 		return true;
 	}
 
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="maxRange"></param>
+	/// <param name="sourceTransforms"></param>
+	/// <param name="preventNeighbors"></param>
+	/// <returns></returns>
+	protected List<Transform> GetRandomRoomNodesAndRemoveFromArray(int maxRange, Transform[] sourceTransforms, bool preventNeighbors = true)
+	{
+		List<Transform> roomNodes = new List<Transform>();
+		int i = 0;
+		while (i < maxRange) {
+
+			int randomRoomSlot = Random.Range(0, sourceTransforms.Length);
+
+			Transform roomNode = sourceTransforms[randomRoomSlot];
+
+			if (roomNode == null)
+				continue;
+
+			Tile parentTile = roomNode.GetComponentInParent<Tile>();
+
+			if (!ShouldBuildDoorHere(roomNode, parentTile, preventNeighbors))
+				continue;
+
+			roomNodes.Add(roomNode);
+			//sourceTransforms.Remove(roomNode);
+			sourceTransforms[randomRoomSlot] = null;
+			i++;
+		}
+		return roomNodes;
+	}
+
+	/// <summary>
+	/// Checks if room type should have connected rooms (e.g., FALSE FOR Tees / Start+End Rooms)
+	/// </summary>
+	/// <param name="currentAnchor"></param>
+	/// <param name="parentTile"></param>
+	/// <param name="preventNeighbors"></param>
+	/// <returns></returns>
 	protected bool ShouldBuildDoorHere(Transform currentAnchor, Tile parentTile, bool preventNeighbors)
 	{
 
@@ -1283,32 +1371,20 @@ public class ApartmentBuilder : MonoBehaviour
 		return true;
 	}
 
-
-	//protected List<Transform> GetRandomRoomNodes(int maxRange, List<Transform> sourceTransforms, bool preventNeighbors = true)
-	protected List<Transform> GetRandomRoomNodesAndRemoveFromArray(int maxRange, Transform[] sourceTransforms, bool preventNeighbors = true)
+	protected IEnumerator BuildSidePaths()
 	{
-		List<Transform> roomNodes = new List<Transform>();
-		int i = 0;
-		while (i < maxRange) {
+		Transform[] candidateSidePathNodes = new Transform[availableExits.Count]; // Possible room positions = any remaning exits + any walls
+		availableExits.CopyTo(candidateSidePathNodes);
 
-			int randomRoomSlot = Random.Range(0, sourceTransforms.Length);
+		for (int i = 0; i < candidateSidePathNodes.Length; i++) {
 
-			Transform roomNode = sourceTransforms[randomRoomSlot];
+			//How do we say things like, "get a random room from wing 1", etc?
+			// Probably need to organize the rooms differently -- if they're children of a node, then we can say "this clump is a room", etc.
 
-			if (roomNode == null)
-				continue;
 
-			Tile parentTile = roomNode.GetComponentInParent<Tile>();
-
-			if (!ShouldBuildDoorHere(roomNode, parentTile, preventNeighbors))
-				continue;
-
-			roomNodes.Add(roomNode);
-			//sourceTransforms.Remove(roomNode);
-			sourceTransforms[randomRoomSlot] = null;
-			i++;
+			yield return null;
 		}
-		return roomNodes;
+
 	}
 
 	public bool debugRoomTesting = true;
@@ -1382,7 +1458,7 @@ public class ApartmentBuilder : MonoBehaviour
 
 			}
 
-			BuildTile(newTileType, joiningPoint, out Tile newTile);
+			BuildTile(newTileType, joiningPoint, pointA, out Tile newTile);
 			if (!newTile)
 				break;
 
